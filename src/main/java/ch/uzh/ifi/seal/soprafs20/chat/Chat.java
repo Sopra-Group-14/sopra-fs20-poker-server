@@ -1,4 +1,6 @@
 package ch.uzh.ifi.seal.soprafs20.chat;
+import ch.uzh.ifi.seal.soprafs20.entity.ChatLog;
+
 import java.util.List;
 
 /**
@@ -20,5 +22,7 @@ public class Chat {
     public String getLastMessage(){
         return history.get(history.size()-1);
     }
+
+    private void chatLogToString(ChatLog chatLog){}
 
 }
