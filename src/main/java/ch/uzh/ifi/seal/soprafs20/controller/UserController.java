@@ -59,6 +59,13 @@ public class UserController {
     @ResponseBody
     public UserGetDTO loginUser(@RequestBody String username, @RequestBody String password){return null;}
 
+    @PostMapping("/logout")
+    @ResponseStatus(HttpStatus.I_AM_A_TEAPOT)
+    @ResponseBody
+    public void logoutUser(@RequestHeader(value = "Authorization") String token) {
+        //userService.logoutUser(token);
+    }
+
     @GetMapping("/users/balance/{userid}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
@@ -69,9 +76,11 @@ public class UserController {
     @ResponseBody
     public int addBalance(@PathVariable long userid, @RequestBody int amount){return -1;}
 
-    @GetMapping("/users/{userid}")
+    @GetMapping("/users/{userId}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public UserGetDTO getUser(@PathVariable long userid){return null;}
+    public UserGetDTO getUserByID(@PathVariable long userId){return null;}
+
+
 
 }
