@@ -16,7 +16,7 @@ public class OutOfGameController {
     @GetMapping("/spectators/games")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public List<Game> getGameListWhenNotLoggedIn(){return null;}
+    public List<Game> getAllHostedGames(){return null;}
 
     @GetMapping("/games/join")
     @ResponseStatus(HttpStatus.CREATED)

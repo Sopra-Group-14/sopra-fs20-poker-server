@@ -15,21 +15,21 @@ public class ChatController {
     @PutMapping("/chats/{gameid}/players")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public ChatLog sendPlayerMessage(@RequestBody int playerid, @RequestBody String message, @PathVariable int gameid){return null;}
+    public ChatLog sendPlayerMessage(@RequestBody long playerid, @RequestBody String message, @PathVariable long gameid){return null;}
 
     @GetMapping("/chats/{gameid}/players")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public List<String> getPlayerMessageHistory(@PathVariable int gameid){return null;}
+    public List<String> getPlayerMessageHistory(@PathVariable long gameid){return null;}
 
     @PutMapping("/chats/{gameid}/spectators")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public ChatLog sendSpectatorMessage(@RequestBody int spectatorid, @RequestBody String message, @PathVariable int gameid){return null;}
+    public ChatLog sendSpectatorMessage(@RequestBody long spectatorid, @RequestBody String message, @PathVariable long gameid){return null;}
 
     @GetMapping("/chats/{gameid}/spectators")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public List<String> getSpectatorMessageHistory(@PathVariable int gameid){return null;}
+    public List<String> getSpectatorMessageHistory(@PathVariable long gameid){return null;}
 
 }

@@ -15,46 +15,46 @@ public class GameController {
     @PutMapping("/games/{gameid}/fold/{playerid}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public GameLog fold(@PathVariable int gameid, @PathVariable long playerid){return null;}
+    public GameLog fold(@PathVariable long gameid, @PathVariable long playerid){return null;}
 
     @PutMapping("/games/{gameid}/raise/{playerid}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public GameLog raise(@PathVariable int gameid, @PathVariable long playerid, @RequestBody int amount){return null;}
+    public GameLog raise(@PathVariable long gameid, @PathVariable long playerid, @RequestBody int amount){return null;}
 
     @PutMapping("/games/{gameid}/call/{playerid}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public GameLog call(@PathVariable int gameid, @PathVariable long playerid){return null;}
+    public GameLog call(@PathVariable long gameid, @PathVariable long playerid){return null;}
 
     @GetMapping("/games/{gameid}/call/{playerid}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public int callAmount(@PathVariable int gameid, @PathVariable long playerid){return -1;}
+    public int callAmount(@PathVariable long gameid, @PathVariable long playerid){return -1;}
 
     @PutMapping("/games/{gameid}/check/{playerid}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public GameLog check(@PathVariable int gameid, @PathVariable long playerid){return null;}
+    public GameLog check(@PathVariable long gameid, @PathVariable long playerid){return null;}
 
     @PutMapping("/games/{gameid}/players/{playerid}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ResponseBody
-    public GameLog makePlayer(@PathVariable int gameid, @PathVariable long playerid){return null;}
+    public GameLog makePlayer(@PathVariable long gameid, @PathVariable long playerid){return null;}
 
     @PutMapping("/games/{gameid}/spectators/{playerid}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ResponseBody
-    public GameLog makeSpectator(@PathVariable int gameid, @PathVariable long playerid){return null;}
+    public GameLog makeSpectator(@PathVariable long gameid, @PathVariable long playerid){return null;}
 
     @GetMapping("/games/{gameid}/end/winner")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public GameSummary endGame(@PathVariable int gameid){return null;}
+    public GameSummary endGame(@PathVariable long gameid){return null;}
 
     @GetMapping("/games/{gameid}/currentplayer")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public Player currentPlayer(@PathVariable int gameid){return null;}
+    public Player currentPlayer(@PathVariable long gameid){return null;}
 
 }
