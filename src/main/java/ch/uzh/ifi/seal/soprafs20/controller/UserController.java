@@ -66,15 +66,15 @@ public class UserController {
         //userService.logoutUser(token);
     }
 
-    @GetMapping("/users/balance/{userid}")
+    @GetMapping("/users/balance/{userId}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public int getBalance(@PathVariable long userid){return -1;}
+    public int getBalance(@PathVariable long userId){return -1;}
 
-    @PutMapping("/users/balance/{userid}")
+    @PutMapping("/users/balance/{userId}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public int addBalance(@PathVariable long userid, @RequestBody int amount){return -1;}
+    public int addBalance(@PathVariable long userId, @RequestBody int amount){return -1;}
 
     @GetMapping("/users/{userId}")
     @ResponseStatus(HttpStatus.OK)

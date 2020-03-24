@@ -12,49 +12,49 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class GameController {
 
-    @PutMapping("/games/{gameid}/fold/{playerid}")
+    @PutMapping("/games/{gameId}/fold/{playerId}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public GameLog fold(@PathVariable long gameid, @PathVariable long playerid){return null;}
+    public GameLog fold(@PathVariable long gameId, @PathVariable long playerId){return null;}
 
-    @PutMapping("/games/{gameid}/raise/{playerid}")
+    @PutMapping("/games/{gameId}/raise/{playerId}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public GameLog raise(@PathVariable long gameid, @PathVariable long playerid, @RequestBody int amount){return null;}
+    public GameLog raise(@PathVariable long gameId, @PathVariable long playerId, @RequestBody int amount){return null;}
 
-    @PutMapping("/games/{gameid}/call/{playerid}")
+    @PutMapping("/games/{gameId}/call/{playerId}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public GameLog call(@PathVariable long gameid, @PathVariable long playerid){return null;}
+    public GameLog call(@PathVariable long gameId, @PathVariable long playerId){return null;}
 
-    @GetMapping("/games/{gameid}/call/{playerid}")
+    @GetMapping("/games/{gameId}/call/{playerId}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public int callAmount(@PathVariable long gameid, @PathVariable long playerid){return -1;}
+    public int callAmount(@PathVariable long gameId, @PathVariable long playerId){return -1;}
 
-    @PutMapping("/games/{gameid}/check/{playerid}")
+    @PutMapping("/games/{gameId}/check/{playerId}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public GameLog check(@PathVariable long gameid, @PathVariable long playerid){return null;}
+    public GameLog check(@PathVariable long gameId, @PathVariable long playerId){return null;}
 
-    @PutMapping("/games/{gameid}/players/{playerid}")
+    @PutMapping("/games/{gameId}/players/{playerId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ResponseBody
-    public GameLog makePlayer(@PathVariable long gameid, @PathVariable long playerid){return null;}
+    public GameLog makePlayer(@PathVariable long gameId, @PathVariable long playerId){return null;}
 
-    @PutMapping("/games/{gameid}/spectators/{playerid}")
+    @PutMapping("/games/{gameId}/spectators/{playerId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ResponseBody
-    public GameLog makeSpectator(@PathVariable long gameid, @PathVariable long playerid){return null;}
+    public GameLog makeSpectator(@PathVariable long gameId, @PathVariable long playerId){return null;}
 
-    @GetMapping("/games/{gameid}/end/winner")
+    @GetMapping("/games/{gameId}/end/winner")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public GameSummary endGame(@PathVariable long gameid){return null;}
+    public GameSummary endGame(@PathVariable long gameId){return null;}
 
-    @GetMapping("/games/{gameid}/currentplayer")
+    @GetMapping("/games/{gameId}/currentPlayer")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public Player currentPlayer(@PathVariable long gameid){return null;}
+    public Player currentPlayer(@PathVariable long gameId){return null;}
 
 }
