@@ -12,24 +12,24 @@ import java.util.List;
 @RestController
 public class ChatController {
 
-    @PutMapping("/chats/{gameid}/players")
+    @PutMapping("/chats/{gameId}/players")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public ChatLog sendPlayerMessage(@RequestBody long playerid, @RequestBody String message, @PathVariable long gameid){return null;}
+    public ChatLog sendPlayerMessage(@RequestBody long playerId, @RequestBody String message, @PathVariable long gameId){return null;}
 
-    @GetMapping("/chats/{gameid}/players")
+    @GetMapping("/chats/{gameId}/players")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public List<String> getPlayerMessageHistory(@PathVariable long gameid){return null;}
+    public List<String> getPlayerMessageHistory(@PathVariable long gameId){return null;}
 
-    @PutMapping("/chats/{gameid}/spectators")
+    @PutMapping("/chats/{gameId}/spectators")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public ChatLog sendSpectatorMessage(@RequestBody long spectatorid, @RequestBody String message, @PathVariable long gameid){return null;}
+    public ChatLog sendSpectatorMessage(@RequestBody long spectatorId, @RequestBody String message, @PathVariable long gameId){return null;}
 
-    @GetMapping("/chats/{gameid}/spectators")
+    @GetMapping("/chats/{gameId}/spectators")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public List<String> getSpectatorMessageHistory(@PathVariable long gameid){return null;}
+    public List<String> getSpectatorMessageHistory(@PathVariable long gameId){return null;}
 
 }
