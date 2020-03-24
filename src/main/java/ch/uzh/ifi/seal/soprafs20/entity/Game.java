@@ -1,6 +1,9 @@
 package ch.uzh.ifi.seal.soprafs20.entity;
 import ch.uzh.ifi.seal.soprafs20.chat.PlayerChat;
 import ch.uzh.ifi.seal.soprafs20.chat.SpectatorChat;
+import ch.uzh.ifi.seal.soprafs20.entity_in_game.Player;
+import ch.uzh.ifi.seal.soprafs20.entity_in_game.Spectator;
+
 import java.util.List;
 
 /**

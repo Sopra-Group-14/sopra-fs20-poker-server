@@ -1,8 +1,8 @@
 package ch.uzh.ifi.seal.soprafs20.controller;
 
-import ch.uzh.ifi.seal.soprafs20.entity.GameLog;
-import ch.uzh.ifi.seal.soprafs20.entity.GameSummary;
-import ch.uzh.ifi.seal.soprafs20.entity.Player;
+import ch.uzh.ifi.seal.soprafs20.entity_in_game.GameLog;
+import ch.uzh.ifi.seal.soprafs20.entity_in_game.GameSummary;
+import ch.uzh.ifi.seal.soprafs20.entity_in_game.Player;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
