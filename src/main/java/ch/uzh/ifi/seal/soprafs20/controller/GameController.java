@@ -1,10 +1,16 @@
 package ch.uzh.ifi.seal.soprafs20.controller;
 
+import ch.uzh.ifi.seal.soprafs20.constant.Action;
+import ch.uzh.ifi.seal.soprafs20.constant.UserStatus;
+import ch.uzh.ifi.seal.soprafs20.entity.Game;
 import ch.uzh.ifi.seal.soprafs20.entity_in_game.GameLog;
 import ch.uzh.ifi.seal.soprafs20.entity_in_game.GameSummary;
 import ch.uzh.ifi.seal.soprafs20.entity_in_game.Player;
+import ch.uzh.ifi.seal.soprafs20.rest.dto.UserPostDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * REST controller responsible for everything that happens in the game (gameplay-related).
@@ -12,30 +18,36 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class GameController {
 
-    @PutMapping("/games/{gameId}/fold/{playerId}")
+    @GetMapping("/games")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public GameLog fold(@PathVariable long gameId, @PathVariable long playerId){return null;}
+    public List<Game> getGames(){return null;}
 
-    @PutMapping("/games/{gameId}/raise/{playerId}")
+    @PostMapping("/games")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public GameLog raise(@PathVariable long gameId, @PathVariable long playerId, @RequestBody int amount){return null;}
+    public Game createGame(Game game){return null;}
 
-    @PutMapping("/games/{gameId}/call/{playerId}")
+    @PutMapping("/games/{gameId}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public GameLog call(@PathVariable long gameId, @PathVariable long playerId){return null;}
+    public Game joinGame(@RequestBody UserPostDTO userPostDTO, @RequestBody UserStatus userStatus, @RequestHeader String token, @PathVariable long gameId){return null;}
 
-    @GetMapping("/games/{gameId}/call/{playerId}")
+    @GetMapping("/games/{gameId}/players")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public int callAmount(@PathVariable long gameId, @PathVariable long playerId){return -1;}
+    public List<Player> getPlayers(@PathVariable long gameId){return null;}
 
-    @PutMapping("/games/{gameId}/check/{playerId}")
+    @PutMapping("/games/{gameId}/players/{playerId}/actions")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public GameLog check(@PathVariable long gameId, @PathVariable long playerId){return null;}
+    public GameLog takeAction(@RequestBody Action action, @PathVariable long gameId, @PathVariable long playerId, @RequestHeader String token){return null;}
+
+    //Overloaded method for calls that use an "amount"
+    @PutMapping("/games/{gameId}/players/{playerId}/actions")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public GameLog takeAction(@RequestBody Action action, @RequestBody int amount, @PathVariable long gameId, @PathVariable long playerId, @RequestHeader String token){return null;}
 
     @PutMapping("/games/{gameId}/players/{playerId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -46,11 +58,6 @@ public class GameController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ResponseBody
     public GameLog makeSpectator(@PathVariable long gameId, @PathVariable long playerId){return null;}
-
-    @GetMapping("/games/{gameId}/end/winner")
-    @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
-    public GameSummary endGame(@PathVariable long gameId){return null;}
 
     @GetMapping("/games/{gameId}/currentPlayer")
     @ResponseStatus(HttpStatus.OK)

@@ -54,24 +54,24 @@ public class UserController {
         //return DTOMapper.INSTANCE.convertEntityToUserGetDTO(createdUser);
     }
 
-    @GetMapping("/login")
+    @PutMapping("/login")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public UserGetDTO loginUser(@RequestBody String username, @RequestBody String password){return null;}
 
-    @PostMapping("/logout")
+    @PutMapping("/logout")
     @ResponseStatus(HttpStatus.I_AM_A_TEAPOT)
     @ResponseBody
     public void logoutUser(@RequestHeader(value = "Authorization") String token) {
         //userService.logoutUser(token);
     }
 
-    @GetMapping("/users/balance/{userId}")
+    @GetMapping("/users/{userId}/balance")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public int getBalance(@PathVariable long userId){return -1;}
 
-    @PutMapping("/users/balance/{userId}")
+    @PutMapping("/users/{userId}/balance")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public int addBalance(@PathVariable long userId, @RequestBody int amount){return -1;}
