@@ -88,14 +88,17 @@ public class GameControllerTest {
         //given
         GameLog putGameLog = new GameLog(2,2,Action.FOLD, 0, "Other1", 3L, "Other2", 4L, 400, false, false);
         GameLog testGameLog = new GameLog(1, 1, Action.RAISE, 10, "TestPlayer", 1L, "NextTestPlayer", 2L, 100, false, false);
+        String testToken = "testToken";
 
         given(gameService.executeAction(Action.RAISE, 10, 1L,1L, "Token")).willReturn(testGameLog);
 
         //when
-        MockHttpServletRequestBuilder putRequest = put("/games/1/players/1/actions").contentType(MediaType.APPLICATION_JSON);
+        MockHttpServletRequestBuilder putRequest = put("/games/1/players/1/actions").contentType(MediaType.APPLICATION_JSON).content(asJsonString(Action.RAISE))
+                .content(asJsonString(100)).header(testToken);
 
         //then
-        //mockMvc.perform(putRequest).andExpect(status().isOk());
+        mockMvc.perform(putRequest).andExpect(status().isOk());
+
 
     }
 

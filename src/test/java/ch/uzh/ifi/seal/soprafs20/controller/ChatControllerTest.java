@@ -127,10 +127,11 @@ public class ChatControllerTest {
         ChatLog testChatLog = new ChatLog("11:11:11", "TestUsername", "TestMessage");
 
         //when
-        //MockHttpServletRequestBuilder putRequest = put("/games/1/chats/players").contentType(MediaType.APPLICATION_JSON).content(());
+        //MockHttpServletRequestBuilder putRequest = put("/games/1/chats/players").contentType(MediaType.APPLICATION_JSON).content();
 
         //then
         //mockMvc.perform(putRequest).andExpect(status().isCreated());
+
 
     }
 
