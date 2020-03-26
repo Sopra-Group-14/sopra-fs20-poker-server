@@ -28,7 +28,7 @@ public class UserController {
     @GetMapping("/users")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public List<UserGetDTO> getAllUsers() {
+    public List<UserGetDTO> getAllUsers(@RequestHeader(value = "Authorization") String token){
         // fetch all users in the internal representation
         List<User> users = userService.getUsers();
         List<UserGetDTO> userGetDTOs = new ArrayList<>();
@@ -79,7 +79,7 @@ public class UserController {
     @GetMapping("/users/{userId}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public UserGetDTO getUserByID(@PathVariable long userId){return null;}
+    public UserGetDTO getUserByID(@PathVariable(value= "userId") final long id, @RequestHeader(value = "Authorization") String token){return null;}
 
 
 
