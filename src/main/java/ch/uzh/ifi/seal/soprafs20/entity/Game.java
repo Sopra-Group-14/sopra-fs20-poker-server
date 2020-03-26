@@ -69,4 +69,6 @@ public class Game {
 
     public int getMaxPlayers(){return maxPlayers;}
 
+    public void updateBlinds(){}
+
 }

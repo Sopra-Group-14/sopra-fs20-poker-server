@@ -3,6 +3,7 @@ package ch.uzh.ifi.seal.soprafs20.service;
 import ch.uzh.ifi.seal.soprafs20.constant.Action;
 import ch.uzh.ifi.seal.soprafs20.entity.Game;
 import ch.uzh.ifi.seal.soprafs20.entity_in_game.GameLog;
+import ch.uzh.ifi.seal.soprafs20.entity_in_game.Player;
 
 /**
  * The GameService takes care of what happens with Games.
@@ -23,5 +24,7 @@ public class GameService {
         currentId += 1;
         return currentId;
     }
+
+    public void updateBlinds(Game game){}
 
 }
