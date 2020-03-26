@@ -74,7 +74,7 @@ public class UserController {
     @PutMapping("/users/{userId}/balance")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public int addBalance(@PathVariable long userId, @RequestBody int amount){return -1;}
+    public int addBalance(@PathVariable (value = "userId") long userId, int amount){return -1;}
 
     @GetMapping("/users/{userId}")
     @ResponseStatus(HttpStatus.OK)
