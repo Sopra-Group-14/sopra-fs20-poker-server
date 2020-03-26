@@ -19,7 +19,7 @@ public class Game {
     //private final GameService gameService;
     private final PlayerChat playerChat = new PlayerChat();
     private final SpectatorChat spectatorChat = new SpectatorChat();
-    private long id;
+    private long gameId;
     private int maxPlayers;
     private String gameName, gameHostName;
 
@@ -59,9 +59,9 @@ public class Game {
         this.spectators.remove(spectator);
     }
 
-    public void setId(long id){this.id = id;}
+    public void setId(long id){this.gameId = id;}
 
-    public long getId(){return id;}
+    public long getId(){return gameId;}
 
     public String getGameName(){return gameName;}
 
