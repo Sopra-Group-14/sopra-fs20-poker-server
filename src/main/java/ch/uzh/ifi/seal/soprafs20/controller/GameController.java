@@ -24,7 +24,7 @@ public class GameController {
     public List<Game> getGames(){return null;}
 
     @PostMapping("/games")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
     public Game createGame(Game game){return null;}
 
@@ -38,16 +38,16 @@ public class GameController {
     @ResponseBody
     public List<Player> getPlayers(@PathVariable long gameId){return null;}
 
-    @PutMapping("/games/{gameId}/players/{playerId}/actions")
-    @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
-    public GameLog takeAction(@RequestBody Action action, @PathVariable long gameId, @PathVariable long playerId, @RequestHeader (value = "Authorization") String token){return null;}
-
-    //Overloaded method for calls that use an "amount"
     /*@PutMapping("/games/{gameId}/players/{playerId}/actions")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public GameLog takeAction(@RequestBody Action action, @RequestBody int amount, @PathVariable long gameId, @PathVariable long playerId, @RequestHeader String token){return null;}*/
+    public GameLog takeAction(@RequestBody Action action, @PathVariable long gameId, @PathVariable long playerId, @RequestHeader (value = "Authorization") String token){return null;}*/
+
+    //Overloaded method for calls that use an "amount"
+    @PutMapping("/games/{gameId}/players/{playerId}/actions")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public GameLog takeAction(@RequestBody Action action, @RequestBody int amount, @PathVariable long gameId, @PathVariable long playerId, @RequestHeader String token){return null;}
 
     @PutMapping("/games/{gameId}/players/{playerId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

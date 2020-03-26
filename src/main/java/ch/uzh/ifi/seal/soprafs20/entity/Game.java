@@ -15,6 +15,7 @@ public class Game {
     //Initialize the chats
     private final PlayerChat playerChat = new PlayerChat();
     private final SpectatorChat spectatorChat = new SpectatorChat();
+    private long id;
 
     //Create lists for spectators and players
     private List<Player> players;
@@ -22,19 +23,23 @@ public class Game {
 
 
     public void addPlayer(Player player){
-        players.add(player);
+        this.players.add(player);
     }
 
     public void removePlayer(Player player){
-        players.remove(player);
+        this.players.remove(player);
     }
 
     public void addSpectator(Spectator spectator){
-        spectators.add(spectator);
+        this.spectators.add(spectator);
     }
 
     public void removeSpectator(Spectator spectator){
-        spectators.remove(spectator);
+        this.spectators.remove(spectator);
     }
+
+    public void setId(long id){this.id = id;}
+
+    public long getId(){return id;}
 
 }
