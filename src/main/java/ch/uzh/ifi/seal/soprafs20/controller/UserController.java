@@ -69,7 +69,7 @@ public class UserController {
     @GetMapping("/users/{userId}/balance")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public int getBalance(@PathVariable long userId){return -1;}
+    public int getBalance(@PathVariable long userId, @RequestHeader (value = "Authorization") String token){return -1;}
 
     @PutMapping("/users/{userId}/balance")
     @ResponseStatus(HttpStatus.OK)
