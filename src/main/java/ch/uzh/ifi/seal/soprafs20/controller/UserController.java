@@ -43,7 +43,7 @@ public class UserController {
     @PostMapping("/registration")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public /*UserGetDTO*/ void createUser(@RequestBody UserPostDTO userPostDTO) {
+    public UserGetDTO createUser(@RequestBody UserPostDTO userPostDTO) {
         // convert API user to internal representation
         User userInput = DTOMapper.INSTANCE.convertUserPostDTOtoEntity(userPostDTO);
 
@@ -51,7 +51,7 @@ public class UserController {
         User createdUser = userService.createUser(userInput);
 
         // convert internal representation of user back to API
-        //return DTOMapper.INSTANCE.convertEntityToUserGetDTO(createdUser);
+        return DTOMapper.INSTANCE.convertEntityToUserGetDTO(createdUser);
     }
 
     @PutMapping("/login")
@@ -74,7 +74,7 @@ public class UserController {
     @PutMapping("/users/{userId}/balance")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public int addBalance(@PathVariable (value = "userId") long userId, int amount){return -1;}
+    public int addBalance(@PathVariable (value = "userId") long userId, @RequestBody int amount, @RequestHeader (value = "Authorization") String token){return -1;}
 
     @GetMapping("/users/{userId}")
     @ResponseStatus(HttpStatus.OK)

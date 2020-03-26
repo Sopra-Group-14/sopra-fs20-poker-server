@@ -31,7 +31,7 @@ public class GameController {
     @PutMapping("/games/{gameId}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public Game joinGame(@RequestBody UserPostDTO userPostDTO, @RequestBody UserStatus userStatus, @RequestHeader String token, @PathVariable long gameId){return null;}
+    public Game joinGame(@RequestBody UserPostDTO userPostDTO, @RequestBody UserStatus userStatus, @RequestHeader (value = "Authorization") String token, @PathVariable long gameId){return null;}
 
     @GetMapping("/games/{gameId}/players")
     @ResponseStatus(HttpStatus.OK)
@@ -41,13 +41,13 @@ public class GameController {
     @PutMapping("/games/{gameId}/players/{playerId}/actions")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public GameLog takeAction(@RequestBody Action action, @PathVariable long gameId, @PathVariable long playerId, @RequestHeader String token){return null;}
+    public GameLog takeAction(@RequestBody Action action, @PathVariable long gameId, @PathVariable long playerId, @RequestHeader (value = "Authorization") String token){return null;}
 
     //Overloaded method for calls that use an "amount"
-    @PutMapping("/games/{gameId}/players/{playerId}/actions")
+    /*@PutMapping("/games/{gameId}/players/{playerId}/actions")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public GameLog takeAction(@RequestBody Action action, @RequestBody int amount, @PathVariable long gameId, @PathVariable long playerId, @RequestHeader String token){return null;}
+    public GameLog takeAction(@RequestBody Action action, @RequestBody int amount, @PathVariable long gameId, @PathVariable long playerId, @RequestHeader String token){return null;}*/
 
     @PutMapping("/games/{gameId}/players/{playerId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
