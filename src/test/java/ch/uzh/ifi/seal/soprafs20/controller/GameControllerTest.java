@@ -58,9 +58,11 @@ public class GameControllerTest {
     public void returnedCreatedGameIsTheRightOne() throws Exception{
 
         //given
-        Game postGame = new Game();
+        //The game we post
+        Game postGame = new Game("TestGame", "TestHost");
         postGame.setId(1L);
-        Game testGame = new Game();
+        //The game we want to get back
+        Game testGame = new Game("TestGame", "TestHost");
         testGame.setId(1L);
 
         given(gameService.createGame(postGame)).willReturn(testGame);
@@ -76,6 +78,7 @@ public class GameControllerTest {
 
         //Comparing what we want with what we actually get returned
         assertEquals(returnedGame.getId(), testGame.getId());
+        assertEquals(returnedGame.getGameName(), testGame.getGameName());
 
     }
 

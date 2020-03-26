@@ -4,7 +4,12 @@ import ch.uzh.ifi.seal.soprafs20.constant.Action;
 import ch.uzh.ifi.seal.soprafs20.entity.Game;
 import ch.uzh.ifi.seal.soprafs20.entity_in_game.GameLog;
 
+/**
+ * The GameService takes care of what happens with Games.
+ */
 public class GameService {
+
+    private int currentId = 0;
 
     public Game createGame(Game game){
         return null;
@@ -12,6 +17,11 @@ public class GameService {
 
     public GameLog executeAction(Action action, int amount, long gameId, long playerId, String token){
         return null;
+    }
+
+    public long getNextId(){
+        currentId += 1;
+        return currentId;
     }
 
 }

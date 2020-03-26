@@ -18,7 +18,7 @@ public class ChatController {
     public ChatLog sendPlayerMessage(@RequestBody long playerId, @RequestBody String message, @PathVariable long gameId){return null;}
 
     @GetMapping("/games/{gameId}/chats/players")
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public List<String> getPlayerMessageHistory(@PathVariable long gameId){return null;}
 
@@ -28,7 +28,7 @@ public class ChatController {
     public ChatLog sendSpectatorMessage(@RequestBody long spectatorId, @RequestBody String message, @PathVariable long gameId){return null;}
 
     @GetMapping("/games/{gameId}/chats/spectators")
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public List<String> getSpectatorMessageHistory(@PathVariable long gameId){return null;}
 
