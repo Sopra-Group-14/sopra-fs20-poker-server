@@ -4,10 +4,14 @@ import ch.uzh.ifi.seal.soprafs20.constant.Action;
 import ch.uzh.ifi.seal.soprafs20.entity.Game;
 import ch.uzh.ifi.seal.soprafs20.entity_in_game.GameLog;
 import ch.uzh.ifi.seal.soprafs20.entity_in_game.Player;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * The GameService takes care of what happens with Games.
  */
+@Service
+@Transactional
 public class GameService {
 
     private int currentId = 0;
@@ -17,6 +21,24 @@ public class GameService {
     }
 
     public GameLog executeAction(Action action, int amount, long gameId, long playerId, String token){
+        if(action == Action.FOLD){
+
+        }
+        if(action == Action.RAISE){
+
+        }
+        if(action == Action.CALL){
+
+        }
+        if(action == Action.CHECK){
+
+        }
+        if(action == Action.MAKEPLAYER){
+
+        }
+        if(action == Action.MAKESPECTATOR){
+
+        }
         return null;
     }
 

@@ -7,6 +7,7 @@ import ch.uzh.ifi.seal.soprafs20.entity_in_game.GameLog;
 import ch.uzh.ifi.seal.soprafs20.entity_in_game.GameSummary;
 import ch.uzh.ifi.seal.soprafs20.entity_in_game.Player;
 import ch.uzh.ifi.seal.soprafs20.rest.dto.UserPostDTO;
+import ch.uzh.ifi.seal.soprafs20.service.GameService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +18,12 @@ import java.util.List;
  */
 @RestController
 public class GameController {
+
+    private final GameService gameService;
+
+    GameController(GameService gameService) {
+        this.gameService = gameService;
+    }
 
     @GetMapping("/games")
     @ResponseStatus(HttpStatus.OK)
@@ -47,7 +54,10 @@ public class GameController {
     @PutMapping("/games/{gameId}/players/{playerId}/actions")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public GameLog takeAction(@RequestBody Action action, @RequestBody int amount, @PathVariable long gameId, @PathVariable long playerId, @RequestHeader String token){return null;}
+    public GameLog takeAction(@RequestBody Action action, @RequestBody int amount, @PathVariable long gameId, @PathVariable long playerId, @RequestHeader String token){
+        gameService.executeAction(action, amount, gameId, playerId, token);
+        return null;
+    }
 
     @PutMapping("/games/{gameId}/players/{playerId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
