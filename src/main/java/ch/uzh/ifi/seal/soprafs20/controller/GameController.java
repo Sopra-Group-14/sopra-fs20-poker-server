@@ -1,5 +1,6 @@
 package ch.uzh.ifi.seal.soprafs20.controller;
 
+import ch.uzh.ifi.seal.soprafs20.cards.Card;
 import ch.uzh.ifi.seal.soprafs20.constant.Action;
 import ch.uzh.ifi.seal.soprafs20.constant.UserStatus;
 import ch.uzh.ifi.seal.soprafs20.entity.Game;
@@ -33,12 +34,17 @@ public class GameController {
     @PostMapping("/games")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public Game createGame(Game game){return null;}
+    public Game createGame(@RequestBody String gameName, @RequestBody long HostId, @RequestBody String potType){return GameService.createGame(gameName, HostId, potType);}
 
     @PutMapping("/games/{gameId}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public Game joinGame(@RequestBody UserPostDTO userPostDTO, @RequestBody UserStatus userStatus, @RequestHeader (value = "Authorization") String token, @PathVariable long gameId){return null;}
+
+    @GetMapping("/games/{gameId}")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public List<Card> getTableCards(@PathVariable long gameId){return gameService.getTableCards(gameId);}
 
     @GetMapping("/games/{gameId}/players")
     @ResponseStatus(HttpStatus.OK)
@@ -73,5 +79,12 @@ public class GameController {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public Player currentPlayer(@PathVariable long gameId){return null;}
+
+    @PutMapping("/games/{gameId}/players/{playerId}")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public void toggleReadyStatus(@PathVariable long gameId, @PathVariable long playerId){
+        gameService.toggleReadyStatus(gameId, playerId);
+    }
 
 }

@@ -74,4 +74,9 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format(baseErrorMessage, "name", "is"));
         }
     }
+
+    public static int addBalance(long userId){
+        return -1;
+    }
+
 }

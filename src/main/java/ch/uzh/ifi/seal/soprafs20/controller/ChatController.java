@@ -15,21 +15,21 @@ public class ChatController {
     @PutMapping("/games/{gameId}/chats/players")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public ChatLog sendPlayerMessage(@RequestBody long playerId, @RequestBody String message, @PathVariable long gameId){return null;}
+    public ChatLog sendPlayerMessage(@RequestBody ChatLog chatLog, @PathVariable long gameId, @RequestHeader (value = "Authorization") String token){return null;}
 
     @GetMapping("/games/{gameId}/chats/players")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public List<String> getPlayerMessageHistory(@PathVariable long gameId){return null;}
+    public List<String> getPlayerMessageHistory(@PathVariable long gameId, @RequestHeader (value = "Authorization") String token){return null;}
 
     @PutMapping("/games/{gameId}/chats/spectators")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public ChatLog sendSpectatorMessage(@RequestBody long spectatorId, @RequestBody String message, @PathVariable long gameId){return null;}
+    public ChatLog sendSpectatorMessage(@RequestBody ChatLog chatLog, @PathVariable long gameId, @RequestHeader (value = "Authorization") String token){return null;}
 
     @GetMapping("/games/{gameId}/chats/spectators")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public List<String> getSpectatorMessageHistory(@PathVariable long gameId){return null;}
+    public List<String> getSpectatorMessageHistory(@PathVariable long gameId, @RequestHeader (value = "Authorization") String token){return null;}
 
 }
