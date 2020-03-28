@@ -54,6 +54,8 @@ public class GameService {
 
     public void updateBlinds(Game game){}
 
-    public void toggleReadyStatus(long gameId, long playerId){};
+    public void toggleReadyStatus(long gameId, long playerId){}
+
+    public List<Player> getPlayers(long gameId){return null;}
 
 }

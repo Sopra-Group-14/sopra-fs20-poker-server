@@ -7,14 +7,14 @@ import ch.uzh.ifi.seal.soprafs20.constant.Action;
  */
 public class GameLog {
 
-    private int transactionNr, gameRound, raiseAmount, playerPot;
+    private int transactionNr, gameRound, raiseAmount, playerPot, amountToCall;
     private String playerName, nextPlayerName;
     private long playerId, nextPlayerId;
     private boolean roundOver, gameOver;
     private Action action;
 
     //All the parameters are set in the constructor
-    public GameLog(int transactionNr, int gameRound, Action action, int raiseAmount, String playerName, long playerId, String nextPlayerName, long nextPlayerId, int playerPot, boolean roundOver, boolean gameOver){
+    public GameLog(int transactionNr, int gameRound, Action action, int raiseAmount, String playerName, long playerId, String nextPlayerName, long nextPlayerId, int playerPot, boolean roundOver, boolean gameOver, int amountToCall){
         this.transactionNr = transactionNr;
         this.gameRound = gameRound;
         this.action = action;
@@ -26,6 +26,7 @@ public class GameLog {
         this.playerPot = playerPot;
         this.roundOver = roundOver;
         this.gameOver = gameOver;
+        this.amountToCall = amountToCall;
     }
 
 
@@ -50,5 +51,9 @@ public class GameLog {
     public boolean getRoundOver(){return roundOver;}
 
     public boolean getGameOver(){return gameOver;}
+
+    public int getAmountToCall(){return amountToCall;}
+
+    public void setAmountToCall(int amount){amountToCall = amount;}
 
 }
