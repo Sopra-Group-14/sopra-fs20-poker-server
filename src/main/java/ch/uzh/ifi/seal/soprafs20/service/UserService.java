@@ -79,4 +79,6 @@ public class UserService {
         return -1;
     }
 
+    public void updateUserMode(long userId, String mode){}
+
 }
