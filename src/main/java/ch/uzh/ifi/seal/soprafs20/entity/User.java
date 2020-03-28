@@ -1,5 +1,6 @@
 package ch.uzh.ifi.seal.soprafs20.entity;
 
+import ch.uzh.ifi.seal.soprafs20.constant.UserMode;
 import ch.uzh.ifi.seal.soprafs20.constant.UserStatus;
 
 import javax.persistence.*;
@@ -33,6 +34,8 @@ public class User implements Serializable {
 
     @Column(nullable = false)
     private UserStatus status;
+
+    private UserMode mode;
 
     public Long getId() {
         return id;
@@ -73,4 +76,8 @@ public class User implements Serializable {
     public void setStatus(UserStatus status) {
         this.status = status;
     }
+
+    public void setMode(UserMode mode){this.mode = mode;}
+
+    public UserMode getMode(){return mode;}
 }

@@ -58,4 +58,8 @@ public class GameService {
 
     public List<Player> getPlayers(long gameId){return null;}
 
+    public void removePlayer(long gameId, long userId){}
+
+    public List<Game> getAllGames(){return null;}
+
 }

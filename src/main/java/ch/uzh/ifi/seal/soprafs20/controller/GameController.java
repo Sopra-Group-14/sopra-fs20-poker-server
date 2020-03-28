@@ -29,7 +29,7 @@ public class GameController {
     @GetMapping("/games")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public List<Game> getGames(){return null;}
+    public List<Game> getAllGames(){return gameService.getAllGames();}
 
     @PostMapping("/games")
     @ResponseStatus(HttpStatus.CREATED)
@@ -56,7 +56,10 @@ public class GameController {
     @ResponseBody
     public List<Player> getPlayers(@PathVariable long gameId){return null;}
 
-
+    @PutMapping("/games/{gameId}/players/{playerId}/leave")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public void leave(@PathVariable long gameId, @PathVariable long playerId){gameService.removePlayer(gameId, playerId);}
 
     /*@PutMapping("/games/{gameId}/players/{playerId}/actions")
     @ResponseStatus(HttpStatus.OK)
