@@ -65,7 +65,9 @@ public class ChatControllerTest {
         testHistory.add("Player2 [22:22:22]: Second Message");
         testHistory.add("Player3 [33:33:33]: Third Message");
 
-        given(chatService.getHistory(Mockito.any())).willReturn(testHistory);
+        long testGameId = 1L;
+
+        given(chatService.getHistory("players", testGameId)).willReturn(testHistory);
 
         //when
         MockHttpServletRequestBuilder getRequest = get("/games/1/chats/players");
@@ -74,7 +76,7 @@ public class ChatControllerTest {
         mockMvc.perform(getRequest).andExpect(status().isOk());
 
         //chat history get returned
-        List<String> returnedHistory = chatService.getHistory(testPlayerChat);
+        List<String> returnedHistory = chatService.getHistory("player", testGameId);
 
         //assertions
         assertEquals(testHistory.get(0), returnedHistory.get(0));
@@ -98,7 +100,9 @@ public class ChatControllerTest {
         testHistory.add("Player2 [22:22:22]: Second Message");
         testHistory.add("Player3 [33:33:33]: Third Message");
 
-        given(chatService.getHistory(Mockito.any())).willReturn(testHistory);
+        long testGameId = 1L;
+
+        given(chatService.getHistory("spectators", testGameId)).willReturn(testHistory);
 
         //when
         MockHttpServletRequestBuilder getRequest = get("/games/1/chats/spectators");
@@ -107,7 +111,7 @@ public class ChatControllerTest {
         mockMvc.perform(getRequest).andExpect(status().isOk());
 
         //chat history get returned
-        List<String> returnedHistory = chatService.getHistory(testSpectatorChat);
+        List<String> returnedHistory = chatService.getHistory("spectators", testGameId);
 
         //assertions
         assertEquals(testHistory.get(0), returnedHistory.get(0));

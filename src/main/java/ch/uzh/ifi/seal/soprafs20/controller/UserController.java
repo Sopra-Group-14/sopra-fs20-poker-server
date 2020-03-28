@@ -82,7 +82,7 @@ public class UserController {
     @GetMapping("/users/{userId}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public UserGetDTO getUserByID(@PathVariable(value= "userId") final long userId, @RequestHeader(value = "Authorization") String token){return null;}
+    public UserGetDTO getUserByID(@PathVariable(value= "userId") final long userId, @RequestHeader(value = "Authorization") String token){return userService.getUserById(userId);}
 
     @PutMapping("/users/{userId}/mode")
     @ResponseStatus(HttpStatus.OK)
