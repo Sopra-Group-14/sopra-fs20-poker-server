@@ -22,7 +22,7 @@ public class ChatController {
     @PutMapping("/games/{gameId}/chats/players")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public ChatLog sendPlayerMessage(@RequestBody ChatLog chatLog, @PathVariable long gameId, @RequestHeader (value = "Authorization") String token){return null;}
+    public ChatLog sendPlayerMessage(@RequestBody ChatLog chatLog, @PathVariable long gameId, @RequestHeader (value = "Authorization") String token){return chatService.newMessage("players", gameId, chatLog);}
 
     @GetMapping("/games/{gameId}/chats/players")
     @ResponseStatus(HttpStatus.OK)
@@ -32,7 +32,7 @@ public class ChatController {
     @PutMapping("/games/{gameId}/chats/spectators")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public ChatLog sendSpectatorMessage(@RequestBody ChatLog chatLog, @PathVariable long gameId, @RequestHeader (value = "Authorization") String token){return null;}
+    public ChatLog sendSpectatorMessage(@RequestBody ChatLog chatLog, @PathVariable long gameId, @RequestHeader (value = "Authorization") String token){return chatService.newMessage("spectators", gameId, chatLog);}
 
     @GetMapping("/games/{gameId}/chats/spectators")
     @ResponseStatus(HttpStatus.OK)

@@ -1,6 +1,7 @@
 package ch.uzh.ifi.seal.soprafs20.service;
 
 import ch.uzh.ifi.seal.soprafs20.chat.Chat;
+import ch.uzh.ifi.seal.soprafs20.entity.ChatLog;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -18,8 +19,9 @@ public class ChatService {
         return null;
     }
 
-    public void newMessage(Chat chat, String message){
+    /*public void newMessage(Chat chat, String message){
         chat.newMessage(message);
-    }
+    }*/
+    public ChatLog newMessage(String chatmode, long gameId, ChatLog chatLog){return null;}
 
 }

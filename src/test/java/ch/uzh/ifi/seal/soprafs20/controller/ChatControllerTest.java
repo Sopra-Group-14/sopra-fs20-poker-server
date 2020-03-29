@@ -70,13 +70,13 @@ public class ChatControllerTest {
         given(chatService.getHistory("players", testGameId)).willReturn(testHistory);
 
         //when
-        MockHttpServletRequestBuilder getRequest = get("/games/1/chats/players");
+        MockHttpServletRequestBuilder getRequest = get("/games/1/chats/players").header("Authorization", "TestToken");
 
         //then
         mockMvc.perform(getRequest).andExpect(status().isOk());
 
         //chat history get returned
-        List<String> returnedHistory = chatService.getHistory("player", testGameId);
+        List<String> returnedHistory = chatService.getHistory("players", testGameId);
 
         //assertions
         assertEquals(testHistory.get(0), returnedHistory.get(0));
@@ -105,7 +105,7 @@ public class ChatControllerTest {
         given(chatService.getHistory("spectators", testGameId)).willReturn(testHistory);
 
         //when
-        MockHttpServletRequestBuilder getRequest = get("/games/1/chats/spectators");
+        MockHttpServletRequestBuilder getRequest = get("/games/1/chats/spectators").header("Authorization", "TestToken");
 
         //then
         mockMvc.perform(getRequest).andExpect(status().isOk());
@@ -125,17 +125,48 @@ public class ChatControllerTest {
 
         //given
         //information we give over to the server
-        long testPlayerId = 1L;
-        String testMessage = "TestMessage";
+        long testGameId = 1L;
         //chatlog we want returned
         ChatLog testChatLog = new ChatLog("11:11:11", "TestUsername", "TestMessage");
+        given(chatService.newMessage("players", testGameId, testChatLog)).willReturn(testChatLog);
 
         //when
-        //MockHttpServletRequestBuilder putRequest = put("/games/1/chats/players").contentType(MediaType.APPLICATION_JSON).content();
+        MockHttpServletRequestBuilder putRequest = put("/games/1/chats/players").contentType(MediaType.APPLICATION_JSON).content(asJsonString(testChatLog)).header("Authorization", "TestToken");
 
         //then
-        //mockMvc.perform(putRequest).andExpect(status().isCreated());
+        mockMvc.perform(putRequest).andExpect(status().isCreated());
 
+        ChatLog returnedChatLog = chatService.newMessage("players", testGameId, testChatLog);
+
+        //assertions
+        assertEquals(returnedChatLog.getMessage(), testChatLog.getMessage());
+        assertEquals(returnedChatLog.getTime(), testChatLog.getTime());
+        assertEquals(returnedChatLog.getUsername(), testChatLog.getUsername());
+
+    }
+
+    @Test
+    public void sendSpectatorChatMessageReturnsCorrectChatlog() throws Exception{
+
+        //given
+        //information we give over to the server
+        long testGameId = 1L;
+        //chatlog we want returned
+        ChatLog testChatLog = new ChatLog("11:11:11", "TestUsername", "TestMessage");
+        given(chatService.newMessage("spectators", testGameId, testChatLog)).willReturn(testChatLog);
+
+        //when
+        MockHttpServletRequestBuilder putRequest = put("/games/1/chats/spectators").contentType(MediaType.APPLICATION_JSON).content(asJsonString(testChatLog)).header("Authorization", "TestToken");
+
+        //then
+        mockMvc.perform(putRequest).andExpect(status().isCreated());
+
+        ChatLog returnedChatLog = chatService.newMessage("spectators", testGameId, testChatLog);
+
+        //assertions
+        assertEquals(returnedChatLog.getMessage(), testChatLog.getMessage());
+        assertEquals(returnedChatLog.getTime(), testChatLog.getTime());
+        assertEquals(returnedChatLog.getUsername(), testChatLog.getUsername());
 
     }
 
