@@ -54,7 +54,7 @@ public class GameController {
     @GetMapping("/games/{gameId}/players")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public List<Player> getPlayers(@PathVariable long gameId){return null;}
+    public List<Player> getPlayers(@PathVariable long gameId){return gameService.getPlayers(gameId);}
 
     @PutMapping("/games/{gameId}/players/{playerId}/leave")
     @ResponseStatus(HttpStatus.OK)

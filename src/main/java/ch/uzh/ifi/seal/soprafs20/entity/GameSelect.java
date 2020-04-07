@@ -9,7 +9,6 @@ public class GameSelect {
 
     private List<Game> gameList;
 
-
     public void addGame(Game game){
         gameList.add(game);
     }
@@ -20,6 +19,19 @@ public class GameSelect {
 
     public List<Game> getAllGames(){
         return gameList;
+    }
+
+    //Scan the gameList until the game with gameId is found. If none is found, null is returned.
+    public Game getGameById(long gameId){
+        int i;
+        Game returnGame = null;
+        for(i=0;i<gameList.size();i++){
+            if(gameList.get(i).getId() == gameId){
+                returnGame = gameList.get(i);
+                break;
+            }
+        }
+        return returnGame;
     }
 
 }
