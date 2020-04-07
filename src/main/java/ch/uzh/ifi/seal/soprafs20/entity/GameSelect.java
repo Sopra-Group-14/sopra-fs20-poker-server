@@ -26,7 +26,7 @@ public class GameSelect {
         int i;
         Game returnGame = null;
         for(i=0;i<gameList.size();i++){
-            if(gameList.get(i).getId() == gameId){
+            if(gameList.get(i).getGameId() == gameId){
                 returnGame = gameList.get(i);
                 break;
             }

@@ -75,10 +75,11 @@ public class GameController {
         return null;
     }
 
-    @PutMapping("/games/{gameId}/players/{playerId}")
+ /*   @PutMapping("/games/{gameId}/players/{playerId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ResponseBody
     public GameLog makePlayer(@PathVariable long gameId, @PathVariable long playerId){return null;}
+*/
 
     @PutMapping("/games/{gameId}/spectators/{playerId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
