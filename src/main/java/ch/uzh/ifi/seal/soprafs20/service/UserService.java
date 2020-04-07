@@ -2,6 +2,7 @@ package ch.uzh.ifi.seal.soprafs20.service;
 
 import ch.uzh.ifi.seal.soprafs20.constant.UserStatus;
 import ch.uzh.ifi.seal.soprafs20.entity.User;
+import ch.uzh.ifi.seal.soprafs20.exceptions.SopraServiceException;
 import ch.uzh.ifi.seal.soprafs20.repository.UserRepository;
 import ch.uzh.ifi.seal.soprafs20.rest.dto.UserGetDTO;
 import org.slf4j.Logger;
@@ -84,4 +85,45 @@ public class UserService {
 
     public UserGetDTO getUserById(long userId){return null;}
 
+
+    public String loginUser(String username, String password){
+
+        log.warn("try login for User: {}", username);
+        User user = userRepository.findByUsername(username);
+        if (user == null){
+            throw new SopraServiceException("ERROR: login not possible. Username or password incorrect.");
+        }
+
+        //throw error if password are different
+        //TODO use encrypted passwords
+        if(!user.getPassword().equals(password)){
+            throw new SopraServiceException("ERROR: login not possible. Username or password incorrect.");
+        }
+
+        //only generate a new token, if the user is not already logged in
+        if (user.getStatus() != UserStatus.ONLINE){
+            String loginToken = UUID.randomUUID().toString();
+            user.setToken(loginToken);
+            user.setStatus(UserStatus.ONLINE);
+            this.userRepository.save(user);
+            this.userRepository.flush();
+            return loginToken;
+        }
+        return user.getToken();
+    }
+/*
+    public void logoutUser(String token){
+        User user = userRepository.findByToken(token);
+        if (user != null){
+            user.setStatus(UserStatus.OFFLINE);
+            //user.setToken("");
+            log.warn("try to logout for User: {}", user.getName());
+            this.userRepository.save(user);
+            this.userRepository.flush();
+        }
+        else{
+            throw new SopraServiceException("logout failed");
+        }
+    }
+*/
 }
