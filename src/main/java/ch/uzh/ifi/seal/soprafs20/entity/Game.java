@@ -59,9 +59,9 @@ public class Game {
         this.spectators.remove(spectator);
     }
 
-    public void setId(long id){this.gameId = id;}
+    public void setGameId(long id){this.gameId = id;}
 
-    public long getId(){return gameId;}
+    public long getGameId(){return gameId;}
 
     public String getGameName(){return gameName;}
 
