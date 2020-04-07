@@ -3,6 +3,7 @@ package ch.uzh.ifi.seal.soprafs20.service;
 import ch.uzh.ifi.seal.soprafs20.cards.Card;
 import ch.uzh.ifi.seal.soprafs20.constant.Action;
 import ch.uzh.ifi.seal.soprafs20.entity.Game;
+import ch.uzh.ifi.seal.soprafs20.entity.GameSelect;
 import ch.uzh.ifi.seal.soprafs20.entity_in_game.GameLog;
 import ch.uzh.ifi.seal.soprafs20.entity_in_game.Player;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,8 @@ import java.util.List;
 @Service
 @Transactional
 public class GameService {
+
+    private final GameSelect gameSelect = new GameSelect();
 
     private int currentId = 0;
 
@@ -56,7 +59,9 @@ public class GameService {
 
     public void toggleReadyStatus(long gameId, long playerId){}
 
-    public List<Player> getPlayers(long gameId){return null;}
+    public List<Player> getPlayers(long gameId){
+        return gameSelect.getGameById(gameId).getPlayers();
+    }
 
     public void removePlayer(long gameId, long userId){}
 

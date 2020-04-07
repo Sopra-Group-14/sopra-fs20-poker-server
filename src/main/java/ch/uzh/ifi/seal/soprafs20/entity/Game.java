@@ -61,6 +61,8 @@ public class Game {
         this.players.remove(player);
     }
 
+    public List<Player> getPlayers(){return players;}
+
     public void addSpectator(Spectator spectator){
         this.spectators.add(spectator);
     }
