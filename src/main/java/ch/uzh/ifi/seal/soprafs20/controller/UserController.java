@@ -1,5 +1,6 @@
 package ch.uzh.ifi.seal.soprafs20.controller;
 
+import ch.uzh.ifi.seal.soprafs20.constant.UserStatus;
 import ch.uzh.ifi.seal.soprafs20.entity.User;
 import ch.uzh.ifi.seal.soprafs20.rest.dto.UserGetDTO;
 import ch.uzh.ifi.seal.soprafs20.rest.dto.UserPostDTO;
@@ -74,13 +75,18 @@ public class UserController {
     @PutMapping("/users/{userId}/balance")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public int addBalance(@PathVariable (value = "userId") long userId, @RequestBody int amount, @RequestHeader (value = "Authorization") String token){return -1;}
+    public int addBalance(@PathVariable (value = "userId") long userId, @RequestBody int amount, @RequestHeader (value = "Authorization") String token){
+        return UserService.addBalance(userId);
+    }
 
     @GetMapping("/users/{userId}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public UserGetDTO getUserByID(@PathVariable(value= "userId") final long userId, @RequestHeader(value = "Authorization") String token){return null;}
+    public UserGetDTO getUserByID(@PathVariable(value= "userId") final long userId, @RequestHeader(value = "Authorization") String token){return userService.getUserById(userId);}
 
-
+    @PutMapping("/users/{userId}/mode")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public void updateUserMode(@PathVariable long userId, @RequestBody String mode, @RequestHeader(value = "Authorization") String token){userService.updateUserMode(userId, mode);}
 
 }

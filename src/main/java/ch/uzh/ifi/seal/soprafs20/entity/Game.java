@@ -1,4 +1,6 @@
 package ch.uzh.ifi.seal.soprafs20.entity;
+import ch.uzh.ifi.seal.soprafs20.cards.Card;
+import ch.uzh.ifi.seal.soprafs20.cards.Deck;
 import ch.uzh.ifi.seal.soprafs20.chat.PlayerChat;
 import ch.uzh.ifi.seal.soprafs20.chat.SpectatorChat;
 import ch.uzh.ifi.seal.soprafs20.entity_in_game.Player;
@@ -23,11 +25,19 @@ public class Game {
     private int maxPlayers;
     private String gameName, gameHostName;
 
-    private Pot mainPot = new Pot();
+    //How many cards on the table are revealed
+    private int revealedTableCards = 0;
 
-    //Create lists for spectators and players
+    private Pot mainPot = new Pot();
+    private Deck deck = new Deck();
+
+    //Create lists for spectators, players and the active players
     private List<Player> players = new LinkedList<>();
     private List<Spectator> spectators = new LinkedList<>();
+    private List<Player> activePlayers = new LinkedList<>();
+
+    //Create a list for the cards on the table
+    private List<Card> tableCards = new LinkedList<>();
 
     //Constructor
     public Game(String gameName, String hostName/*, int maxPlayers, GameService gameService*/){
@@ -68,5 +78,23 @@ public class Game {
     public String getGameHostName(){return gameHostName;}
 
     public int getMaxPlayers(){return maxPlayers;}
+
+    public void updateBlinds(){}
+
+    public void addTableCard(Card card){
+        tableCards.add(card);
+    }
+
+    public void removeTableCards(){
+        tableCards = new LinkedList<>();
+        revealedTableCards = 0;
+    }
+
+    public Card revealNextTableCard(){
+        revealedTableCards += 1;
+        Card topCard = deck.getTopCard();
+        tableCards.add(topCard);
+        return topCard;
+    }
 
 }

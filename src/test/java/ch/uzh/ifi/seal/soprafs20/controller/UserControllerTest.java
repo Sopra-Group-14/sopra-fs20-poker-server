@@ -2,6 +2,7 @@ package ch.uzh.ifi.seal.soprafs20.controller;
 
 import ch.uzh.ifi.seal.soprafs20.constant.UserStatus;
 import ch.uzh.ifi.seal.soprafs20.entity.User;
+import ch.uzh.ifi.seal.soprafs20.rest.dto.UserGetDTO;
 import ch.uzh.ifi.seal.soprafs20.rest.dto.UserPostDTO;
 import ch.uzh.ifi.seal.soprafs20.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -15,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Collections;
@@ -25,8 +27,8 @@ import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * UserControllerTest
@@ -56,7 +58,7 @@ public class UserControllerTest {
         given(userService.getUsers()).willReturn(allUsers);
 
         // when
-        MockHttpServletRequestBuilder getRequest = get("/registration").contentType(MediaType.APPLICATION_JSON);
+        MockHttpServletRequestBuilder getRequest = get("/users").contentType(MediaType.APPLICATION_JSON).header("Authorization", "TestToken");
 
         // then
         mockMvc.perform(getRequest).andExpect(status().isOk())
@@ -94,6 +96,40 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$.name", is(user.getName())))
                 .andExpect(jsonPath("$.username", is(user.getUsername())))
                 .andExpect(jsonPath("$.status", is(user.getStatus().toString())));
+    }
+
+    @Test
+    public void getUserByIdRetrievesCorrectUser() throws Exception{
+
+        //given
+        //make user we get returned
+        UserGetDTO testUser = new UserGetDTO();
+        testUser.setUsername("TestUsername");
+        testUser.setName("TestName");
+        testUser.setId(1L);
+
+        //make user we want returned
+        UserGetDTO testUser2 = new UserGetDTO();
+        testUser2.setUsername("TestUsername");
+        testUser2.setName("TestName");
+        testUser2.setId(1L);
+
+        given(userService.getUserById(Mockito.anyLong())).willReturn(testUser);
+
+        //when
+        MockHttpServletRequestBuilder getRequest = get("/users/1").header("Authorization", "TestToken");
+
+        //then
+        mockMvc.perform(getRequest).andExpect(status().isOk());
+
+        //get returned user
+        UserGetDTO returnedUser = userService.getUserById(1L);
+
+        //assertions
+        assertEquals(returnedUser.getName(), testUser2.getName());
+        assertEquals(returnedUser.getUsername(), testUser2.getUsername());
+        assertEquals(returnedUser.getId(), testUser2.getId());
+
     }
 
     /**
