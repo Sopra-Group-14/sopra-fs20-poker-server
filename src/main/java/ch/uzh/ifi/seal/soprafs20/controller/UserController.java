@@ -6,6 +6,7 @@ import ch.uzh.ifi.seal.soprafs20.rest.dto.UserPostDTO;
 import ch.uzh.ifi.seal.soprafs20.rest.mapper.DTOMapper;
 import ch.uzh.ifi.seal.soprafs20.service.UserService;
 import org.springframework.http.HttpStatus;
+import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -48,10 +49,16 @@ public class UserController {
         User userInput = DTOMapper.INSTANCE.convertUserPostDTOtoEntity(userPostDTO);
 
         // create user
-        User createdUser = userService.createUser(userInput);
+        try {
+            User createdUser = userService.createUser(userInput);
 
-        // convert internal representation of user back to API
-        return DTOMapper.INSTANCE.convertEntityToUserGetDTO(createdUser);
+            // convert internal representation of user back to API
+            return DTOMapper.INSTANCE.convertEntityToUserGetDTO(createdUser);
+        }
+        catch (Exception ex){
+                throw new TransactionSystemException("error");
+        }
+
     }
 
     @PutMapping("/login")
