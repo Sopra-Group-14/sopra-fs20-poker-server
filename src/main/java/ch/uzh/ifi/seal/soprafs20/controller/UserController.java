@@ -1,6 +1,7 @@
 package ch.uzh.ifi.seal.soprafs20.controller;
 
 import ch.uzh.ifi.seal.soprafs20.entity.User;
+import ch.uzh.ifi.seal.soprafs20.rest.dto.LoginPutDTO;
 import ch.uzh.ifi.seal.soprafs20.rest.dto.UserGetDTO;
 import ch.uzh.ifi.seal.soprafs20.rest.dto.UserPostDTO;
 import ch.uzh.ifi.seal.soprafs20.rest.mapper.DTOMapper;
@@ -64,11 +65,15 @@ public class UserController {
     @PutMapping("/login")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public UserGetDTO loginUser(@RequestBody String username, @RequestBody String password){
-        String token = this.userService.loginUser(username, password);
+    public UserGetDTO loginUser(@RequestBody LoginPutDTO loginPutDTO){
         UserGetDTO userGetDTO = new UserGetDTO();
-        userGetDTO.setToken(token);
-        userGetDTO.setUsername(username);
+        User user = this.userService.loginUser(loginPutDTO.getUsername(), loginPutDTO.getPassword());
+        userGetDTO.setUsername(user.getUsername());
+        userGetDTO.setToken(user.getToken());
+        userGetDTO.setId(user.getId());
+        userGetDTO.setPassword(user.getPassword());
+        userGetDTO.setStatus(user.getStatus());
+        userGetDTO.setName(user.getName());
         return userGetDTO;
     }
 

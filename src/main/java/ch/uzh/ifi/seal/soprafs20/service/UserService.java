@@ -41,7 +41,7 @@ public class UserService {
 
     public User createUser(User newUser) {
         newUser.setToken(UUID.randomUUID().toString());
-        newUser.setStatus(UserStatus.OFFLINE);
+        newUser.setStatus(UserStatus.ONLINE);
 
         checkIfUserExists(newUser);
 
@@ -86,7 +86,7 @@ public class UserService {
     public UserGetDTO getUserById(long userId){return null;}
 
 
-    public String loginUser(String username, String password){
+    public User loginUser(String username, String password){
 
         log.warn("try login for User: {}", username);
         User user = userRepository.findByUsername(username);
@@ -107,9 +107,9 @@ public class UserService {
             user.setStatus(UserStatus.ONLINE);
             this.userRepository.save(user);
             this.userRepository.flush();
-            return loginToken;
+            return user;
         }
-        return user.getToken();
+        return user;
     }
 /*
     public void logoutUser(String token){
