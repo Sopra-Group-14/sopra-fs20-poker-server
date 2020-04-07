@@ -21,6 +21,7 @@ public class GameSelect {
         return gameList;
     }
 
+    //Scan the gameList until the game with gameId is found. If none is found, null is returned.
     public Game getGameById(long gameId){
         int i;
         Game returnGame = null;

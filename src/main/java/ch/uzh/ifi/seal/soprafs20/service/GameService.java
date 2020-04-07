@@ -18,6 +18,7 @@ import java.util.List;
 @Transactional
 public class GameService {
 
+    //The GameSelect is essentially just a list that holds all games. The games can then be accessed through it.
     private final GameSelect gameSelect = new GameSelect();
 
     private int currentId = 0;
