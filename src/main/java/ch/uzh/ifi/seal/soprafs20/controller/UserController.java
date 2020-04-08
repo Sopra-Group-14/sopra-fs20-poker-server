@@ -81,7 +81,7 @@ public class UserController {
     @ResponseStatus(HttpStatus.I_AM_A_TEAPOT)
     @ResponseBody
     public void logoutUser(@RequestHeader(value = "Authorization") String token) {
-        //userService.logoutUser(token);
+        userService.logoutUser(token);
     }
 
     @GetMapping("/users/{userId}/balance")
@@ -99,7 +99,10 @@ public class UserController {
     @GetMapping("/users/{userId}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public UserGetDTO getUserByID(@PathVariable(value= "userId") final long userId, @RequestHeader(value = "Authorization") String token){return userService.getUserById(userId);}
+    public UserGetDTO getUserByID(@PathVariable(value= "userId") final long userId, @RequestHeader(value = "Authorization") String token){
+        User user = userService.getUserById(userId);
+        return DTOMapper.INSTANCE.convertEntityToUserGetDTO(user);
+    }
 
     @PutMapping("/users/{userId}/mode")
     @ResponseStatus(HttpStatus.OK)

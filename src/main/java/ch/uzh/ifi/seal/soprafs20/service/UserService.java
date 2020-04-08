@@ -77,13 +77,26 @@ public class UserService {
         }*/
     }
 
+    public void logoutUser(String token){
+        User user = this.userRepository.findByToken(token);
+        if(user != null) {
+            user.setStatus(UserStatus.OFFLINE);
+            this.userRepository.save(user);
+            this.userRepository.flush();
+        }else{
+            /* throw new SopraServiceExeption("no user found"); */
+        }
+    }
+
     public static int addBalance(long userId){
         return -1;
     }
 
     public void updateUserMode(long userId, String mode){}
 
-    public UserGetDTO getUserById(long userId){return null;}
+    public User getUserById(long userId){
+        return this.userRepository.findById(userId);
+    }
 
 
     public User loginUser(String username, String password){
