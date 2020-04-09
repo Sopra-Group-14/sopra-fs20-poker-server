@@ -63,8 +63,8 @@ public class GameService {
 
     public List<Card> getTableCards(String token){
         Game game = this.gameRepository.findByGameHostToken(token);
-
-        return null;}
+        return game.getTableCards();
+    }
 
     public long getNextId(){
         currentId += 1;

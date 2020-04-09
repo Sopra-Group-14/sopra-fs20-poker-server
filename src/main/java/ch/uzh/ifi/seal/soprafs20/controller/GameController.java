@@ -49,7 +49,10 @@ public class GameController {
     @GetMapping("/games/{gameId}/dealers/cards")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public List<Card> getTableCards(@RequestHeader (value = "Authorization") String token){return gameService.getTableCards(token);}
+    public List<Card> getTableCards(@RequestHeader (value = "Authorization") String token){
+
+        return gameService.getTableCards(token);
+    }
 
     @GetMapping("/games/{gameId}/players")
     @ResponseStatus(HttpStatus.OK)

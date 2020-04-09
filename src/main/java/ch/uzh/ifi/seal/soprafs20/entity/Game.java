@@ -25,9 +25,6 @@ public class Game {
     private int maxPlayers;
     private String gameName, gameHostName;
 
-    //How many cards on the table are revealed
-    private int revealedTableCards = 0;
-
     private Pot mainPot = new Pot();
     private Deck deck = new Deck();
 
@@ -82,6 +79,10 @@ public class Game {
     public int getMaxPlayers(){return maxPlayers;}
 
     public void updateBlinds(){}
+
+    public List<Card> getTableCards(){
+        return new LinkedList<>(tableCards);
+    }
 
     public void addTableCard(){
         if (tableCards.size()>2){
