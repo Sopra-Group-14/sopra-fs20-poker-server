@@ -46,10 +46,10 @@ public class GameController {
     @ResponseBody
     public GameLog getGameLog(@PathVariable long gameId){return null;}
 
-    @GetMapping("/games/{gameId}/table")
+    @GetMapping("/games/{gameId}/dealers/cards")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public List<Card> getTableCards(@PathVariable long gameId){return gameService.getTableCards(gameId);}
+    public List<Card> getTableCards(@RequestHeader (value = "Authorization") String token){return gameService.getTableCards(token);}
 
     @GetMapping("/games/{gameId}/players")
     @ResponseStatus(HttpStatus.OK)

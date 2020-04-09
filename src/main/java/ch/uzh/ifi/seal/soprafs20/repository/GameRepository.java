@@ -8,11 +8,11 @@ import java.util.List;
 
 @Repository("userRepository")
 public interface GameRepository extends JpaRepository<Game, Long> {
-    Game findByName(String name);
+    Game findByGameHostName(String name);
 
-    Game findByUsername(String username);
+    Game findByGameHostUsername(String username);
 
-    Game findByToken(String token);
+    Game findByGameHostToken(String token);
 
     Game findById(long id);
 

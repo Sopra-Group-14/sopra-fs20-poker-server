@@ -4,7 +4,6 @@ import ch.uzh.ifi.seal.soprafs20.constant.UserStatus;
 import ch.uzh.ifi.seal.soprafs20.entity.User;
 import ch.uzh.ifi.seal.soprafs20.exceptions.SopraServiceException;
 import ch.uzh.ifi.seal.soprafs20.repository.UserRepository;
-import ch.uzh.ifi.seal.soprafs20.rest.dto.UserGetDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +28,8 @@ public class UserService {
     private final Logger log = LoggerFactory.getLogger(UserService.class);
 
     private final UserRepository userRepository;
+
+
 
     @Autowired
     public UserService(@Qualifier("userRepository") UserRepository userRepository) {
@@ -83,8 +84,11 @@ public class UserService {
             user.setStatus(UserStatus.OFFLINE);
             this.userRepository.save(user);
             this.userRepository.flush();
-        }else{
+        }
+        else
+            {
             /* throw new SopraServiceExeption("no user found"); */
+                throw new SopraServiceException("no user found");
         }
     }
 

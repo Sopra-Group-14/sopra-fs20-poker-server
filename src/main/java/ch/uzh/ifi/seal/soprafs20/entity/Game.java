@@ -7,7 +7,7 @@ import ch.uzh.ifi.seal.soprafs20.entity_in_game.Player;
 import ch.uzh.ifi.seal.soprafs20.entity_in_game.Pot;
 import ch.uzh.ifi.seal.soprafs20.entity_in_game.Spectator;
 import ch.uzh.ifi.seal.soprafs20.service.GameService;
-
+import ch.uzh.ifi.seal.soprafs20.exceptions.SopraServiceException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -83,20 +83,17 @@ public class Game {
 
     public void updateBlinds(){}
 
-    public void addTableCard(Card card){
-        tableCards.add(card);
+    public void addTableCard(){
+        if (tableCards.size()>2){
+            throw new SopraServiceException("There are already three cards on the table in the game");
+        }
+        deck.shuffle();
+        tableCards.add(deck.getTopCard());
     }
 
     public void removeTableCards(){
         tableCards = new LinkedList<>();
-        revealedTableCards = 0;
-    }
-
-    public Card revealNextTableCard(){
-        revealedTableCards += 1;
-        Card topCard = deck.getTopCard();
-        tableCards.add(topCard);
-        return topCard;
     }
 
 }
+
