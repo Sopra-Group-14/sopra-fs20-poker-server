@@ -6,15 +6,16 @@ import ch.uzh.ifi.seal.soprafs20.entity.GameSelect;
 import ch.uzh.ifi.seal.soprafs20.entity.User;
 import ch.uzh.ifi.seal.soprafs20.entity_in_game.GameLog;
 import ch.uzh.ifi.seal.soprafs20.entity_in_game.Player;
-import ch.uzh.ifi.seal.soprafs20.repository.GameRepository;
-import ch.uzh.ifi.seal.soprafs20.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.print.attribute.standard.NumberUp;
 import java.util.List;
+
+import static ch.uzh.ifi.seal.soprafs20.entity.GameSelect.NULL_GAME;
+import static java.lang.Math.random;
 
 /**
  * The GameService takes care of what happens with Games.
@@ -22,21 +23,61 @@ import java.util.List;
 @Service
 @Transactional
 public class GameService {
-    private final Logger log = LoggerFactory.getLogger(GameService.class);
 
-    private final GameRepository gameRepository;
+    private final UserService userService;
+    private final Logger gameLog = LoggerFactory.getLogger(GameService.class);
 
-    @Autowired
-    public GameService(@Qualifier("gameRepository") GameRepository gameRepository) {
-        this.gameRepository = gameRepository;
-    }
     //The GameSelect is essentially just a list that holds all games. The games can then be accessed through it.
     private final GameSelect gameSelect = new GameSelect();
 
     private int currentId = 0;
+    private String gameName;
+    private long hostID;
+    private String potType;
 
-    public static Game createGame(String gameName, long HostId, String potType){
-        return null;
+    public GameService(UserService userService){
+        this.userService = userService;
+    }
+
+    public Game createGame(String gameName, long hostID, String potType){
+
+        /*createGame receives gameName, hostId and potType from client. The game constructor expects the hostName;
+
+         */
+
+        //TODO resolve null pointer exception if user that does not exist creates a game
+        User host = userService.getUserById(hostID);
+
+        String hostName = host.getUsername();
+        String hostToken = host.getToken();
+        Game newGame = new Game();
+
+        long currentId;
+        if(this.gameSelect.getAllGames() != null){
+            currentId = this.gameSelect.getAllGames().size() + 1;
+        }else{
+            currentId = 1;
+        }
+
+        newGame.setGameId(currentId);
+        newGame.setGameName(gameName);
+        newGame.setPotType(potType);
+        newGame.setGameHostName(hostName);
+        newGame.setHostToken(hostToken);
+
+        this.gameSelect.addGame(newGame);
+
+        return newGame;
+
+    }
+
+    public void addHost(long hostID, Game game){
+
+        User playerHost = userService.getUserById(hostID);
+        Player player = userService.setToPlayer(playerHost);
+
+        game.addPlayer(player);
+
     }
 
     public GameLog executeAction(Action action, int amount, long gameId, long playerId, String token){
@@ -62,7 +103,7 @@ public class GameService {
     }
 
     public List<Card> getTableCards(String token){
-        Game game = this.gameRepository.findByGameHostToken(token);
+        Game game = this.gameSelect.getGameByToken(token);
         return game.getTableCards();
     }
 
@@ -81,6 +122,6 @@ public class GameService {
 
     public void removePlayer(long gameId, long userId){}
 
-    public List<Game> getAllGames(){return null;}
+    public List<Game> getAllGames(){return gameSelect.getAllGames();}
 
 }

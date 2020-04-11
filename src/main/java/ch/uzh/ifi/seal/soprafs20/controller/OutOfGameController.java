@@ -37,13 +37,4 @@ public class OutOfGameController {
     @ResponseBody
     public Game hostGame(@RequestBody UserPostDTO userPostDTO){return null;}
 
-    @GetMapping("/games")
-    @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
-    public List<Game> activeGames(){
-        List<Game> allGames = outOfGameService.getAllHostedGames();
-
-        return null;
-    }
-
 }

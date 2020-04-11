@@ -22,8 +22,12 @@ public class Game {
     private final PlayerChat playerChat = new PlayerChat();
     private final SpectatorChat spectatorChat = new SpectatorChat();
     private long gameId;
+    private long gameHostID;
     private int maxPlayers;
-    private String gameName, gameHostName;
+    private String gameName;
+    private String gameHostName;
+    private String potType;
+    private String hostToken;
 
     private Pot mainPot = new Pot();
     private Deck deck = new Deck();
@@ -36,19 +40,51 @@ public class Game {
     //Create a list for the cards on the table
     private List<Card> tableCards = new LinkedList<>();
 
-    //Constructor
-    public Game(String gameName, String hostName/*, int maxPlayers, GameService gameService*/){
+    /*
+Constructor
+    public Game(String gameName, String hostName, String potType /*, int maxPlayers, GameService gameService* /){
         this.gameName = gameName;
         this.gameHostName = hostName;
+        this.potType = potType;
         //this.maxPlayers = maxPlayers;
         /*this.gameService = gameService;
-        this.id = assignId();*/
+        this.id = assignId();* /
     }
+*/
 
     /*private long assignId(){
         return gameService.getNextId();
     }*/
 
+    public void setPotType(String potType) {
+        this.potType = potType;
+    }
+
+    public String getPotType() {
+        return potType;
+    }
+
+    public void setGameName(String gameName) {
+        this.gameName = gameName;
+    }
+
+    public void setGameHostID(long gameHostID) {
+        this.gameHostID = gameHostID;
+    }
+
+    public long getGameHostID() {
+        return gameHostID;
+    }
+
+    public String getGameName(){return gameName;}
+
+    public void setGameHostName(String gameHostName) {
+        this.gameHostName = gameHostName;
+    }
+
+    public String getGameHostName(){
+        return this.gameHostName;
+    }
 
     public void addPlayer(Player player){
         this.players.add(player);
@@ -72,9 +108,13 @@ public class Game {
 
     public long getGameId(){return gameId;}
 
-    public String getGameName(){return gameName;}
+    public void setHostToken(String hostToken) {
+        this.hostToken = hostToken;
+    }
 
-    public String getGameHostName(){return gameHostName;}
+    public String getHostToken(){
+        return this.hostToken;
+    }
 
     public int getMaxPlayers(){return maxPlayers;}
 

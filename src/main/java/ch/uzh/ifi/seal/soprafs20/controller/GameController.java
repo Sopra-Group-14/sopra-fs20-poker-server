@@ -7,7 +7,9 @@ import ch.uzh.ifi.seal.soprafs20.entity.Game;
 import ch.uzh.ifi.seal.soprafs20.entity_in_game.GameLog;
 import ch.uzh.ifi.seal.soprafs20.entity_in_game.GameSummary;
 import ch.uzh.ifi.seal.soprafs20.entity_in_game.Player;
+import ch.uzh.ifi.seal.soprafs20.rest.dto.GamePostDTO;
 import ch.uzh.ifi.seal.soprafs20.rest.dto.UserPostDTO;
+import ch.uzh.ifi.seal.soprafs20.rest.mapper.DTOMapper;
 import ch.uzh.ifi.seal.soprafs20.service.GameService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +36,18 @@ public class GameController {
     @PostMapping("/games")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public Game createGame(@RequestBody String gameName, @RequestBody long HostId, @RequestBody String potType){return GameService.createGame(gameName, HostId, potType);}
+    public Game createGame(@RequestBody GamePostDTO gamePostDTO){
+        Game postGame = DTOMapper.INSTANCE.convertGamePostDTOtoEntity(gamePostDTO);
+
+        String gameName = postGame.getGameName();
+        long hostId = postGame.getGameHostID();
+        String potType = postGame.getPotType();
+
+        Game game = this.gameService.createGame(gameName, hostId, potType);
+        gameService.addHost(hostId, game);
+
+        return game;
+    }
 
     @PutMapping("/games/{gameId}")
     @ResponseStatus(HttpStatus.OK)

@@ -35,7 +35,6 @@ public class UserGetDTO {
         this.username = username;
     }
 
-
     public UserStatus getStatus() {
         return status;
     }

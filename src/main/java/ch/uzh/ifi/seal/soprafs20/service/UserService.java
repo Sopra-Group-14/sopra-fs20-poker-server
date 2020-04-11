@@ -2,6 +2,7 @@ package ch.uzh.ifi.seal.soprafs20.service;
 
 import ch.uzh.ifi.seal.soprafs20.constant.UserStatus;
 import ch.uzh.ifi.seal.soprafs20.entity.User;
+import ch.uzh.ifi.seal.soprafs20.entity_in_game.Player;
 import ch.uzh.ifi.seal.soprafs20.exceptions.SopraServiceException;
 import ch.uzh.ifi.seal.soprafs20.repository.UserRepository;
 import org.slf4j.Logger;
@@ -102,6 +103,13 @@ public class UserService {
         return this.userRepository.findById(userId);
     }
 
+    public Player setToPlayer(User user){
+        long userID = user.getId();
+
+        Player player = new Player(userID);
+
+        return player;
+    }
 
     public User loginUser(String username, String password){
 

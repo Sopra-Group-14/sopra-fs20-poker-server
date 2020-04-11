@@ -8,12 +8,16 @@ public class Player{
 
     private List<Card> hand;
 
+    private static final int START_CREDIT = 1000;
+
     private int credit;
 
     private long id;
 
-    Player(int credit, long id){
-        this.credit = credit;
+    private boolean isHost;
+
+    public Player(long id){
+        this.credit = START_CREDIT;
         this.id = id;
     }
 

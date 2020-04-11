@@ -1,23 +1,13 @@
 package ch.uzh.ifi.seal.soprafs20.service;
 
-import ch.uzh.ifi.seal.soprafs20.constant.UserStatus;
 import ch.uzh.ifi.seal.soprafs20.entity.Game;
 import ch.uzh.ifi.seal.soprafs20.entity.GameSelect;
-import ch.uzh.ifi.seal.soprafs20.entity.User;
-import ch.uzh.ifi.seal.soprafs20.repository.GameRepository;
-import ch.uzh.ifi.seal.soprafs20.repository.UserRepository;
-import ch.uzh.ifi.seal.soprafs20.rest.dto.UserGetDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.UUID;
 
 /**
  * User Service
@@ -30,14 +20,11 @@ public class OutOfGameService {
 
     private final Logger log = LoggerFactory.getLogger(UserService.class);
 
-    private final GameRepository gameRepository;
+    private final GameSelect gameSelect = new GameSelect();
 
-    public OutOfGameService(GameRepository gameRepository) {
-        this.gameRepository = gameRepository;
-    }
 
     public List<Game> getAllHostedGames() {
-        return this.gameRepository.findAll();
+        return this.gameSelect.getAllGames();
     }
 
 }

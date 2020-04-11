@@ -1,4 +1,5 @@
 package ch.uzh.ifi.seal.soprafs20.entity;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -7,10 +8,13 @@ import java.util.List;
  */
 public class GameSelect {
 
-    private List<Game> gameList;
+    private List<Game> gameList = new ArrayList<>();
+    public static final Game NULL_GAME = new Game();
 
     public void addGame(Game game){
-        gameList.add(game);
+        if(!gameList.contains(game)) {
+            gameList.add(game);
+        }
     }
 
     public void removeGame(Game game){
@@ -24,9 +28,25 @@ public class GameSelect {
     //Scan the gameList until the game with gameId is found. If none is found, null is returned.
     public Game getGameById(long gameId){
         int i;
-        Game returnGame = null;
+        Game returnGame = NULL_GAME;
+
+        if(gameList != null) {
+            for (i = 0; i < gameList.size(); i++) {
+                if (gameList.get(i).getGameId() == gameId) {
+                    returnGame = gameList.get(i);
+                    break;
+                }
+            }
+        }
+        return returnGame;
+    }
+
+    //Scan the gameList until the game with gameId is found. If none is found, null is returned.
+    public Game getGameByToken(String token){
+        int i;
+        Game returnGame = NULL_GAME;
         for(i=0;i<gameList.size();i++){
-            if(gameList.get(i).getGameId() == gameId){
+            if(gameList.get(i).getHostToken() == token){
                 returnGame = gameList.get(i);
                 break;
             }
