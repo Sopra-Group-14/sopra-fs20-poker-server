@@ -7,6 +7,7 @@ import ch.uzh.ifi.seal.soprafs20.constant.GameRound;
 import ch.uzh.ifi.seal.soprafs20.constant.UserStatus;
 import ch.uzh.ifi.seal.soprafs20.entity_in_game.Player;
 import ch.uzh.ifi.seal.soprafs20.entity_in_game.Pot;
+import ch.uzh.ifi.seal.soprafs20.entity_in_game.SmallBlind;
 import ch.uzh.ifi.seal.soprafs20.entity_in_game.Spectator;
 import ch.uzh.ifi.seal.soprafs20.service.GameService;
 import ch.uzh.ifi.seal.soprafs20.exceptions.SopraServiceException;
@@ -99,6 +100,31 @@ Constructor
 
     public List<Player> getPlayers(){return players;}
     public List<Player> getActivePlayers(){return activePlayers;}
+
+
+    public Player getCurrentPlayer(long id) {
+        for (int i = 0; i < players.size(); i++) {
+            if (players.get(i).getId() == id) {
+                return players.get(i);
+            }
+        }
+        return null;
+    }
+
+    public Player getPreviousPlayer(Player currentPlayer){
+        if (activePlayers.get(0).getId() == currentPlayer.getId()) {
+            return activePlayers.get(activePlayers.size()-1);
+        }
+        else {
+            for (int i = 1; i < activePlayers.size(); i++) {
+                if (activePlayers.get(i).getId() == currentPlayer.getId()) {
+                    return activePlayers.get(i - 1);
+                }
+
+            }
+            return null;
+        }
+    }
 
     public void addSpectator(Spectator spectator){
         this.spectators.add(spectator);

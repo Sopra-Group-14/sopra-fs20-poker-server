@@ -106,7 +106,7 @@ public class UserService {
     public Player setToPlayer(User user){
         long userID = user.getId();
 
-        Player player = new Player(userID);
+        Player player = new Player(user);
 
         return player;
     }

@@ -5,12 +5,15 @@ import ch.uzh.ifi.seal.soprafs20.constant.GameRound;
 import ch.uzh.ifi.seal.soprafs20.entity.Game;
 import ch.uzh.ifi.seal.soprafs20.entity.GameSelect;
 import ch.uzh.ifi.seal.soprafs20.entity.User;
+import ch.uzh.ifi.seal.soprafs20.entity_in_game.BigBlind;
 import ch.uzh.ifi.seal.soprafs20.entity_in_game.GameLog;
 import ch.uzh.ifi.seal.soprafs20.entity_in_game.Player;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.print.attribute.standard.NumberUp;
 import java.util.Iterator;
@@ -84,10 +87,13 @@ public class GameService {
 
     public GameLog executeAction(Action action, int amount, long gameId, long playerId, String token){
 
+        GameLog gameLog;
         Game game = gameSelect.getGameById(gameId);
         List<Player> players = game.getPlayers();
-        Iterator playersIterator = players.iterator();
         List<Player> activePlayers = game.getActivePlayers();
+        Player currentPlayer = game.getCurrentPlayer(playerId);
+        Player previousPlayer = game.getPreviousPlayer(currentPlayer);
+
 
 
         if(action == Action.FOLD){
@@ -96,28 +102,34 @@ public class GameService {
         if(action == Action.RAISE){
 
         }
-        if(action == Action.CALL){
+        if(action == Action.CALL) {
             //the called amount mustn't be bigger than the actual credit of the player.
+
+            if (amount>currentPlayer.getCredit()){
+                String baseErrorMessage = "A call involves matching the amount already bet. The credit of the Player %s is too low!";
+                throw new ResponseStatusException(HttpStatus.CONFLICT, String.format(baseErrorMessage, currentPlayer.getPlayerName()));
+            }
 
             //In the first betting round, the amount bet must be higher or equal than the big blind
             if (game.getGameRound() == GameRound.Preflop) {
+                if (activePlayers.get(0) == currentPlayer && currentPlayer.getAmountInPot() == 0) {
+                    //TODO check if called amount is same as big blind or higher
 
 
-                if (activePlayers.get(0).getId() == playerId) {
-                    //call big blind or higher
-                }else {
+                }
+                else {
                     //call the difference in the pot between previous and actual player
                     //
-                    for (int i = 1; i < activePlayers.size(); i++) {
-                        if (activePlayers.get(i).getId() == playerId) {
-                            Player previousPlayer = activePlayers.get(i - 1);
-                        }
 
-                    }
+
                 }
             }
+            else {
 
+            }
         }
+
+
 
 
 

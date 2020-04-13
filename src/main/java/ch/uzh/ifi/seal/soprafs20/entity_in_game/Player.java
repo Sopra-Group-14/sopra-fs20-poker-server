@@ -18,12 +18,13 @@ public class Player{
     private boolean isHost;
 
     private int amountInPot = 0;
+    private String playerName;
 
-    User user = new User();
 
     public Player(User user){
         this.credit = START_CREDIT;
         this.id = user.getId();
+        this.playerName = user.getUsername();
     }
 
 
@@ -52,6 +53,8 @@ public class Player{
     }
 
     public int getAmountInPot(){return amountInPot;}
+
+    public String getPlayerName(){return this.playerName;}
 
     public void setAmountInPot(int amountInPot){
         this.amountInPot = amountInPot;
