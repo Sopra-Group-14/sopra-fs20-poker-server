@@ -142,5 +142,34 @@ public class CardAnalyser {
 
     }
 
+    public boolean isFourOfAKind(List<Card> cards){
+
+        List<Card> listOne = new ArrayList<>();
+        List<Card> listTwo = new ArrayList<>();
+        int i = 0;
+
+        while(0<cards.size()){
+            if(i==0){
+                listOne.add(cards.get(i));
+            }
+            else if(cards.get(0).getRank() == listOne.get(0).getRank()){
+                listOne.add(cards.get(0));
+            }else{
+                if(i>0 && listTwo.size() == 0){
+                    listTwo.add(cards.get(0));
+                }else{
+                    if(cards.get(0).getRank() == listTwo.get(0).getRank()){
+                        listTwo.add(cards.get(0));
+                    }
+                }
+            }
+            cards.remove(0);
+            i+=1;
+        }
+
+        return listOne.size() == 4 || listTwo.size() == 4;
+
+    }
+
 }
 
