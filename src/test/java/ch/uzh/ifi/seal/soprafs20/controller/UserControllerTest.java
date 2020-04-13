@@ -105,10 +105,14 @@ public class UserControllerTest {
 
         //given
         //make user we get returned
-        UserGetDTO testUser = new UserGetDTO();
+        User testUser = new User();
         testUser.setUsername("TestUsername");
         testUser.setName("TestName");
         testUser.setId(1L);
+        testUser.setStatus(UserStatus.OFFLINE);
+
+        String token = "1234";
+        given(userService.getUserById(1L)).willReturn(testUser);
 
         //make user we want returned
         UserGetDTO testUser2 = new UserGetDTO();
@@ -116,21 +120,25 @@ public class UserControllerTest {
         testUser2.setName("TestName");
         testUser2.setId(1L);
 
-        given(userService.getUserById(Mockito.anyLong())).willReturn(testUser);
 
         //when
-        MockHttpServletRequestBuilder getRequest = get("/users/1").header("Authorization", "TestToken");
+        MockHttpServletRequestBuilder getRequest = get("/users/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "token");
 
         //then
-        mockMvc.perform(getRequest).andExpect(status().isOk());
+        mockMvc.perform(getRequest).andExpect(status().isOk())
+                .andExpect(jsonPath("$.name", is(testUser.getName())))
+                .andExpect(jsonPath("$.username", is(testUser.getUsername())))
+                .andExpect(jsonPath("$.status", is(testUser.getStatus().toString())));
 
         //get returned user
-        UserGetDTO returnedUser = userService.getUserById(1L);
+        User user = userService.getUserById(1L);
 
         //assertions
-        assertEquals(returnedUser.getName(), testUser2.getName());
-        assertEquals(returnedUser.getUsername(), testUser2.getUsername());
-        assertEquals(returnedUser.getId(), testUser2.getId());
+        assertEquals(user.getName(), testUser2.getName());
+        assertEquals(user.getUsername(), testUser2.getUsername());
+        assertEquals(user.getId(), testUser2.getId());
 
     }
 
