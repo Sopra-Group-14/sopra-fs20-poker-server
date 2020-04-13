@@ -1,6 +1,7 @@
 package ch.uzh.ifi.seal.soprafs20.entity_in_game;
 
 import ch.uzh.ifi.seal.soprafs20.cards.Card;
+import ch.uzh.ifi.seal.soprafs20.entity.User;
 
 import java.util.List;
 
@@ -16,9 +17,13 @@ public class Player{
 
     private boolean isHost;
 
-    public Player(long id){
+    private int amountInPot = 0;
+
+    User user = new User();
+
+    public Player(User user){
         this.credit = START_CREDIT;
-        this.id = id;
+        this.id = user.getId();
     }
 
 
@@ -44,6 +49,12 @@ public class Player{
 
     public long getId(){
         return id;
+    }
+
+    public int getAmountInPot(){return amountInPot;}
+
+    public void setAmountInPot(int amountInPot){
+        this.amountInPot = amountInPot;
     }
 
 }

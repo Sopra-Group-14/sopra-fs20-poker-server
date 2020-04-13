@@ -1,6 +1,7 @@
 package ch.uzh.ifi.seal.soprafs20.service;
 import ch.uzh.ifi.seal.soprafs20.cards.Card;
 import ch.uzh.ifi.seal.soprafs20.constant.Action;
+import ch.uzh.ifi.seal.soprafs20.constant.GameRound;
 import ch.uzh.ifi.seal.soprafs20.entity.Game;
 import ch.uzh.ifi.seal.soprafs20.entity.GameSelect;
 import ch.uzh.ifi.seal.soprafs20.entity.User;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.print.attribute.standard.NumberUp;
+import java.util.Iterator;
 import java.util.List;
 
 import static ch.uzh.ifi.seal.soprafs20.entity.GameSelect.NULL_GAME;
@@ -81,6 +83,13 @@ public class GameService {
     }
 
     public GameLog executeAction(Action action, int amount, long gameId, long playerId, String token){
+
+        Game game = gameSelect.getGameById(gameId);
+        List<Player> players = game.getPlayers();
+        Iterator playersIterator = players.iterator();
+        List<Player> activePlayers = game.getActivePlayers();
+
+
         if(action == Action.FOLD){
 
         }
@@ -88,8 +97,35 @@ public class GameService {
 
         }
         if(action == Action.CALL){
+            //the called amount mustn't be bigger than the actual credit of the player.
+
+            //In the first betting round, the amount bet must be higher or equal than the big blind
+            if (game.getGameRound() == GameRound.Preflop) {
+
+
+                if (activePlayers.get(0).getId() == playerId) {
+                    //call big blind or higher
+                }else {
+                    //call the difference in the pot between previous and actual player
+                    //
+                    for (int i = 1; i < activePlayers.size(); i++) {
+                        if (activePlayers.get(i).getId() == playerId) {
+                            Player previousPlayer = activePlayers.get(i - 1);
+                        }
+
+                    }
+                }
+            }
 
         }
+
+
+
+            //
+
+
+
+
         if(action == Action.CHECK){
 
         }

@@ -3,6 +3,8 @@ import ch.uzh.ifi.seal.soprafs20.cards.Card;
 import ch.uzh.ifi.seal.soprafs20.cards.Deck;
 import ch.uzh.ifi.seal.soprafs20.chat.PlayerChat;
 import ch.uzh.ifi.seal.soprafs20.chat.SpectatorChat;
+import ch.uzh.ifi.seal.soprafs20.constant.GameRound;
+import ch.uzh.ifi.seal.soprafs20.constant.UserStatus;
 import ch.uzh.ifi.seal.soprafs20.entity_in_game.Player;
 import ch.uzh.ifi.seal.soprafs20.entity_in_game.Pot;
 import ch.uzh.ifi.seal.soprafs20.entity_in_game.Spectator;
@@ -28,6 +30,7 @@ public class Game {
     private String gameHostName;
     private String potType;
     private String hostToken;
+    private GameRound gameRound;
 
     private Pot mainPot = new Pot();
     private Deck deck = new Deck();
@@ -95,6 +98,7 @@ Constructor
     }
 
     public List<Player> getPlayers(){return players;}
+    public List<Player> getActivePlayers(){return activePlayers;}
 
     public void addSpectator(Spectator spectator){
         this.spectators.add(spectator);
@@ -119,6 +123,13 @@ Constructor
     public int getMaxPlayers(){return maxPlayers;}
 
     public void updateBlinds(){}
+    public GameRound getGameRound() {
+        return gameRound;
+    }
+
+    public void setGameRound(GameRound gameRound) {
+        this.gameRound = gameRound;
+    }
 
     public List<Card> getTableCards(){
         return new LinkedList<>(tableCards);
