@@ -171,5 +171,249 @@ public class CardAnalyser {
 
     }
 
+    public boolean isFullHouse(List<Card> cards){
+
+        List<Card> listOne = new ArrayList<>();
+        List<Card> listTwo = new ArrayList<>();
+        int i = 0;
+
+        while(0<cards.size()){
+            if(i==0){
+                listOne.add(cards.get(i));
+            }
+            else if(cards.get(0).getRank() == listOne.get(0).getRank()){
+                listOne.add(cards.get(0));
+            }else{
+                if(i>0 && listTwo.size() == 0){
+                    listTwo.add(cards.get(0));
+                }else{
+                    if(cards.get(0).getRank() == listTwo.get(0).getRank()){
+                        listTwo.add(cards.get(0));
+                    }
+                }
+            }
+            cards.remove(0);
+            i+=1;
+        }
+
+        return (listOne.size() == 2 && listTwo.size() == 3) || (listOne.size() == 3 && listTwo.size() == 2);
+
+    }
+
+    public boolean isFlush(List<Card> cards){
+
+        boolean allSameSuit = true;
+        Suit suit = cards.get(0).getSuit();
+        cards.remove(0);
+
+        while(0<cards.size()){
+            if(cards.get(0).getSuit() != suit){
+                allSameSuit = false;
+                break;
+            }
+            cards.remove(0);
+        }
+
+        return allSameSuit;
+
+    }
+
+    public boolean isStraight(List<Card> cards){
+
+        //We have to execute the whole thing twice; first to check if the ace (if there is one) is the highest card
+        //Second; if the ace is the lowest card
+        boolean firstCondition = false;
+        boolean secondCondition = false;
+
+        //We backup the cards array for checking after the first condition
+        List<Card> cardsTwo = new ArrayList<>(cards);
+
+        boolean hasSecondHighest = false;
+        boolean hasThirdHighest = false;
+        boolean hasFourthHighest = false;
+        boolean hasFifthHighest = false;
+        boolean lastCanBeAce = false;
+
+        Card highestCard = highestCard(cards);
+        int highestInt = rankToInt(highestCard.getRank());
+        cards.remove(highestCard);
+        int highestIntTwo = highestInt;
+
+        //This is the second scenario; if the ace is the lowest card
+        if(highestCard.getRank() == Rank.ACE){
+            Card tempReAdd = highestCard;
+            highestCard = highestCard(cards);
+            highestInt = rankToInt(highestCard.getRank());
+            cards.add(tempReAdd);
+        }
+
+        while(0<cards.size()){
+            if(rankToInt(cards.get(0).getRank()) == highestInt-1){
+                hasSecondHighest = true;
+            }
+            if(rankToInt(cards.get(0).getRank()) == highestInt-2){
+                hasThirdHighest = true;
+            }
+            if(rankToInt(cards.get(0).getRank()) == highestInt-3){
+                hasFourthHighest = true;
+                if(cards.get(0).getRank() == Rank.TWO){
+                    lastCanBeAce = true;
+                }
+            }
+            if((rankToInt(cards.get(0).getRank()) == highestInt-4) || (lastCanBeAce && cards.get(0).getRank() == Rank.ACE)){
+                hasFifthHighest = true;
+            }
+            cards.remove(0);
+        }
+
+        secondCondition = hasSecondHighest && hasThirdHighest && hasFourthHighest && hasFifthHighest;
+
+        //This is the first scenario; if the ace is the highest card
+
+        hasSecondHighest = false;
+        hasThirdHighest = false;
+        hasFourthHighest = false;
+        hasFifthHighest = false;
+        lastCanBeAce = false;
+
+        while(0<cardsTwo.size()){
+            if(rankToInt(cardsTwo.get(0).getRank()) == highestIntTwo-1){
+                hasSecondHighest = true;
+            }
+            if(rankToInt(cardsTwo.get(0).getRank()) == highestIntTwo-2){
+                hasThirdHighest = true;
+            }
+            if(rankToInt(cardsTwo.get(0).getRank()) == highestIntTwo-3){
+                hasFourthHighest = true;
+                if(cardsTwo.get(0).getRank() == Rank.TWO){
+                    lastCanBeAce = true;
+                }
+            }
+            if((rankToInt(cardsTwo.get(0).getRank()) == highestIntTwo-4) || (lastCanBeAce && cardsTwo.get(0).getRank() == Rank.ACE)){
+                hasFifthHighest = true;
+            }
+            cardsTwo.remove(0);
+        }
+
+        firstCondition = hasSecondHighest && hasThirdHighest && hasFourthHighest && hasFifthHighest;
+
+        //In the end, one of the two conditions have to be true
+        return firstCondition || secondCondition;
+
+    }
+
+    public boolean isThreeOfAKind(List<Card> cards){
+
+        List<Card> listOne = new ArrayList<>();
+        List<Card> listTwo = new ArrayList<>();
+        List<Card> listThree = new ArrayList<>();
+        int i = 0;
+
+        while(0<cards.size()){
+            if(i==0){
+                listOne.add(cards.get(i));
+            }
+            else if(cards.get(0).getRank() == listOne.get(0).getRank()){
+                listOne.add(cards.get(0));
+            }else{
+                if(i>0 && listTwo.size() == 0){
+                    listTwo.add(cards.get(0));
+                }else if(cards.get(0).getRank() == listTwo.get(0).getRank()){
+                    listTwo.add(cards.get(0));
+                }else{
+                    if(i>0 && listThree.size() == 0){
+                        listThree.add(cards.get(0));
+                    }else if(cards.get(0).getRank() == listThree.get(0).getRank()){
+                        listThree.add(cards.get(0));
+                    }
+                }
+            }
+            cards.remove(0);
+            i+=1;
+        }
+
+        return listOne.size() == 3 || listTwo.size() == 3 || listThree.size() == 3;
+
+    }
+
+    public boolean isTwoPairs(List<Card> cards){
+
+        List<Card> listOne = new ArrayList<>();
+        List<Card> listTwo = new ArrayList<>();
+        List<Card> listThree = new ArrayList<>();
+        int i = 0;
+
+        while(0<cards.size()){
+            if(i==0){
+                listOne.add(cards.get(i));
+            }
+            else if(cards.get(0).getRank() == listOne.get(0).getRank()){
+                listOne.add(cards.get(0));
+            }else{
+                if(i>0 && listTwo.size() == 0){
+                    listTwo.add(cards.get(0));
+                }else if(cards.get(0).getRank() == listTwo.get(0).getRank()){
+                    listTwo.add(cards.get(0));
+                }else{
+                    if(i>0 && listThree.size() == 0){
+                        listThree.add(cards.get(0));
+                    }else if(cards.get(0).getRank() == listThree.get(0).getRank()){
+                        listThree.add(cards.get(0));
+                    }
+                }
+            }
+            cards.remove(0);
+            i+=1;
+        }
+
+        return (listOne.size() ==2 && listTwo.size() == 2) || (listOne.size() == 2 && listThree.size() == 2) || (listTwo.size() == 2 && listThree.size() == 2);
+
+    }
+
+    public boolean isOnePair(List<Card> cards){
+
+        List<Card> listOne = new ArrayList<>();
+        List<Card> listTwo = new ArrayList<>();
+        List<Card> listThree = new ArrayList<>();
+        List<Card> listFour = new ArrayList<>();
+        int i = 0;
+
+        while(0<cards.size()){
+            if(i==0){
+                listOne.add(cards.get(i));
+            }
+            else if(cards.get(0).getRank() == listOne.get(0).getRank()){
+                listOne.add(cards.get(0));
+            }else{
+                if(i>0 && listTwo.size() == 0){
+                    listTwo.add(cards.get(0));
+                }else if(cards.get(0).getRank() == listTwo.get(0).getRank()){
+                    listTwo.add(cards.get(0));
+                }else{
+                    if(i>0 && listThree.size() == 0){
+                        listThree.add(cards.get(0));
+                    }else if(cards.get(0).getRank() == listThree.get(0).getRank()){
+                        listThree.add(cards.get(0));
+                    }else{
+                        if(i>0 && listFour.size() == 0){
+                            listFour.add(cards.get(0));
+                        }else if(cards.get(0).getRank() == listFour.get(0).getRank()){
+                            listFour.add(cards.get(0));
+                        }
+                    }
+                }
+            }
+            cards.remove(0);
+            i+=1;
+        }
+
+        return listOne.size() == 2 || listTwo.size() == 2 || listThree.size() == 2 || listFour.size() == 2;
+
+    }
+
+    public boolean isHighCard(List<Card> cards){
+        return true;
+    }
+
 }
 
