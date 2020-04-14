@@ -32,6 +32,7 @@ public class Game {
     private String potType;
     private String hostToken;
     private GameRound gameRound;
+    private int transactionNr;
 
     private Pot mainPot = new Pot();
     private Deck deck = new Deck();
@@ -40,6 +41,8 @@ public class Game {
     private List<Player> players = new LinkedList<>();
     private List<Spectator> spectators = new LinkedList<>();
     private List<Player> activePlayers = new LinkedList<>();
+    private boolean roundOver;
+    private boolean gameOver;
 
     //Create a list for the cards on the table
     private List<Card> tableCards = new LinkedList<>();
@@ -101,6 +104,9 @@ Constructor
     public List<Player> getPlayers(){return players;}
     public List<Player> getActivePlayers(){return activePlayers;}
 
+    public int getTransactionNr(){return this.transactionNr;}
+    public void setTransactionNr(int transactionNr){this.transactionNr = transactionNr;}
+
 
     public Player getCurrentPlayer(long id) {
         for (int i = 0; i < players.size(); i++) {
@@ -110,6 +116,21 @@ Constructor
         }
         return null;
     }
+
+    public Player getNextPlayer(Player currentPlayer) {
+        if (activePlayers.get(activePlayers.size() - 1).getId() == currentPlayer.getId()) {
+            return activePlayers.get(0);
+        }
+        else {
+            for (int i = 0; i < activePlayers.size() - 1; i++) {
+                if (activePlayers.get(i).getId() == currentPlayer.getId()) {
+                    return activePlayers.get(i + 1);
+                }
+            }
+            return null;
+        }
+    }
+
 
     public Player getPreviousPlayer(Player currentPlayer){
         if (activePlayers.get(0).getId() == currentPlayer.getId()) {
@@ -146,9 +167,16 @@ Constructor
         return this.hostToken;
     }
 
+    public void setGameOver(){this.gameOver = true;}
+    public boolean isGameOver(){return this.gameOver;}
+    public void setRoundOver(){this.roundOver = true;}
+    public boolean isRoundOver(){return this.roundOver;}
+
     public int getMaxPlayers(){return maxPlayers;}
 
     public void updateBlinds(){}
+
+
     public GameRound getGameRound() {
         return gameRound;
     }

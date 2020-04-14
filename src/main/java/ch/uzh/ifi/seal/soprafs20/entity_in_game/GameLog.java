@@ -1,20 +1,22 @@
 package ch.uzh.ifi.seal.soprafs20.entity_in_game;
 
 import ch.uzh.ifi.seal.soprafs20.constant.Action;
+import ch.uzh.ifi.seal.soprafs20.constant.GameRound;
 
 /**
  * This object is responsible for documenting what happens in a game.
  */
 public class GameLog {
 
-    private int transactionNr, gameRound, raiseAmount, playerPot, amountToCall;
+    private int transactionNr, raiseAmount, playerPot, amountToCall, potAmount;
+    private GameRound gameRound;
     private String playerName, nextPlayerName;
     private long playerId, nextPlayerId;
     private boolean roundOver, gameOver;
     private Action action;
 
     //All the parameters are set in the constructor
-    public GameLog(int transactionNr, int gameRound, Action action, int raiseAmount, String playerName, long playerId, String nextPlayerName, long nextPlayerId, int playerPot, boolean roundOver, boolean gameOver, int amountToCall){
+    public GameLog(int transactionNr, GameRound gameRound, Action action, int raiseAmount, String playerName, long playerId, String nextPlayerName, long nextPlayerId, int playerPot, int potAmount, boolean roundOver, boolean gameOver, int amountToCall){
         this.transactionNr = transactionNr;
         this.gameRound = gameRound;
         this.action = action;
@@ -24,6 +26,7 @@ public class GameLog {
         this.nextPlayerName = nextPlayerName;
         this.nextPlayerId = nextPlayerId;
         this.playerPot = playerPot;
+        this.potAmount = potAmount;
         this.roundOver = roundOver;
         this.gameOver = gameOver;
         this.amountToCall = amountToCall;
@@ -32,7 +35,7 @@ public class GameLog {
 
     public int getTransactionNr(){return transactionNr;}
 
-    public int getGameRound(){return gameRound;}
+    public GameRound getGameRound(){return gameRound;}
 
     public Action getAction(){return action;}
 

@@ -4,6 +4,7 @@ import ch.uzh.ifi.seal.soprafs20.cards.Card;
 import ch.uzh.ifi.seal.soprafs20.constant.Action;
 import ch.uzh.ifi.seal.soprafs20.constant.UserStatus;
 import ch.uzh.ifi.seal.soprafs20.entity.Game;
+import ch.uzh.ifi.seal.soprafs20.entity.User;
 import ch.uzh.ifi.seal.soprafs20.entity_in_game.GameLog;
 import ch.uzh.ifi.seal.soprafs20.entity_in_game.GameSummary;
 import ch.uzh.ifi.seal.soprafs20.entity_in_game.Player;
@@ -12,6 +13,7 @@ import ch.uzh.ifi.seal.soprafs20.rest.dto.UserPostDTO;
 import ch.uzh.ifi.seal.soprafs20.rest.mapper.DTOMapper;
 import ch.uzh.ifi.seal.soprafs20.service.GameService;
 import org.springframework.http.HttpStatus;
+import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -87,8 +89,10 @@ public class GameController {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public GameLog takeAction(@RequestBody Action action, @RequestBody int amount, @PathVariable long gameId, @PathVariable long playerId, @RequestHeader String token){
-        gameService.executeAction(action, amount, gameId, playerId, token);
-        return null;
+        if (gameService.checkAuthorizationPut(gameId, playerId, token) == false) {
+            throw new TransactionSystemException("error");
+        }
+        return gameService.executeAction(action, amount, gameId, playerId, token);
     }
 
  /*   @PutMapping("/games/{gameId}/players/{playerId}")
