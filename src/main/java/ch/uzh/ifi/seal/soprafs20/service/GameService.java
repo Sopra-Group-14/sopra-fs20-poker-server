@@ -118,7 +118,6 @@ public class GameService {
 
 
 
-
         if(action == Action.FOLD){
 
         }
@@ -127,6 +126,10 @@ public class GameService {
             if (amount > currentPlayer.getCredit()) {
                 String baseErrorMessage = "A call involves matching the amount already bet. The credit of the Player %s is too low!";
                 throw new ResponseStatusException(HttpStatus.CONFLICT, String.format(baseErrorMessage, currentPlayer.getPlayerName()));
+            }
+            if (amount < previousPlayer.getAmountInPot()-currentPlayer.getAmountInPot()){
+                String baseErrorMessage = "The specified amount is below the min.raise, raising below call amount (%d) is not allowed!";
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, String.format(baseErrorMessage, previousPlayer.getAmountInPot()-currentPlayer.getAmountInPot()));
             }
 
 
