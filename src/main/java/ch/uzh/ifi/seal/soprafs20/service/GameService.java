@@ -124,7 +124,7 @@ public class GameService {
             }
             //In the PreFlop the first player must bet, he can decide if he goes with the bigblind or raises
 
-            //In the rounds Flop, Turn, river a player can bet if no player has bet before him (all have checked or folded)
+            //In the rounds Flop, Turn, river a player can bet if no player has bet before him (all players before have checked or folded)
 
 
         }
@@ -150,8 +150,8 @@ public class GameService {
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN, String.format(baseErrorMessage, previousPlayer.getAmountInPot()-currentPlayer.getAmountInPot()));
             }*/
 
-            //the raised amount must be bigger than 1
-            if (amount<1){
+            //the raised amount must be bigger or equal than 1
+            if (amount<=1){
                 String baseErrorMessage = "The Player %s tries to raise by an amount lower than 1!";
                 throw new ResponseStatusException(HttpStatus.CONFLICT, String.format(baseErrorMessage, currentPlayer.getPlayerName()));
             }
