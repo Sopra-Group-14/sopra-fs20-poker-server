@@ -18,7 +18,12 @@ public class Player{
     private boolean isHost;
 
     private int amountInPot = 0;
+
     private String playerName;
+
+    private boolean thisPlayersTurn = true;
+
+    private boolean folded = false;
 
 
     public Player(User user){
@@ -59,5 +64,12 @@ public class Player{
     public void setAmountInPot(int amountInPot){
         this.amountInPot = amountInPot;
     }
+    public void setThisPlayersTurn(boolean thisPlayersTurn){this.thisPlayersTurn = thisPlayersTurn;}
+
+    public boolean isThisPlayersTurn(){return thisPlayersTurn;}
+
+    public void fold(){this.folded = true;}
+
+    public boolean hasFolded(){return this.folded;}
 
 }

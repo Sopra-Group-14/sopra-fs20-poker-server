@@ -167,6 +167,11 @@ Constructor
         return this.hostToken;
     }
 
+    public void playerFolds(Player player){
+        player.fold();
+        activePlayers.remove(player);
+    }
+
     public void setGameOver(){this.gameOver = true;}
     public boolean isGameOver(){return this.gameOver;}
     public void setRoundOver(){this.roundOver = true;}

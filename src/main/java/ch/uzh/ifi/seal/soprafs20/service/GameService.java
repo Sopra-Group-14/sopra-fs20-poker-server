@@ -98,12 +98,37 @@ public class GameService {
         Pot pot = new Pot();
 
 
+        //The player tries to take an action when it is not their turn
+        if (!activePlayers.contains(currentPlayer) |  !currentPlayer.isThisPlayersTurn()){
+            String baseErrorMessage = "Not Player %s turn!";
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, String.format(baseErrorMessage, currentPlayer.getPlayerName()));
+        }
+
+        //The player ID does not exist
+        if (!players.contains(currentPlayer)){
+            String baseErrorMessage = "Player %s with Id %d does not exist in the game with id %d !";
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format(baseErrorMessage, currentPlayer.getPlayerName(),currentPlayer.getId(), game.getGameId()));
+        }
+
+        //The user has already folded
+        if (!activePlayers.contains(currentPlayer) | currentPlayer.hasFolded()==true){
+            String baseErrorMessage = "The Player %s with Id %d has already folded and does not participate in the current round anymore!";
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, String.format(baseErrorMessage, currentPlayer.getPlayerName(),currentPlayer.getId()));
+        }
+
+
 
 
         if(action == Action.FOLD){
 
         }
         if(action == Action.RAISE){
+            //the raised amount mustn't be bigger than the actual credit of the player
+            if (amount > currentPlayer.getCredit()) {
+                String baseErrorMessage = "A call involves matching the amount already bet. The credit of the Player %s is too low!";
+                throw new ResponseStatusException(HttpStatus.CONFLICT, String.format(baseErrorMessage, currentPlayer.getPlayerName()));
+            }
+
 
         }
         if(action == Action.CALL) {
@@ -168,10 +193,20 @@ public class GameService {
                         }
 
                 }
+
+
+            // Important: setThisPlayerTurn for all players but nextPlayer to false
+            for (int i = 0; i<activePlayers.size(); i++){
+                activePlayers.get(i).setThisPlayersTurn(false);
+            }
+            nextPlayer.setThisPlayersTurn(true);
+
+
             return gameLog;
         }
 
         if(action == Action.CHECK){
+
 
         }
         if(action == Action.MAKEPLAYER){
