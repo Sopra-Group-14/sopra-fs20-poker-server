@@ -116,82 +116,50 @@ public class GameService {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, String.format(baseErrorMessage, currentPlayer.getPlayerName(),currentPlayer.getId()));
         }
 
-
-
-        if(action == Action.FOLD){
-
-        }
-        if(action == Action.RAISE){
-            //the raised amount mustn't be bigger than the actual credit of the player
+        if (action == Action.BET){
+            //the bet amount mustn't be bigger than the actual credit of the player
             if (amount > currentPlayer.getCredit()) {
                 String baseErrorMessage = "A call involves matching the amount already bet. The credit of the Player %s is too low!";
                 throw new ResponseStatusException(HttpStatus.CONFLICT, String.format(baseErrorMessage, currentPlayer.getPlayerName()));
             }
+            //In the PreFlop the first player must bet, he can decide if he goes with the bigblind or raises
 
-            if (amount < previousPlayer.getAmountInPot()-currentPlayer.getAmountInPot()){
+            //In the rounds Flop, Turn, river a player can bet if no player has bet before him (all have checked or folded)
+
+
+        }
+
+        if(action == Action.FOLD){
+
+            game.playerFolds(currentPlayer);
+
+        }
+        if(action == Action.RAISE){
+
+            //the raised amount + the called amount mustn't be bigger than the actual credit of the player
+            int addedAmount = (previousPlayer.getAmountInPot()-currentPlayer.getAmountInPot()) + amount;
+            int amountToCall = (previousPlayer.getAmountInPot() - currentPlayer.getAmountInPot());
+            if (addedAmount > currentPlayer.getCredit()) {
+                String baseErrorMessage = "A call involves matching the amount already bet. The credit of the Player %s is too low!";
+                throw new ResponseStatusException(HttpStatus.CONFLICT, String.format(baseErrorMessage, currentPlayer.getPlayerName()));
+            }
+
+           /* //the raised amount must be bigger than the difference of the amount in the pot of previous player and next player
+            if (amount+ currentPlayer.getAmountInPot()< <= previousPlayer.getAmountInPot()-currentPlayer.getAmountInPot()){
                 String baseErrorMessage = "The specified amount is below the min.raise, raising below call amount (%d) is not allowed!";
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN, String.format(baseErrorMessage, previousPlayer.getAmountInPot()-currentPlayer.getAmountInPot()));
-            }
+            }*/
+
+            //the raised amount must be bigger than 1
             if (amount<1){
                 String baseErrorMessage = "The Player %s tries to raise by an amount lower than 1!";
                 throw new ResponseStatusException(HttpStatus.CONFLICT, String.format(baseErrorMessage, currentPlayer.getPlayerName()));
             }
-            if (game.getGameRound() == GameRound.Preflop && activePlayers.get(0) == currentPlayer && currentPlayer.getAmountInPot() == 0) {
-                //TODO check if raised amount is same as small blind or higher
-                //if (amount >= bigBlind.getCredit()) {
-                currentPlayer.removeCredit(amount);
-                currentPlayer.setAmountInPot(currentPlayer.getAmountInPot() + amount);
-                pot.addAmount(amount);
-                game.setTransactionNr(game.getTransactionNr() + 1);
-                gameLog = new GameLog(game.getTransactionNr(),
-                        GameRound.Preflop,
-                        Action.RAISE,
-                        amount,
-                        currentPlayer.getPlayerName(),
-                        currentPlayer.getId(),
-                        nextPlayer.getPlayerName(),
-                        nextPlayer.getId(),
-                        currentPlayer.getAmountInPot(),
-                        pot.getAmount(),
-                        game.isRoundOver(),
-                        game.isGameOver(),
-                        amount);
-                /*}
-                   else{
-                       String baseErrorMessage = "The amount, which want to be called must be equal or bigger than the BigBlind in the first round";
-                       throw new ResponseStatusException(HttpStatus.CONFLICT, String.format(baseErrorMessage));
-                    }*/
-            }
-            else if (game.getGameRound() == GameRound.Preflop && activePlayers.get(1) == currentPlayer && currentPlayer.getAmountInPot() == 0) {
-                //TODO check if called amount is same as big blind or higher
-                //if (amount >= bigBlind.getCredit()) {
-                currentPlayer.removeCredit(amount);
-                currentPlayer.setAmountInPot(currentPlayer.getAmountInPot() + amount);
-                pot.addAmount(amount);
-                game.setTransactionNr(game.getTransactionNr() + 1);
-                gameLog = new GameLog(game.getTransactionNr(),
-                        GameRound.Preflop,
-                        Action.RAISE,
-                        amount,
-                        currentPlayer.getPlayerName(),
-                        currentPlayer.getId(),
-                        nextPlayer.getPlayerName(),
-                        nextPlayer.getId(),
-                        currentPlayer.getAmountInPot(),
-                        pot.getAmount(),
-                        game.isRoundOver(),
-                        game.isGameOver(),
-                        amount);
-                /*}
-                   else{
-                       String baseErrorMessage = "The amount, which want to be called must be equal or bigger than the BigBlind in the first round";
-                       throw new ResponseStatusException(HttpStatus.CONFLICT, String.format(baseErrorMessage));
-                    }*/
-            }
-            else {currentPlayer.removeCredit(amount);
-                int amountToCall = (previousPlayer.getAmountInPot() - currentPlayer.getAmountInPot());
-                currentPlayer.setAmountInPot(currentPlayer.getAmountInPot() + amount);
-                pot.addAmount(amount);
+
+
+                currentPlayer.removeCredit(addedAmount);
+                currentPlayer.setAmountInPot(currentPlayer.getAmountInPot() + addedAmount);
+                pot.addAmount(addedAmount);
                 game.setTransactionNr(game.getTransactionNr() + 1);
                 gameLog = new GameLog(game.getTransactionNr(),
                         game.getGameRound(),
@@ -207,7 +175,6 @@ public class GameService {
                         game.isGameOver(),
                         amountToCall);
 
-            }
 
             // Important: setThisPlayerTurn for all players but nextPlayer to false
             for (Player activePlayer : activePlayers) {
@@ -224,104 +191,52 @@ public class GameService {
                 String baseErrorMessage = "A call involves matching the amount already bet. The credit of the Player %s is too low!";
                 throw new ResponseStatusException(HttpStatus.CONFLICT, String.format(baseErrorMessage, currentPlayer.getPlayerName()));
             }
-
-            //check if the player playing is the first player of first round.
-            //In the first betting round, the amount bet must be higher or equal than the big blind
-            if (game.getGameRound() == GameRound.Preflop && activePlayers.get(0) == currentPlayer && currentPlayer.getAmountInPot() == 0) {
-                //TODO check if called amount is same as small blind or higher
-                //if (amount >= bigBlind.getCredit()) {
-                currentPlayer.removeCredit(amount);
-                currentPlayer.setAmountInPot(currentPlayer.getAmountInPot() + amount);
-                pot.addAmount(amount);
-                game.setTransactionNr(game.getTransactionNr() + 1);
-                gameLog = new GameLog(game.getTransactionNr(),
-                        GameRound.Preflop,
-                        Action.CALL,
-                        amount,
-                        currentPlayer.getPlayerName(),
-                        currentPlayer.getId(),
-                        nextPlayer.getPlayerName(),
-                        nextPlayer.getId(),
-                        currentPlayer.getAmountInPot(),
-                        pot.getAmount(),
-                        game.isRoundOver(),
-                        game.isGameOver(),
-                        amount);
-                /*}
-                   else{
-                       String baseErrorMessage = "The amount, which want to be called must be equal or bigger than the BigBlind in the first round";
-                       throw new ResponseStatusException(HttpStatus.CONFLICT, String.format(baseErrorMessage));
-                    }*/
-
-            }else if (game.getGameRound() == GameRound.Preflop && activePlayers.get(1) == currentPlayer && currentPlayer.getAmountInPot() == 0){
-                //TODO check if called amount is same as big blind or higher
-                //if (amount >= bigBlind.getCredit()) {
-                currentPlayer.removeCredit(amount);
-                currentPlayer.setAmountInPot(currentPlayer.getAmountInPot() + amount);
-                pot.addAmount(amount);
-                game.setTransactionNr(game.getTransactionNr() + 1);
-                gameLog = new GameLog(game.getTransactionNr(),
-                        GameRound.Preflop,
-                        Action.CALL,
-                        amount,
-                        currentPlayer.getPlayerName(),
-                        currentPlayer.getId(),
-                        nextPlayer.getPlayerName(),
-                        nextPlayer.getId(),
-                        currentPlayer.getAmountInPot(),
-                        pot.getAmount(),
-                        game.isRoundOver(),
-                        game.isGameOver(),
-                        amount);
-                /*}
-                   else{
-                       String baseErrorMessage = "The amount, which want to be called must be equal or bigger than the BigBlind in the first round";
-                       throw new ResponseStatusException(HttpStatus.CONFLICT, String.format(baseErrorMessage));
-                    }*/
-
-
-
+            //if current player is the first player of the round preflop then he is not allowed to call, but has to bet or raise
+            if (game.getGameRound() == GameRound.Preflop && activePlayers.get(0) == currentPlayer && currentPlayer.getAmountInPot() == 0){
+                String baseErrorMessage = "The player &s is not allowed to call, he has to bet or raise!";
+                throw new ResponseStatusException(HttpStatus.CONFLICT, String.format(baseErrorMessage, currentPlayer.getPlayerName()));
             }
-            else {   //check if called amount is equal to the difference in the pot between the amounts of the previous and current player
-                    if (previousPlayer.getAmountInPot() - currentPlayer.getAmountInPot() != amount) {
-                        String baseErrorMessage = "the amount to call does not match the difference between the amount of Player %s and Player %s in the pot";
-                        throw new ResponseStatusException(HttpStatus.CONFLICT, String.format(baseErrorMessage, currentPlayer.getPlayerName(), previousPlayer.getPlayerName()));
-                    }
-                    else {
-                        currentPlayer.removeCredit(amount);
-                        currentPlayer.setAmountInPot(currentPlayer.getAmountInPot() + amount);
-                        pot.addAmount(amount);
-                        game.setTransactionNr(game.getTransactionNr() + 1);
-                        gameLog = new GameLog(game.getTransactionNr(),
-                                game.getGameRound(),
-                                Action.CALL,
-                                amount,
-                                currentPlayer.getPlayerName(),
-                                currentPlayer.getId(),
-                                nextPlayer.getPlayerName(),
-                                nextPlayer.getId(),
-                                currentPlayer.getAmountInPot(),
-                                pot.getAmount(),
-                                game.isRoundOver(),
-                                game.isGameOver(),
-                                amount);
-                        }
+            //currentPlayer is only allowed to call if the player before has raised or betted
+            if (!(previousPlayer.getAmountInPot() > currentPlayer.getAmountInPot())){
+                String baseErrorMessage = "The player &s is not allowed to call, he has to bet or raise!";
+                throw new ResponseStatusException(HttpStatus.CONFLICT, String.format(baseErrorMessage, currentPlayer.getPlayerName()));
+            }
 
-                }
+            //check if called amount is equal to the difference in the pot between the amounts of the previous and current player
+            if (previousPlayer.getAmountInPot() - currentPlayer.getAmountInPot() != amount) {
+                String baseErrorMessage = "the amount to call does not match the difference between the amount of Player %s and Player %s in the pot";
+                throw new ResponseStatusException(HttpStatus.CONFLICT, String.format(baseErrorMessage, currentPlayer.getPlayerName(), previousPlayer.getPlayerName()));
+            }
 
+                currentPlayer.removeCredit(amount);
+                currentPlayer.setAmountInPot(currentPlayer.getAmountInPot() + amount);
+                pot.addAmount(amount);
+                game.setTransactionNr(game.getTransactionNr() + 1);
+                gameLog = new GameLog(game.getTransactionNr(),
+                        game.getGameRound(),
+                        Action.CALL,
+                        amount,
+                        currentPlayer.getPlayerName(),
+                        currentPlayer.getId(),
+                        nextPlayer.getPlayerName(),
+                        nextPlayer.getId(),
+                        currentPlayer.getAmountInPot(),
+                        pot.getAmount(),
+                        game.isRoundOver(),
+                        game.isGameOver(),
+                        amount);
 
             // Important: setThisPlayerTurn for all players but nextPlayer to false
-            for (int i = 0; i<activePlayers.size(); i++){
-                activePlayers.get(i).setThisPlayersTurn(false);
+            for (Player activePlayer : activePlayers) {
+                activePlayer.setThisPlayersTurn(false);
             }
             nextPlayer.setThisPlayersTurn(true);
-
-
             return gameLog;
         }
 
         if(action == Action.CHECK){
 
+            currentPlayer.check();
 
         }
         if(action == Action.MAKEPLAYER){

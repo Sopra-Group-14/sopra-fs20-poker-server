@@ -25,6 +25,8 @@ public class Player{
 
     private boolean folded = false;
 
+    private boolean checked= false;
+
 
     public Player(User user){
         this.credit = START_CREDIT;
@@ -71,5 +73,9 @@ public class Player{
     public void fold(){this.folded = true;}
 
     public boolean hasFolded(){return this.folded;}
+
+    public void check(){this.checked = true;}
+
+    public boolean hasChecked(){return this.checked;}
 
 }
