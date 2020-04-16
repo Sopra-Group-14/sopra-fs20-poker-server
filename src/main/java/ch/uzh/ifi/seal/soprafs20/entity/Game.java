@@ -33,6 +33,8 @@ public class Game {
     private String hostToken;
     private GameRound gameRound;
     private int transactionNr;
+    private Player smallBlind;
+    private Player bigBlind;
 
     private Pot mainPot = new Pot();
     private Deck deck = new Deck();
@@ -95,6 +97,22 @@ Constructor
 
     public void addPlayer(Player player){
         this.players.add(player);
+    }
+
+    public void setBigBlind(Player bigBlind) {
+        this.bigBlind = bigBlind;
+    }
+
+    public Player getBigBlind() {
+        return bigBlind;
+    }
+
+    public void setSmallBlind(Player smallBlind) {
+        this.smallBlind = smallBlind;
+    }
+
+    public Player getSmallBlind() {
+        return smallBlind;
     }
 
     public void removePlayer(Player player){

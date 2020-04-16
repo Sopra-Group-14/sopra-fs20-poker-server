@@ -263,7 +263,13 @@ public class GameService {
         return currentId;
     }
 
-    public void updateBlinds(Game game){}
+    public void updateBlinds(Game game){
+
+        List<Player> players = game.getPlayers();
+        game.setSmallBlind(players.get(0));
+        game.setBigBlind(players.get(1));
+
+    }
 
     public void toggleReadyStatus(long gameId, long playerId){}
 
