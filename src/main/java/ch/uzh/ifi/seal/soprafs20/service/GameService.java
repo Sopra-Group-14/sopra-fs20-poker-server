@@ -77,6 +77,11 @@ public class GameService {
 
     }
 
+    public Game getGame(){
+
+        return null;
+    }
+
     public void addHost(long hostID, Game game){
 
         User playerHost = userService.getUserById(hostID);
