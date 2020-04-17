@@ -3,12 +3,10 @@ import ch.uzh.ifi.seal.soprafs20.cards.Card;
 import ch.uzh.ifi.seal.soprafs20.cards.Deck;
 import ch.uzh.ifi.seal.soprafs20.chat.PlayerChat;
 import ch.uzh.ifi.seal.soprafs20.chat.SpectatorChat;
+import ch.uzh.ifi.seal.soprafs20.constant.Action;
 import ch.uzh.ifi.seal.soprafs20.constant.GameRound;
 import ch.uzh.ifi.seal.soprafs20.constant.UserStatus;
-import ch.uzh.ifi.seal.soprafs20.entity_in_game.Player;
-import ch.uzh.ifi.seal.soprafs20.entity_in_game.Pot;
-import ch.uzh.ifi.seal.soprafs20.entity_in_game.SmallBlind;
-import ch.uzh.ifi.seal.soprafs20.entity_in_game.Spectator;
+import ch.uzh.ifi.seal.soprafs20.entity_in_game.*;
 import ch.uzh.ifi.seal.soprafs20.service.GameService;
 import ch.uzh.ifi.seal.soprafs20.exceptions.SopraServiceException;
 import java.util.LinkedList;
@@ -125,6 +123,10 @@ Constructor
     public int getTransactionNr(){return this.transactionNr;}
     public void setTransactionNr(int transactionNr){this.transactionNr = transactionNr;}
 
+    public void addActivePlayer(Player player){
+        this.activePlayers.add(player);
+    }
+
 
     public Player getCurrentPlayer(long id) {
         for (int i = 0; i < players.size(); i++) {
@@ -224,6 +226,12 @@ Constructor
         tableCards = new LinkedList<>();
     }
 
+    public GameLog roundStartGameLog(Game game){
+
+        return new GameLog(1, GameRound.Preflop, Action.NONE,
+                0, game.gameHostName, game.gameHostID, game.activePlayers.get(0).getPlayerName(),
+                game.activePlayers.get(0).getId(), 0, 0, false, false, 0);
+    }
 
 }
 

@@ -31,7 +31,7 @@ import static java.lang.Math.random;
 public class GameService {
 
     private final UserService userService;
-    private final Logger gameLog = LoggerFactory.getLogger(GameService.class);
+    //private final Logger gameLog = LoggerFactory.getLogger(GameService.class);
 
     //The GameSelect is essentially just a list that holds all games. The games can then be accessed through it.
     private final GameSelect gameSelect = new GameSelect();
@@ -68,6 +68,7 @@ public class GameService {
         newGame.setGameId(currentId);
         newGame.setGameName(gameName);
         newGame.setPotType(potType);
+        newGame.setGameHostID(hostID);
         newGame.setGameHostName(hostName);
         newGame.setHostToken(hostToken);
 
@@ -83,6 +84,8 @@ public class GameService {
         Player player = userService.setToPlayer(playerHost);
 
         game.addPlayer(player);
+        game.addActivePlayer(player);
+
 
     }
 
@@ -284,6 +287,57 @@ public class GameService {
         else{
             return false;
         }
+    }
+
+
+
+    private void updateActiveUsers(Game game){
+        final int SMALL_BLIND = 5;
+        for(Player player : game.getPlayers()){
+            if(player.getCredit() < SMALL_BLIND){
+                game.removePlayer(player);
+            }
+        }
+    }
+
+    public Game findGameById(long gameId){
+        return gameSelect.getGameById(gameId);
+    }
+
+    public GameLog roundStart(Game game){
+
+        GameLog gameLog = game.roundStartGameLog(game);
+
+        /*FOR TESTING PURPOSES*/
+
+        User user1 = new User();
+        user1.setUsername("MOCKUSER1");
+        user1.setPassword("password");
+        user1.setToken("token");
+        user1.setId((long) 2);
+
+        User user2 = new User();
+        user2.setUsername("MOCKUSER2");
+        user2.setPassword("password2");
+        user2.setToken("token2");
+        user2.setId((long) 3);
+
+        Player player1 = new Player(user1);
+        Player player2 = new Player(user2);
+
+        game.addPlayer(player1);
+        game.addPlayer(player2);
+        game.addActivePlayer(player1);
+        game.addActivePlayer(player2);
+
+        /*END TESTING PURPOSES*/
+
+
+        System.out.print(gameLog);
+        updateActiveUsers(game);
+        updateBlinds(game);
+
+        return gameLog;
     }
 
 }

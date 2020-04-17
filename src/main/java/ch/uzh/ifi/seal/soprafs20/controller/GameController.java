@@ -61,6 +61,17 @@ public class GameController {
     @ResponseBody
     public GameLog getGameLog(@PathVariable long gameId){return null;}
 
+    @PutMapping("games/{gameId}/roundStart")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public GameLog roundStart(@PathVariable long gameId){
+
+        Game game = gameService.findGameById(gameId);
+
+        return gameService.roundStart(game);
+
+    }
+
     @GetMapping("/games/{gameId}/dealers/cards")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody

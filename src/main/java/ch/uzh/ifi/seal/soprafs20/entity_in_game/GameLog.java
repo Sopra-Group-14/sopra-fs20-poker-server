@@ -16,7 +16,8 @@ public class GameLog {
     private Action action;
 
     //All the parameters are set in the constructor
-    public GameLog(int transactionNr, GameRound gameRound, Action action, int raiseAmount, String playerName, long playerId, String nextPlayerName, long nextPlayerId, int playerPot, int potAmount, boolean roundOver, boolean gameOver, int amountToCall){
+    public GameLog(int tGransactionNr, GameRound gameRound, Action action, int raiseAmount, String playerName,
+                   long playerId, String nextPlayerName, long nextPlayerId, int playerPot, int potAmount, boolean roundOver, boolean gameOver, int amountToCall){
         this.transactionNr = transactionNr;
         this.gameRound = gameRound;
         this.action = action;
