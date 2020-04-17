@@ -26,7 +26,73 @@ public class CardAnalyser {
         ranks.add(Rank.ACE);
     }
 
-    public Card highestCard(List<Card> cards){
+    public PokerHand getPokerHand(List<Card> cards){
+
+        List<Card> newCards = new ArrayList<>(cards);
+        PokerHand royalFlush = isRoyalFlush(newCards);
+        if(royalFlush != null){
+            return royalFlush;
+        }
+
+        newCards = new ArrayList<>(cards);
+        PokerHand straightFlush = isStraightFlush(newCards);
+        if(straightFlush != null){
+            return straightFlush;
+        }
+
+        newCards = new ArrayList<>(cards);
+        PokerHand fourOfAKind = isFourOfAKind(newCards);
+        if(fourOfAKind != null){
+            return fourOfAKind;
+        }
+
+        newCards = new ArrayList<>(cards);
+        PokerHand fullHouse = isFullHouse(newCards);
+        if(fullHouse != null){
+            return fullHouse;
+        }
+
+        newCards = new ArrayList<>(cards);
+        PokerHand flush = isFlush(newCards);
+        if(flush != null){
+            return flush;
+        }
+
+        newCards = new ArrayList<>(cards);
+        PokerHand straight = isStraight(newCards);
+        if(straight != null){
+            return straight;
+        }
+
+        newCards = new ArrayList<>(cards);
+        PokerHand threeOfAKind = isThreeOfAKind(newCards);
+        if(threeOfAKind != null){
+            return threeOfAKind;
+        }
+
+        newCards = new ArrayList<>(cards);
+        PokerHand twoPairs = isTwoPairs(newCards);
+        if(twoPairs != null) {
+            return twoPairs;
+        }
+
+        newCards = new ArrayList<>(cards);
+        PokerHand onePair = isOnePair(newCards);
+        if(onePair != null){
+            return onePair;
+        }
+
+        newCards = new ArrayList<>(cards);
+        PokerHand highCard = isHighCard(newCards);
+        if(highCard != null){
+            return highCard;
+        }
+
+        return new PokerHand(0, null, null, null, null, null);
+
+    }
+
+    private Card highestCard(List<Card> cards){
 
         Card highest = cards.get(0);
         int i;
@@ -41,7 +107,7 @@ public class CardAnalyser {
 
     }
 
-    public int rankToInt(Rank rank){
+    private int rankToInt(Rank rank){
 
         int rankInt = -1;
         int i;
@@ -56,13 +122,30 @@ public class CardAnalyser {
 
     }
 
-    public Rank intToRank(int integer){
+    private Rank intToRank(int integer){
 
         return ranks.get(integer);
 
     }
 
-    public boolean isRoyalFlush(List<Card> cards){
+    private int[] sortList(int[] list){
+        int i, e, temp;
+
+        for(i = 0;i<list.length-1; i++){
+            for(e = 0;e<list.length-1;e++){
+                if(list[e] < list[e+1]){
+                    temp = list[e];
+                    list[e] = list[e+1];
+                    list[e+1] = temp;
+                }
+            }
+        }
+
+        return list;
+
+    }
+
+    private PokerHand isRoyalFlush(List<Card> cards){
 
         boolean hasAce = false;
         boolean hasKing = false;
@@ -93,11 +176,15 @@ public class CardAnalyser {
             cards.remove(0);
         }
 
-        return hasAce && hasKing && hasQueen && hasJack && hasTen;
+        if(hasAce && hasKing && hasQueen && hasJack && hasTen){
+            return new PokerHand(10, null, null, null, null, null);
+        }else{
+            return null;
+        }
 
     }
 
-    public boolean isStraightFlush(List<Card> cards){
+    private PokerHand isStraightFlush(List<Card> cards){
 
         boolean hasSecondHighest = false;
         boolean hasThirdHighest = false;
@@ -138,11 +225,15 @@ public class CardAnalyser {
             cards.remove(0);
         }
 
-        return hasSecondHighest && hasThirdHighest && hasFourthHighest && hasFifthHighest;
+        if(hasSecondHighest && hasThirdHighest && hasFourthHighest && hasFifthHighest){
+            return new PokerHand(9, highestCard.getRank(), null, null, null, null);
+        }else{
+            return null;
+        }
 
     }
 
-    public boolean isFourOfAKind(List<Card> cards){
+    private PokerHand isFourOfAKind(List<Card> cards){
 
         List<Card> listOne = new ArrayList<>();
         List<Card> listTwo = new ArrayList<>();
@@ -167,11 +258,17 @@ public class CardAnalyser {
             i+=1;
         }
 
-        return listOne.size() == 4 || listTwo.size() == 4;
+        if(listOne.size() == 4){
+            return new PokerHand(8, listOne.get(0).getRank(), null, null, null, null);
+        }else if(listTwo.size() == 4){
+            return new PokerHand(8, listTwo.get(0).getRank(), null, null, null, null);
+        }else{
+            return null;
+        }
 
     }
 
-    public boolean isFullHouse(List<Card> cards){
+    private PokerHand isFullHouse(List<Card> cards){
 
         List<Card> listOne = new ArrayList<>();
         List<Card> listTwo = new ArrayList<>();
@@ -196,29 +293,48 @@ public class CardAnalyser {
             i+=1;
         }
 
-        return (listOne.size() == 2 && listTwo.size() == 3) || (listOne.size() == 3 && listTwo.size() == 2);
+        if(listOne.size() == 2 && listTwo.size() == 3){
+            return new PokerHand(7, listTwo.get(0).getRank(), listOne.get(0).getRank(), null, null, null);
+        }else if(listOne.size() == 3 && listTwo.size() == 2){
+            return new PokerHand(7, listOne.get(0).getRank(), listTwo.get(0).getRank(), null, null, null);
+        }else{
+            return null;
+        }
 
     }
 
-    public boolean isFlush(List<Card> cards){
+    private PokerHand isFlush(List<Card> cards){
 
+        int[] rankList = {0,0,0,0,0};
+        int i, e, temp;
         boolean allSameSuit = true;
         Suit suit = cards.get(0).getSuit();
+        rankList[0] = rankToInt(cards.get(0).getRank());
         cards.remove(0);
 
+        i=1;
         while(0<cards.size()){
             if(cards.get(0).getSuit() != suit){
                 allSameSuit = false;
                 break;
             }
+            rankList[i]= (rankToInt(cards.get(0).getRank()));
             cards.remove(0);
+            i+=1;
         }
 
-        return allSameSuit;
+        //Sort RankList
+        rankList = sortList(rankList);
+
+        if(allSameSuit){
+            return new PokerHand(6, intToRank(rankList[0]), intToRank(rankList[1]), intToRank(rankList[2]), intToRank(rankList[3]), intToRank(rankList[4]));
+        }else{
+            return null;
+        }
 
     }
 
-    public boolean isStraight(List<Card> cards){
+    private PokerHand isStraight(List<Card> cards){
 
         //We have to execute the whole thing twice; first to check if the ace (if there is one) is the highest card
         //Second; if the ace is the lowest card
@@ -298,11 +414,17 @@ public class CardAnalyser {
         firstCondition = hasSecondHighest && hasThirdHighest && hasFourthHighest && hasFifthHighest;
 
         //In the end, one of the two conditions have to be true
-        return firstCondition || secondCondition;
+        if(secondCondition){
+            return new PokerHand(5, highestCard.getRank(), null, null, null, null);
+        }else if(firstCondition){
+            return new PokerHand(5, intToRank(highestIntTwo), null, null, null, null);
+        }else{
+            return null;
+        }
 
     }
 
-    public boolean isThreeOfAKind(List<Card> cards){
+    private PokerHand isThreeOfAKind(List<Card> cards){
 
         List<Card> listOne = new ArrayList<>();
         List<Card> listTwo = new ArrayList<>();
@@ -332,11 +454,32 @@ public class CardAnalyser {
             i+=1;
         }
 
-        return listOne.size() == 3 || listTwo.size() == 3 || listThree.size() == 3;
+
+        if(listOne.size() == 3){
+            if(rankToInt(listTwo.get(0).getRank())>rankToInt(listThree.get(0).getRank())){
+                return new PokerHand(4, listOne.get(0).getRank(), null, listTwo.get(0).getRank(), listThree.get(0).getRank(), null);
+            }else{
+                return new PokerHand(4, listOne.get(0).getRank(), null, listThree.get(0).getRank(), listTwo.get(0).getRank(), null);
+            }
+        }else if(listTwo.size() == 3){
+            if(rankToInt(listOne.get(0).getRank())>rankToInt(listThree.get(0).getRank())){
+                return new PokerHand(4, listTwo.get(0).getRank(), null, listOne.get(0).getRank(), listThree.get(0).getRank(), null);
+            }else{
+                return new PokerHand(4, listTwo.get(0).getRank(), null, listThree.get(0).getRank(), listOne.get(0).getRank(), null);
+            }
+        }else if(listThree.size() == 3){
+            if(rankToInt(listTwo.get(0).getRank())>rankToInt(listOne.get(0).getRank())){
+                return new PokerHand(4, listThree.get(0).getRank(), null, listTwo.get(0).getRank(), listOne.get(0).getRank(), null);
+            }else{
+                return new PokerHand(4, listThree.get(0).getRank(), null, listOne.get(0).getRank(), listTwo.get(0).getRank(), null);
+            }
+        }else{
+            return null;
+        }
 
     }
 
-    public boolean isTwoPairs(List<Card> cards){
+    private PokerHand isTwoPairs(List<Card> cards){
 
         List<Card> listOne = new ArrayList<>();
         List<Card> listTwo = new ArrayList<>();
@@ -366,16 +509,37 @@ public class CardAnalyser {
             i+=1;
         }
 
-        return (listOne.size() ==2 && listTwo.size() == 2) || (listOne.size() == 2 && listThree.size() == 2) || (listTwo.size() == 2 && listThree.size() == 2);
+        if(listOne.size() ==2 && listTwo.size() == 2){
+            if(rankToInt(listOne.get(0).getRank())>rankToInt(listTwo.get(0).getRank())){
+                return new PokerHand(3, listOne.get(0).getRank(), listTwo.get(0).getRank(), listThree.get(0).getRank(), null, null);
+            }else{
+                return new PokerHand(3, listTwo.get(0).getRank(), listOne.get(0).getRank(), listThree.get(0).getRank(), null, null);
+            }
+        }else if(listOne.size() == 2 && listThree.size() == 2){
+            if(rankToInt(listOne.get(0).getRank())>rankToInt(listThree.get(0).getRank())){
+                return new PokerHand(3, listOne.get(0).getRank(), listThree.get(0).getRank(), listTwo.get(0).getRank(), null, null);
+            }else{
+                return new PokerHand(3, listThree.get(0).getRank(), listOne.get(0).getRank(), listTwo.get(0).getRank(), null, null);
+            }
+        }else if(listTwo.size() == 2 && listThree.size() == 2){
+            if(rankToInt(listThree.get(0).getRank())>rankToInt(listTwo.get(0).getRank())){
+                return new PokerHand(3, listThree.get(0).getRank(), listTwo.get(0).getRank(), listOne.get(0).getRank(), null, null);
+            }else{
+                return new PokerHand(3, listTwo.get(0).getRank(), listThree.get(0).getRank(), listOne.get(0).getRank(), null, null);
+            }
+        }else{
+            return null;
+        }
 
     }
 
-    public boolean isOnePair(List<Card> cards){
+    private PokerHand isOnePair(List<Card> cards){
 
         List<Card> listOne = new ArrayList<>();
         List<Card> listTwo = new ArrayList<>();
         List<Card> listThree = new ArrayList<>();
         List<Card> listFour = new ArrayList<>();
+        int[] kickerInts = {0,0,0};
         int i = 0;
 
         while(0<cards.size()){
@@ -407,13 +571,64 @@ public class CardAnalyser {
             i+=1;
         }
 
-        return listOne.size() == 2 || listTwo.size() == 2 || listThree.size() == 2 || listFour.size() == 2;
+        if(listOne.size() == 2){
+            kickerInts[0] = rankToInt(listTwo.get(0).getRank());
+            kickerInts[1] = rankToInt(listThree.get(0).getRank());
+            kickerInts[2] = rankToInt(listFour.get(0).getRank());
+
+            kickerInts = sortList(kickerInts);
+
+            return new PokerHand(2, listOne.get(0).getRank(), null, intToRank(kickerInts[0]), intToRank(kickerInts[1]), intToRank(kickerInts[2]));
+
+        }else if(listTwo.size() == 2){
+            kickerInts[0] = rankToInt(listOne.get(0).getRank());
+            kickerInts[1] = rankToInt(listThree.get(0).getRank());
+            kickerInts[2] = rankToInt(listFour.get(0).getRank());
+
+            kickerInts = sortList(kickerInts);
+
+            return new PokerHand(2, listTwo.get(0).getRank(), null, intToRank(kickerInts[0]), intToRank(kickerInts[1]), intToRank(kickerInts[2]));
+
+        }else if(listThree.size() == 2){
+            kickerInts[0] = rankToInt(listTwo.get(0).getRank());
+            kickerInts[1] = rankToInt(listOne.get(0).getRank());
+            kickerInts[2] = rankToInt(listFour.get(0).getRank());
+
+            kickerInts = sortList(kickerInts);
+
+            return new PokerHand(2, listThree.get(0).getRank(), null, intToRank(kickerInts[0]), intToRank(kickerInts[1]), intToRank(kickerInts[2]));
+
+        }else if(listFour.size() == 2){
+            kickerInts[0] = rankToInt(listTwo.get(0).getRank());
+            kickerInts[1] = rankToInt(listThree.get(0).getRank());
+            kickerInts[2] = rankToInt(listOne.get(0).getRank());
+
+            kickerInts = sortList(kickerInts);
+
+            return new PokerHand(2, listFour.get(0).getRank(), null, intToRank(kickerInts[0]), intToRank(kickerInts[1]), intToRank(kickerInts[2]));
+
+        }else{
+            return null;
+        }
 
     }
 
-    public boolean isHighCard(List<Card> cards){
-        return true;
+    private PokerHand isHighCard(List<Card> cards){
+
+        int[] rankInts = {0,0,0,0,0};
+        int i;
+
+        for(i=0;i<cards.size();i++){
+            rankInts[i] = rankToInt(cards.get(i).getRank());
+        }
+
+        rankInts = sortList(rankInts);
+
+        return new PokerHand(1, intToRank(rankInts[0]), intToRank(rankInts[1]), intToRank(rankInts[2]), intToRank(rankInts[3]), intToRank(rankInts[4]));
+
     }
+
 
 }
+
 
