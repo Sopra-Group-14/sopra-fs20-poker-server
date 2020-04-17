@@ -35,6 +35,11 @@ public class GameController {
     @ResponseBody
     public List<Game> getAllGames(){return gameService.getAllGames();}
 
+    @GetMapping("/games/{gameId}")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public Game getGame(){return gameService.getGame();}
+
     @PostMapping("/games")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody

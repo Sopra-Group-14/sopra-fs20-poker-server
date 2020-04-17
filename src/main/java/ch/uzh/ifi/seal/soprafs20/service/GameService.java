@@ -78,6 +78,11 @@ public class GameService {
 
     }
 
+    public Game getGame(){
+
+        return null;
+    }
+
     public void addHost(long hostID, Game game){
 
         User playerHost = userService.getUserById(hostID);
@@ -167,6 +172,10 @@ public class GameService {
                 gameLog = new GameLog(game.getTransactionNr(),
                         game.getGameRound(),
                         Action.RAISE,
+                        game.getPlayers(),
+                        game.getActivePlayers(),
+                        game.getTableCards(),
+                        game.getGameName(),
                         amount,
                         currentPlayer.getPlayerName(),
                         currentPlayer.getId(),
@@ -218,6 +227,10 @@ public class GameService {
                 gameLog = new GameLog(game.getTransactionNr(),
                         game.getGameRound(),
                         Action.CALL,
+                        game.getPlayers(),
+                        game.getActivePlayers(),
+                        game.getTableCards(),
+                        game.getGameName(),
                         amount,
                         currentPlayer.getPlayerName(),
                         currentPlayer.getId(),
