@@ -107,7 +107,7 @@ public class CardAnalyser {
 
     }
 
-    private int rankToInt(Rank rank){
+    public int rankToInt(Rank rank){
 
         int rankInt = -1;
         int i;
@@ -457,21 +457,21 @@ public class CardAnalyser {
 
         if(listOne.size() == 3){
             if(rankToInt(listTwo.get(0).getRank())>rankToInt(listThree.get(0).getRank())){
-                return new PokerHand(4, listOne.get(0).getRank(), null, listTwo.get(0).getRank(), listThree.get(0).getRank(), null);
+                return new PokerHand(4, listOne.get(0).getRank(), listTwo.get(0).getRank(), listThree.get(0).getRank(), null, null);
             }else{
-                return new PokerHand(4, listOne.get(0).getRank(), null, listThree.get(0).getRank(), listTwo.get(0).getRank(), null);
+                return new PokerHand(4, listOne.get(0).getRank(), listThree.get(0).getRank(), listTwo.get(0).getRank(), null, null);
             }
         }else if(listTwo.size() == 3){
             if(rankToInt(listOne.get(0).getRank())>rankToInt(listThree.get(0).getRank())){
-                return new PokerHand(4, listTwo.get(0).getRank(), null, listOne.get(0).getRank(), listThree.get(0).getRank(), null);
+                return new PokerHand(4, listTwo.get(0).getRank(), listOne.get(0).getRank(), listThree.get(0).getRank(), null, null);
             }else{
-                return new PokerHand(4, listTwo.get(0).getRank(), null, listThree.get(0).getRank(), listOne.get(0).getRank(), null);
+                return new PokerHand(4, listTwo.get(0).getRank(), listThree.get(0).getRank(), listOne.get(0).getRank(), null, null);
             }
         }else if(listThree.size() == 3){
             if(rankToInt(listTwo.get(0).getRank())>rankToInt(listOne.get(0).getRank())){
-                return new PokerHand(4, listThree.get(0).getRank(), null, listTwo.get(0).getRank(), listOne.get(0).getRank(), null);
+                return new PokerHand(4, listThree.get(0).getRank(), listTwo.get(0).getRank(), listOne.get(0).getRank(), null, null);
             }else{
-                return new PokerHand(4, listThree.get(0).getRank(), null, listOne.get(0).getRank(), listTwo.get(0).getRank(), null);
+                return new PokerHand(4, listThree.get(0).getRank(), listOne.get(0).getRank(), listTwo.get(0).getRank(), null, null);
             }
         }else{
             return null;
@@ -578,7 +578,7 @@ public class CardAnalyser {
 
             kickerInts = sortList(kickerInts);
 
-            return new PokerHand(2, listOne.get(0).getRank(), null, intToRank(kickerInts[0]), intToRank(kickerInts[1]), intToRank(kickerInts[2]));
+            return new PokerHand(2, listOne.get(0).getRank(), intToRank(kickerInts[0]), intToRank(kickerInts[1]), intToRank(kickerInts[2]), null);
 
         }else if(listTwo.size() == 2){
             kickerInts[0] = rankToInt(listOne.get(0).getRank());
@@ -587,7 +587,7 @@ public class CardAnalyser {
 
             kickerInts = sortList(kickerInts);
 
-            return new PokerHand(2, listTwo.get(0).getRank(), null, intToRank(kickerInts[0]), intToRank(kickerInts[1]), intToRank(kickerInts[2]));
+            return new PokerHand(2, listTwo.get(0).getRank(), intToRank(kickerInts[0]), intToRank(kickerInts[1]), intToRank(kickerInts[2]), null);
 
         }else if(listThree.size() == 2){
             kickerInts[0] = rankToInt(listTwo.get(0).getRank());
@@ -596,7 +596,7 @@ public class CardAnalyser {
 
             kickerInts = sortList(kickerInts);
 
-            return new PokerHand(2, listThree.get(0).getRank(), null, intToRank(kickerInts[0]), intToRank(kickerInts[1]), intToRank(kickerInts[2]));
+            return new PokerHand(2, listThree.get(0).getRank(), intToRank(kickerInts[0]), intToRank(kickerInts[1]), intToRank(kickerInts[2]), null);
 
         }else if(listFour.size() == 2){
             kickerInts[0] = rankToInt(listTwo.get(0).getRank());
@@ -605,7 +605,7 @@ public class CardAnalyser {
 
             kickerInts = sortList(kickerInts);
 
-            return new PokerHand(2, listFour.get(0).getRank(), null, intToRank(kickerInts[0]), intToRank(kickerInts[1]), intToRank(kickerInts[2]));
+            return new PokerHand(2, listFour.get(0).getRank(), intToRank(kickerInts[0]), intToRank(kickerInts[1]), intToRank(kickerInts[2]), null);
 
         }else{
             return null;

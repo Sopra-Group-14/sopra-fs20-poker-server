@@ -1,6 +1,7 @@
 package ch.uzh.ifi.seal.soprafs20.entity;
 import ch.uzh.ifi.seal.soprafs20.cards.Card;
 import ch.uzh.ifi.seal.soprafs20.cards.Deck;
+import ch.uzh.ifi.seal.soprafs20.cards.WinnerCalculator;
 import ch.uzh.ifi.seal.soprafs20.chat.PlayerChat;
 import ch.uzh.ifi.seal.soprafs20.chat.SpectatorChat;
 import ch.uzh.ifi.seal.soprafs20.constant.Action;
@@ -36,6 +37,7 @@ public class Game {
 
     private Pot mainPot = new Pot();
     private Deck deck = new Deck();
+    private WinnerCalculator winnerCalculator;
 
     //Create lists for spectators, players and the active players
     private List<Player> players = new LinkedList<>();

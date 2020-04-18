@@ -3,11 +3,12 @@ package ch.uzh.ifi.seal.soprafs20.entity_in_game;
 import ch.uzh.ifi.seal.soprafs20.cards.Card;
 import ch.uzh.ifi.seal.soprafs20.entity.User;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class Player{
 
-    private List<Card> hand;
+    private List<Card> hand = new LinkedList<>();
 
     private static final int START_CREDIT = 1000;
 
