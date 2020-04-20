@@ -302,6 +302,19 @@ public class GameService {
         }
     }
 
+    public boolean checkAuthorizationGet(String token, long gameId) {
+        User user = userService.getUserByToken(token);
+        Game game = gameSelect.getGameById(gameId);
+        for (int i = 0; i < game.getPlayers().size(); i++) {
+            if ((game.getPlayers().get(i).getId() == user.getId()) && (user != null)) {
+                return true;
+            }else{
+                continue;
+            }
+        }
+        return false;
+    }
+
 
 
     private void updateActiveUsers(Game game){
