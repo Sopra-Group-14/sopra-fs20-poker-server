@@ -103,6 +103,8 @@ public class UserService {
         return this.userRepository.findById(userId);
     }
 
+    public User getUserByToken(String token){return this.userRepository.findByToken(token);}
+
     public Player setToPlayer(User user){
         long userID = user.getId();
 

@@ -1,6 +1,7 @@
 package ch.uzh.ifi.seal.soprafs20.entity;
 import ch.uzh.ifi.seal.soprafs20.cards.Card;
 import ch.uzh.ifi.seal.soprafs20.cards.Deck;
+import ch.uzh.ifi.seal.soprafs20.cards.WinnerCalculator;
 import ch.uzh.ifi.seal.soprafs20.chat.PlayerChat;
 import ch.uzh.ifi.seal.soprafs20.chat.SpectatorChat;
 import ch.uzh.ifi.seal.soprafs20.constant.Action;
@@ -36,6 +37,7 @@ public class Game {
 
     private Pot mainPot = new Pot();
     private Deck deck = new Deck();
+    private WinnerCalculator winnerCalculator;
 
     //Create lists for spectators, players and the active players
     private List<Player> players = new LinkedList<>();
@@ -46,6 +48,10 @@ public class Game {
 
     //Create a list for the cards on the table
     private List<Card> tableCards = new LinkedList<>();
+    private int timesRaisedPerPreflop = 0;
+    private int timesRaisedPerFlop = 0;
+    private int timesRaisedTurnCard= 0;
+    private int timesRaisedRiverCard = 0;
 
     /*
 Constructor
@@ -233,6 +239,37 @@ Constructor
                 game.getNextPlayer(game.getCurrentPlayer((long) 1)).getId(), 0,0, false, false, 0);
     }
 
+    public int getTimesRaisedPerPreflop() {
+        return timesRaisedPerPreflop;
+    }
+
+    public void setTimesRaisedPerPreflop(int timesRaisedPerPreflop) {
+        this.timesRaisedPerPreflop = timesRaisedPerPreflop;
+    }
+
+    public int getTimesRaisedTurnCard() {
+        return timesRaisedTurnCard;
+    }
+
+    public void setTimesRaisedTurnCard(int timesRaisedTurnCard) {
+        this.timesRaisedTurnCard = timesRaisedTurnCard;
+    }
+
+    public int getTimesRaisedPerFlop() {
+        return timesRaisedPerFlop;
+    }
+
+    public void setTimesRaisedPerFlop(int timesRaisedPerFlop) {
+        this.timesRaisedPerFlop = timesRaisedPerFlop;
+    }
+
+    public int getTimesRaisedRiverCard() {
+        return timesRaisedRiverCard;
+    }
+
+    public void setTimesRaisedRiverCard(int timesRaisedRiverCard) {
+        this.timesRaisedRiverCard = timesRaisedRiverCard;
+    }
 }
 
 

@@ -4,9 +4,7 @@ import ch.uzh.ifi.seal.soprafs20.cards.Card;
 import ch.uzh.ifi.seal.soprafs20.constant.Action;
 import ch.uzh.ifi.seal.soprafs20.constant.UserStatus;
 import ch.uzh.ifi.seal.soprafs20.entity.Game;
-import ch.uzh.ifi.seal.soprafs20.entity.User;
 import ch.uzh.ifi.seal.soprafs20.entity_in_game.GameLog;
-import ch.uzh.ifi.seal.soprafs20.entity_in_game.GameSummary;
 import ch.uzh.ifi.seal.soprafs20.entity_in_game.Player;
 import ch.uzh.ifi.seal.soprafs20.rest.dto.GamePostDTO;
 import ch.uzh.ifi.seal.soprafs20.rest.dto.UserPostDTO;
@@ -16,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -35,11 +34,12 @@ public class GameController {
     @ResponseBody
     public List<Game> getAllGames(){return gameService.getAllGames();}
 
+    /*
     @GetMapping("/games/{gameId}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public Game getGame(){return gameService.getGame();}
-
+*/
     @PostMapping("/games")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
@@ -88,7 +88,17 @@ public class GameController {
     @GetMapping("/games/{gameId}/players")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public List<Player> getPlayers(@PathVariable long gameId){return gameService.getPlayers(gameId);}
+    public List<String> getPlayers(@PathVariable long gameId, @RequestHeader (value = "Authorization") String token) {
+        if (gameService.checkAuthorizationGet(token, gameId) == false) {
+            throw new TransactionSystemException("error");
+        }
+        List<Player> players = gameService.getPlayers(gameId);
+        List<String> playerNames = new ArrayList<>();
+        for (int i = 0; i < players.size(); i++) {
+            playerNames.add(players.get(i).getPlayerName());
+        }
+        return playerNames;
+    }
 
     @PutMapping("/games/{gameId}/players/{playerId}/leave")
     @ResponseStatus(HttpStatus.OK)
@@ -105,10 +115,11 @@ public class GameController {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public GameLog takeAction(@RequestBody Action action, @RequestBody int amount, @PathVariable long gameId, @PathVariable long playerId, @RequestHeader String token){
-        if (gameService.checkAuthorizationPut(gameId, playerId, token) == false) {
+        if (!gameService.checkAuthorizationPut(gameId, playerId, token)) {
             throw new TransactionSystemException("error");
         }
-        return gameService.executeAction(action, amount, gameId, playerId, token);
+        GameLog gameLog = gameService.executeAction(action, amount, gameId, playerId, token);
+        return gameLog;
     }
 
  /*   @PutMapping("/games/{gameId}/players/{playerId}")
