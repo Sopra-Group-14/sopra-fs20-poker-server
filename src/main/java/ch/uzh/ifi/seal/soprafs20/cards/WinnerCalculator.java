@@ -79,7 +79,7 @@ public class WinnerCalculator {
                 for(e=0;e<2;e++){
                     aggregateHands.get(i).add(players.get(i).getHand().get(e));
                 }
-                for(e=0;e<3;e++){
+                for(e=0;e<tableCards.size();e++){
                     aggregateHands.get(i).add(tableCards.get(e));
                 }
             }
