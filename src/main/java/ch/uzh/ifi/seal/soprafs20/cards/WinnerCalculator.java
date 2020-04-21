@@ -64,17 +64,29 @@ public class WinnerCalculator {
 
         private CardAnalyser cardAnalyser = new CardAnalyser();
 
-        public List<Player> isWinner(List<Player> players){
+        public List<Player> isWinner(List<Player> players, List<Card> tableCards){
 
             List<PokerHand> hands = new LinkedList<>();
             List<PokerHand> winningHands = new LinkedList<>();
             List<Player> winningPlayers = new LinkedList<>();
 
-            int i;
+            int i,e;
+
+            //Make new list of aggregate player hands; their hand together with table cards
+            List<List<Card>> aggregateHands = new LinkedList<>();
+            for(i=0;i<players.size();i++){
+                aggregateHands.add(new LinkedList<>());
+                for(e=0;e<2;e++){
+                    aggregateHands.get(i).add(players.get(i).getHand().get(e));
+                }
+                for(e=0;e<tableCards.size();e++){
+                    aggregateHands.get(i).add(tableCards.get(e));
+                }
+            }
 
             //Get the base winning player list; only looking at the base hand combination value
             for(i=0;i<players.size();i++) {
-                PokerHand currentHand = cardAnalyser.getPokerHand(players.get(i).getHand());
+                PokerHand currentHand = cardAnalyser.getPokerHand(aggregateHands.get(i));
                 hands.add(currentHand);
                 if (winningHands.size() == 0) {
                     winningHands.add(currentHand);
