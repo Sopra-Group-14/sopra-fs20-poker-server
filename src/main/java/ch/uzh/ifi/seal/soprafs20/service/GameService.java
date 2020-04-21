@@ -6,7 +6,6 @@ import ch.uzh.ifi.seal.soprafs20.controller.GameController;
 import ch.uzh.ifi.seal.soprafs20.entity.Game;
 import ch.uzh.ifi.seal.soprafs20.entity.GameSelect;
 import ch.uzh.ifi.seal.soprafs20.entity.User;
-import ch.uzh.ifi.seal.soprafs20.entity_in_game.BigBlind;
 import ch.uzh.ifi.seal.soprafs20.entity_in_game.GameLog;
 import ch.uzh.ifi.seal.soprafs20.entity_in_game.Player;
 import ch.uzh.ifi.seal.soprafs20.entity_in_game.Pot;
@@ -17,15 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.print.attribute.standard.NumberUp;
-import java.util.Collections;
-import java.util.Iterator;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Collection;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import static ch.uzh.ifi.seal.soprafs20.entity.GameSelect.NULL_GAME;
-import static java.lang.Math.random;
 
 /**
  * The GameService takes care of what happens with Games.
@@ -44,6 +36,7 @@ public class GameService {
     private String gameName;
     private long hostID;
     private String potType;
+    private GameLog gameLog;
 
     public GameService(UserService userService){
         this.userService = userService;
@@ -69,14 +62,20 @@ public class GameService {
             currentId = 1;
         }
 
+        this.gameName = gameName;
+        this.hostID = hostID;
+        this.potType = potType;
+
         newGame.setGameId(currentId);
-        newGame.setGameName(gameName);
-        newGame.setPotType(potType);
-        newGame.setGameHostID(hostID);
+        newGame.setGameName(this.gameName);
+        newGame.setPotType(this.potType);
+        newGame.setGameHostID(this.hostID);
         newGame.setGameHostName(hostName);
         newGame.setHostToken(hostToken);
+//        GameLog nullGameLog = newGame.nullGameLog();
 
         this.gameSelect.addGame(newGame);
+//        newGame.addGameLog(nullGameLog);
 
         return newGame;
 
@@ -721,8 +720,17 @@ public class GameService {
     public void updateBlinds(Game game){
 
         List<Player> players = game.getPlayers();
-        game.setSmallBlind(players.get(0));
-        game.setBigBlind(players.get(1));
+
+        //TODO maybe big and small blinds have to be switched discuss with front end how they want to display the players
+
+        game.setSmallBlind(players.get(1));
+        game.setBigBlind(players.get(0));
+
+
+
+        Player player = players.get(0);
+        players.remove(0);
+        players.add(player);
 
     }
 
@@ -776,38 +784,63 @@ public class GameService {
 
     public GameLog roundStart(Game game){
 
-        GameLog gameLog = game.roundStartGameLog(game);
-
         /*FOR TESTING PURPOSES*/
 
-        User user1 = new User();
-        user1.setUsername("MOCKUSER1");
-        user1.setPassword("password");
-        user1.setToken("token");
-        user1.setId((long) 2);
-
-        User user2 = new User();
-        user2.setUsername("MOCKUSER2");
-        user2.setPassword("password2");
-        user2.setToken("token2");
-        user2.setId((long) 3);
-
-        Player player1 = new Player(user1);
-        Player player2 = new Player(user2);
-
-        game.addPlayer(player1);
-        game.addPlayer(player2);
-        game.addActivePlayer(player1);
-        game.addActivePlayer(player2);
+//        User user1 = new User();
+//        user1.setUsername("MOCKUSER1");
+//        user1.setPassword("password");
+//        user1.setToken("token");
+//        user1.setId((long) 2);
+//
+//        User user2 = new User();
+//        user2.setUsername("MOCKUSER2");
+//        user2.setPassword("password2");
+//        user2.setToken("token2");
+//        user2.setId((long) 3);
+//
+//        Player player1 = new Player(user1);
+//        Player player2 = new Player(user2);
+//
+//        game.addPlayer(player1);
+//        game.addPlayer(player2);
+//        game.addActivePlayer(player1);
+//        game.addActivePlayer(player2);
 
         /*END TESTING PURPOSES*/
 
-
-        System.out.print(gameLog);
+        //all players with a credit > Small_blind remain in the game
         updateActiveUsers(game);
         updateBlinds(game);
 
-        return gameLog;
+        List<Action> possibleActions = new ArrayList<>();
+        possibleActions.add(Action.CHECK);
+        possibleActions.add(Action.BET);
+        possibleActions.add(Action.FOLD);
+        possibleActions.add(Action.MAKESPECTATOR);
+        game.setPossibleActions(possibleActions);
+
+        gameLog = new GameLog(game.getTransactionNr(),
+                GameRound.Preflop,
+                Action.NONE,
+                game.getPlayers(),
+                game.getActivePlayers(),
+                game.getTableCards(),
+                game.getGameName(),
+                0,
+                game.getActivePlayers().get(0).getPlayerName(),
+                game.getActivePlayers().get(0).getId(),
+                game.getActivePlayers().get(1).getPlayerName(),
+                game.getActivePlayers().get(1).getId(),
+                0,
+                0,
+                false,
+                false,
+                0,
+                true,
+                false,
+                game.getPossibleActions());
+
+        return this.gameLog;
     }
 
 }

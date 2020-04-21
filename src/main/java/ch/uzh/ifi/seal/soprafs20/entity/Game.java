@@ -54,6 +54,11 @@ public class Game {
     private int timesRaisedRiverCard = 0;
     private List <Action> possibleActions = new ArrayList<>();
 
+    //private List<GameLog> gameTracker = new LinkedList<>();
+
+    public Game() {
+    }
+
     /*
 Constructor
     public Game(String gameName, String hostName, String potType /*, int maxPlayers, GameService gameService* /){
@@ -233,13 +238,32 @@ Constructor
         tableCards = new LinkedList<>();
     }
 
-    public GameLog roundStartGameLog(Game game){
+
+    public GameLog nullGameLog(){
+
         this.possibleActions.add(Action.BET);
-        return new GameLog(1, GameRound.Preflop, Action.NONE, game.getPlayers(), game.getActivePlayers(), game.getTableCards(),
-                game.getGameName(), 0, game.getActivePlayers().get(0).getPlayerName(), game.activePlayers.get(0).getId(), game.activePlayers.get(1).getPlayerName(),
-                game.getNextPlayer(game.getCurrentPlayer((long) 1)).getId(), 0,0, false, false, 0, activePlayers.get(0).isThisPlayersTurn(),
-                activePlayers.get(1).isThisPlayersTurn(), game.getPossibleActions());
+
+        GameLog gameLog = new GameLog(-1, GameRound.Preflop, Action.NONE, this.getPlayers(), this.getActivePlayers(), this.getTableCards(),
+                this.getGameName(), 0, "", (long) -1, "", (long) -1, 0, 0, false,
+                false, 0, false, false, this.getPossibleActions());
+
+
+        return gameLog;
     }
+
+//    public void removeGameLog(){
+//        this.gameTracker = new ArrayList<>();
+//    }
+//
+//    public void addGameLog(GameLog gameLog){
+//        gameTracker.add(gameLog);
+//    }
+//
+//
+//    public GameLog getGameLog(){
+//        return this.gameTracker.get(gameTracker.size());
+//    }
+
 
     public int getTimesRaisedPerPreflop() {
         return timesRaisedPerPreflop;
@@ -280,6 +304,7 @@ Constructor
     public void setPossibleActions(List<Action> possibleActions) {
         this.possibleActions = possibleActions;
     }
+
 }
 
 

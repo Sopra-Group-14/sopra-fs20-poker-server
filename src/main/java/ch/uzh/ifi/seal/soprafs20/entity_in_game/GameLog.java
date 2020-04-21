@@ -3,6 +3,7 @@ package ch.uzh.ifi.seal.soprafs20.entity_in_game;
 import ch.uzh.ifi.seal.soprafs20.cards.Card;
 import ch.uzh.ifi.seal.soprafs20.constant.Action;
 import ch.uzh.ifi.seal.soprafs20.constant.GameRound;
+import ch.uzh.ifi.seal.soprafs20.entity.Game;
 
 import java.util.List;
 
@@ -25,7 +26,7 @@ public class GameLog {
 
     //All the parameters are set in the constructor
 
-	
+
     public GameLog(int transactionNr, GameRound gameRound, Action action, List<Player> players, List<Player> activePlayers, List<Card> revealedCards, String gameName,
 					int raiseAmount, String playerName, long playerId, String nextPlayerName, long nextPlayerId, int playerPot, int potAmount, boolean roundOver,
 					boolean gameOver, int amountToCall, boolean thisPlayersTurn, boolean nextPlayersTurn, List<Action> possibleActions){
@@ -52,6 +53,7 @@ public class GameLog {
         this.possibleActions = possibleActions;
 
     }
+
 
 
     public int getTransactionNr(){return transactionNr;}
