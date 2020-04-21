@@ -119,7 +119,7 @@ public class GameService {
         }
 
         //The user has already folded
-        if (!activePlayers.contains(currentPlayer) | currentPlayer.hasFolded()==true){
+        if (!activePlayers.contains(currentPlayer) | currentPlayer.hasFolded()){
             String baseErrorMessage = "The Player %s with Id %d has already folded and does not participate in the current round anymore!";
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, String.format(baseErrorMessage, currentPlayer.getPlayerName(),currentPlayer.getId()));
         }
