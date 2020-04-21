@@ -6,16 +6,20 @@ import ch.uzh.ifi.seal.soprafs20.constant.UserStatus;
 import ch.uzh.ifi.seal.soprafs20.entity.Game;
 import ch.uzh.ifi.seal.soprafs20.entity_in_game.GameLog;
 import ch.uzh.ifi.seal.soprafs20.entity_in_game.Player;
+import ch.uzh.ifi.seal.soprafs20.rest.dto.ActionDTO;
 import ch.uzh.ifi.seal.soprafs20.rest.dto.GamePostDTO;
 import ch.uzh.ifi.seal.soprafs20.rest.dto.UserPostDTO;
 import ch.uzh.ifi.seal.soprafs20.rest.mapper.DTOMapper;
 import ch.uzh.ifi.seal.soprafs20.service.GameService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 /**
  * REST controller responsible for everything that happens in the game (gameplay-related).
@@ -24,7 +28,7 @@ import java.util.List;
 public class GameController {
 
     private final GameService gameService;
-
+    private final Logger log = LoggerFactory.getLogger(GameController.class);
     GameController(GameService gameService) {
         this.gameService = gameService;
     }
@@ -114,12 +118,14 @@ public class GameController {
     @PutMapping("/games/{gameId}/players/{playerId}/actions")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public GameLog takeAction(@RequestBody Action action, @RequestBody int amount, @PathVariable long gameId, @PathVariable long playerId, @RequestHeader String token){
+    public GameLog takeAction(@RequestBody ActionDTO actionDTO, @PathVariable long gameId, @PathVariable long playerId, @RequestHeader (value = "Authorization") String token){
+        log.info("war hier");
         if (!gameService.checkAuthorizationPut(gameId, playerId, token)) {
+            log.info("war wieder hier");
             throw new TransactionSystemException("error");
         }
-        GameLog gameLog = gameService.executeAction(action, amount, gameId, playerId, token);
-        return gameLog;
+        log.info("kam bis zum schluss");
+        return gameService.executeAction(actionDTO.getAction(), actionDTO.getAmount(), gameId, playerId, token);
     }
 
  /*   @PutMapping("/games/{gameId}/players/{playerId}")
