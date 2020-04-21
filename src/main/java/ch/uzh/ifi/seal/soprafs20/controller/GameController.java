@@ -119,13 +119,10 @@ public class GameController {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public GameLog takeAction(@RequestBody ActionDTO actionDTO, @PathVariable long gameId, @PathVariable long playerId, @RequestHeader (value = "Authorization") String token){
-        log.info("war hier");
-        if (!gameService.checkAuthorizationPut(gameId, playerId, token)) {
-            log.info("war wieder hier");
-            throw new TransactionSystemException("error");
-        }
-        log.info("kam bis zum schluss");
-        return gameService.executeAction(actionDTO.getAction(), actionDTO.getAmount(), gameId, playerId, token);
+            if (!gameService.checkAuthorizationPut(gameId, playerId, token)) {
+                throw new TransactionSystemException("error");
+            }
+            return gameService.executeAction(actionDTO.getAction(), actionDTO.getAmount(), gameId, playerId, token);
     }
 
  /*   @PutMapping("/games/{gameId}/players/{playerId}")
