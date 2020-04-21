@@ -19,7 +19,7 @@ public class GameLog {
     private List<Card> revealedCards;
     private String gameName;
     private long playerId, nextPlayerId;
-    private boolean roundOver, gameOver;
+    private boolean roundOver, gameOver, thisPlayersTurn, nextPlayersTurn;
     private Action action;
 
     //All the parameters are set in the constructor
@@ -27,7 +27,7 @@ public class GameLog {
 	
     public GameLog(int transactionNr, GameRound gameRound, Action action, List<Player> players, List<Player> activePlayers, List<Card> revealedCards, String gameName,
 					int raiseAmount, String playerName, long playerId, String nextPlayerName, long nextPlayerId, int playerPot, int potAmount, boolean roundOver,
-					boolean gameOver, int amountToCall){
+					boolean gameOver, int amountToCall, boolean thisPlayersTurn, boolean nextPlayersTurn){
 
         this.transactionNr = transactionNr;
         this.gameRound = gameRound;
@@ -46,6 +46,9 @@ public class GameLog {
         this.roundOver = roundOver;
         this.gameOver = gameOver;
         this.amountToCall = amountToCall;
+        this.thisPlayersTurn = thisPlayersTurn;
+        this.nextPlayersTurn = nextPlayersTurn;
+
     }
 
 
@@ -72,6 +75,10 @@ public class GameLog {
     public boolean getGameOver(){return gameOver;}
 
     public int getAmountToCall(){return amountToCall;}
+
+    public boolean getThisPlayersTurn(){return thisPlayersTurn;}
+
+    public boolean getNextPlayersTurn(){return nextPlayersTurn;}
 
     public void setAmountToCall(int amount){amountToCall = amount;}
 

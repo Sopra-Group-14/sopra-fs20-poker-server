@@ -67,9 +67,10 @@ public class Player{
     public void setAmountInPot(int amountInPot){
         this.amountInPot = amountInPot;
     }
+
     public void setThisPlayersTurn(boolean thisPlayersTurn){this.thisPlayersTurn = thisPlayersTurn;}
 
-    public boolean isThisPlayersTurn(){return thisPlayersTurn;}
+    public boolean isThisPlayersTurn(){return this.thisPlayersTurn;}
 
     public void fold(){this.folded = true;}
 

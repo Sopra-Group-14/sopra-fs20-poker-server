@@ -120,6 +120,7 @@ public class GameService {
 
         //The player tries to take an action when it is not their turn
         if (!activePlayers.contains(currentPlayer) |  !currentPlayer.isThisPlayersTurn()){
+            log.info("player tries to take action, when not his turn");
             String baseErrorMessage = "Not Player %s turn!";
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, String.format(baseErrorMessage, currentPlayer.getPlayerName()));
         }
@@ -246,6 +247,13 @@ public class GameService {
             currentPlayer.setAmountInPot(currentPlayer.getAmountInPot() + amount);
             pot.addAmount(amount);
             game.setTransactionNr(game.getTransactionNr() + 1);
+
+            // Important: setThisPlayerTurn for all players but nextPlayer to false
+            for (int i = 0; i < activePlayers.size(); i++){
+                activePlayers.get(i).setThisPlayersTurn(false);
+            }
+            nextPlayer.setThisPlayersTurn(true);
+
             gameLog = new GameLog(game.getTransactionNr(),
                     game.getGameRound(),
                     Action.BET,
@@ -262,13 +270,11 @@ public class GameService {
                     pot.getAmount(),
                     game.isRoundOver(),
                     game.isGameOver(),
-                    0);
+                    0,
+                    currentPlayer.isThisPlayersTurn(),
+                    nextPlayer.isThisPlayersTurn());
 
-            // Important: setThisPlayerTurn for all players but nextPlayer to false
-            for (Player activePlayer : activePlayers) {
-                activePlayer.setThisPlayersTurn(false);
-            }
-            nextPlayer.setThisPlayersTurn(true);
+
             //return gameLog to GameController
             return gameLog;
 
@@ -442,6 +448,13 @@ public class GameService {
                 currentPlayer.setAmountInPot(currentPlayer.getAmountInPot() + addedAmount);
                 pot.addAmount(addedAmount);
                 game.setTransactionNr(game.getTransactionNr() + 1);
+            // Important: setThisPlayerTurn for all players but nextPlayer to false
+            for (Player activePlayer : activePlayers) {
+                activePlayer.setThisPlayersTurn(false);
+            }
+            nextPlayer.setThisPlayersTurn(true);
+
+
                 gameLog = new GameLog(game.getTransactionNr(),
                         game.getGameRound(),
                         Action.RAISE,
@@ -458,14 +471,11 @@ public class GameService {
                         pot.getAmount(),
                         game.isRoundOver(),
                         game.isGameOver(),
-                        amountToCall);
+                        amountToCall,
+                        currentPlayer.isThisPlayersTurn(),
+                        nextPlayer.isThisPlayersTurn());
 
 
-            // Important: setThisPlayerTurn for all players but nextPlayer to false
-            for (Player activePlayer : activePlayers) {
-                activePlayer.setThisPlayersTurn(false);
-            }
-            nextPlayer.setThisPlayersTurn(true);
             //return gameLog to GameController
             return gameLog;
         }
@@ -495,6 +505,18 @@ public class GameService {
                 currentPlayer.setAmountInPot(currentPlayer.getAmountInPot() + amount);
                 pot.addAmount(amount);
                 game.setTransactionNr(game.getTransactionNr() + 1);
+            for (Player activePlayer : activePlayers) {
+                activePlayer.setThisPlayersTurn(false);
+            }
+            nextPlayer.setThisPlayersTurn(true);
+
+            // Important: setThisPlayerTurn for all players but nextPlayer to false
+            for (Player activePlayer : activePlayers) {
+                activePlayer.setThisPlayersTurn(false);
+            }
+            nextPlayer.setThisPlayersTurn(true);
+
+
                 gameLog = new GameLog(game.getTransactionNr(),
                         game.getGameRound(),
                         Action.CALL,
@@ -511,13 +533,11 @@ public class GameService {
                         pot.getAmount(),
                         game.isRoundOver(),
                         game.isGameOver(),
-                        amount);
+                        amount,
+                        currentPlayer.isThisPlayersTurn(),
+                        nextPlayer.isThisPlayersTurn());
 
-            // Important: setThisPlayerTurn for all players but nextPlayer to false
-            for (Player activePlayer : activePlayers) {
-                activePlayer.setThisPlayersTurn(false);
-            }
-            nextPlayer.setThisPlayersTurn(true);
+
             return gameLog;
         }
 

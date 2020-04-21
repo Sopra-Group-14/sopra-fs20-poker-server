@@ -236,7 +236,8 @@ Constructor
 
         return new GameLog(1, GameRound.Preflop, Action.NONE, game.getPlayers(), game.getActivePlayers(), game.getTableCards(),
                 game.getGameName(), 0, game.getActivePlayers().get(0).getPlayerName(), game.activePlayers.get(0).getId(), game.activePlayers.get(1).getPlayerName(),
-                game.getNextPlayer(game.getCurrentPlayer((long) 1)).getId(), 0,0, false, false, 0);
+                game.getNextPlayer(game.getCurrentPlayer((long) 1)).getId(), 0,0, false, false, 0, activePlayers.get(0).isThisPlayersTurn(),
+                activePlayers.get(1).isThisPlayersTurn());
     }
 
     public int getTimesRaisedPerPreflop() {
