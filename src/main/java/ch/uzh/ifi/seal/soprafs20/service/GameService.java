@@ -18,8 +18,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.print.attribute.standard.NumberUp;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Collection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import static ch.uzh.ifi.seal.soprafs20.entity.GameSelect.NULL_GAME;
@@ -108,7 +110,6 @@ public class GameService {
         Pot pot = new Pot();
         int smallBlind = 5;
         int bigBlind = 10;
-        int timesRaisedPerRound = 0;
         Player playerWithMostAmountInPot;
         playerWithMostAmountInPot = game.getActivePlayers().get(0);
         for (int i = 0; i<game.getActivePlayers().size();i++){
@@ -116,6 +117,145 @@ public class GameService {
                 playerWithMostAmountInPot = game.getActivePlayers().get(i);
             }
         }
+
+
+        List <Action> possibleActions = game.getPossibleActions();
+        //fist player of first round has to bet, second player of first round has to raise
+        if (action == Action.BET && game.getGameRound() == GameRound.Preflop && currentPlayer == activePlayers.get(0)){
+            possibleActions.clear();
+            possibleActions.add(Action.RAISE);
+
+            //check all kinds of bet
+        }else if ((action == Action.BET && game.getPotType().equals("fixed limit")) ||
+                (action == Action.BET && game.getPotType() == "split limit")) {
+            if ((game.getGameRound() == GameRound.Preflop && game.getTimesRaisedPerPreflop() >= 2) ||
+                    (game.getGameRound() == GameRound.Preflop && game.getTimesRaisedPerFlop() >= 2) ||
+                    (game.getGameRound() == GameRound.Preflop && game.getTimesRaisedRiverCard() >= 2) ||
+                    (game.getGameRound() == GameRound.Preflop && game.getTimesRaisedTurnCard() >= 2)) {
+                possibleActions.clear();
+                possibleActions.add(Action.CALL);
+                possibleActions.add(Action.FOLD);
+            }
+            else {
+                possibleActions.clear();
+                possibleActions.add(Action.RAISE);
+                possibleActions.add(Action.CALL);
+                possibleActions.add(Action.FOLD);
+            }
+        }else if ((action == Action.BET && game.getPotType().equals("pot limit"))||
+                (action == Action.BET && game.getPotType().equals("no limit"))){
+                possibleActions.clear();
+                possibleActions.add(Action.RAISE);
+                possibleActions.add(Action.CALL);
+                possibleActions.add(Action.FOLD);
+
+
+            //check all kinds of raise
+        }else if (action == Action.RAISE && game.getPotType().equals("no limit")){
+            possibleActions.clear();
+            possibleActions.add(Action.RAISE);
+            if (nextPlayer.getAmountInPot()<previousPlayer.getAmountInPot()) {
+                possibleActions.add(Action.CALL);
+            }
+            possibleActions.add(Action.FOLD);
+        }else if (action == Action.RAISE && game.getPotType().equals("fixed limit")){
+            //per round it is not possible to raise more than three times
+            if ((game.getGameRound()==GameRound.Preflop && game.getTimesRaisedPerPreflop() >= 2)||
+                    (game.getGameRound()==GameRound.Preflop && game.getTimesRaisedPerFlop() >= 2)||
+                    (game.getGameRound()==GameRound.Preflop && game.getTimesRaisedRiverCard() >= 2)||
+                    (game.getGameRound()==GameRound.Preflop && game.getTimesRaisedTurnCard() >= 2))
+            {
+                possibleActions.clear();
+                if (nextPlayer.getAmountInPot()<previousPlayer.getAmountInPot()) {
+                    possibleActions.add(Action.CALL);
+                }
+                possibleActions.add(Action.FOLD);
+            }else {
+                possibleActions.clear();
+                possibleActions.add(Action.RAISE);
+                if (nextPlayer.getAmountInPot()<previousPlayer.getAmountInPot()) {
+                    possibleActions.add(Action.CALL);
+                }
+                possibleActions.add(Action.FOLD);
+            }
+        }else if (action == Action.RAISE && game.getPotType().equals("pot limit")){
+            possibleActions.clear();
+            possibleActions.add(Action.RAISE);
+            if (nextPlayer.getAmountInPot()<previousPlayer.getAmountInPot()) {
+                possibleActions.add(Action.CALL);
+            }
+            possibleActions.add(Action.FOLD);
+        }else if (action == Action.RAISE && game.getPotType() == "split limit"){
+            //per round it is not possible to raise more than three times
+            if ((game.getGameRound()==GameRound.Preflop && game.getTimesRaisedPerPreflop() >= 2)||
+                    (game.getGameRound()==GameRound.Preflop && game.getTimesRaisedPerFlop() >= 2)||
+                    (game.getGameRound()==GameRound.Preflop && game.getTimesRaisedRiverCard() >= 2)||
+                    (game.getGameRound()==GameRound.Preflop && game.getTimesRaisedTurnCard() >= 2))
+            {
+                possibleActions.clear();
+                if (nextPlayer.getAmountInPot()<previousPlayer.getAmountInPot()) {
+                    possibleActions.add(Action.CALL);
+                }
+                possibleActions.add(Action.FOLD);
+            }else {
+                possibleActions.clear();
+                possibleActions.add(Action.RAISE);
+                if (nextPlayer.getAmountInPot()<previousPlayer.getAmountInPot()) {
+                    possibleActions.add(Action.CALL);
+                }
+                possibleActions.add(Action.FOLD);
+            }
+            //check all kinds of check
+        }else if (action == Action.CHECK){
+            possibleActions.clear();
+            possibleActions.add(Action.CHECK);
+            possibleActions.add(Action.BET);
+            possibleActions.add(Action.FOLD);
+
+            //check all kinds of call
+        }else if (action == Action.FOLD){
+            possibleActions = possibleActions;
+        }else if ((action == Action.CALL && game.getPotType() == "split limit")||
+                (action == Action.CALL && game.getPotType().equals("fixed limit"))) {
+            if ((game.getGameRound() == GameRound.Preflop && game.getTimesRaisedPerPreflop() >= 2) ||
+                    (game.getGameRound() == GameRound.Preflop && game.getTimesRaisedPerFlop() >= 2) ||
+                    (game.getGameRound() == GameRound.Preflop && game.getTimesRaisedRiverCard() >= 2) ||
+                    (game.getGameRound() == GameRound.Preflop && game.getTimesRaisedTurnCard() >= 2)) {
+                possibleActions.clear();
+                if (nextPlayer.getAmountInPot()<previousPlayer.getAmountInPot()) {
+                    possibleActions.add(Action.CALL);
+                }
+                possibleActions.add(Action.FOLD);
+                if (nextPlayer.getAmountInPot() == previousPlayer.getAmountInPot()){
+                    possibleActions.add(Action.BET);
+                }
+            }else {
+                possibleActions.clear();
+                possibleActions.add(Action.RAISE);
+                if (nextPlayer.getAmountInPot()<previousPlayer.getAmountInPot()) {
+                    possibleActions.add(Action.CALL);
+                }
+                possibleActions.add(Action.FOLD);
+                if (nextPlayer.getAmountInPot() == previousPlayer.getAmountInPot()){
+                    possibleActions.add(Action.BET);
+                }
+            }
+        }else if (action == Action.CALL){
+            possibleActions.clear();
+            if (nextPlayer.getAmountInPot()<previousPlayer.getAmountInPot()) {
+                possibleActions.add(Action.CALL);
+            }
+            possibleActions.add(Action.FOLD);
+            if (nextPlayer.getAmountInPot() == previousPlayer.getAmountInPot()){
+                possibleActions.add(Action.BET);
+            }
+            possibleActions.add(Action.RAISE);
+
+            if (nextPlayer.getAmountInPot() == previousPlayer.getAmountInPot()){
+                possibleActions.add(Action.CHECK);
+            }
+        }
+
 
 
         //The player tries to take an action when it is not their turn
@@ -157,7 +297,7 @@ public class GameService {
         //the third player of first round (preflop) has to call or raise
         if (game.getGameRound() == GameRound.Preflop && currentPlayer == activePlayers.get(2)){
             if (action != Action.CALL && action != Action.RAISE){
-                String baseErrorMessage = "The Player %s with Id %d has to call or raise because he is first player";
+                String baseErrorMessage = "The Player %s with Id %d has to raise because he is first player";
                 throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, String.format(baseErrorMessage, currentPlayer.getPlayerName(),currentPlayer.getId()));
             }
         }
@@ -254,6 +394,8 @@ public class GameService {
             }
             nextPlayer.setThisPlayersTurn(true);
 
+
+
             gameLog = new GameLog(game.getTransactionNr(),
                     game.getGameRound(),
                     Action.BET,
@@ -272,7 +414,8 @@ public class GameService {
                     game.isGameOver(),
                     0,
                     currentPlayer.isThisPlayersTurn(),
-                    nextPlayer.isThisPlayersTurn());
+                    nextPlayer.isThisPlayersTurn(),
+                    possibleActions);
 
 
             //return gameLog to GameController
@@ -473,7 +616,8 @@ public class GameService {
                         game.isGameOver(),
                         amountToCall,
                         currentPlayer.isThisPlayersTurn(),
-                        nextPlayer.isThisPlayersTurn());
+                        nextPlayer.isThisPlayersTurn(),
+                        possibleActions);
 
 
             //return gameLog to GameController
@@ -535,7 +679,8 @@ public class GameService {
                         game.isGameOver(),
                         amount,
                         currentPlayer.isThisPlayersTurn(),
-                        nextPlayer.isThisPlayersTurn());
+                        nextPlayer.isThisPlayersTurn(),
+                        possibleActions);
 
 
             return gameLog;

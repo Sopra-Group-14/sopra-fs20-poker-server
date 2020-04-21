@@ -6,10 +6,10 @@ import ch.uzh.ifi.seal.soprafs20.chat.PlayerChat;
 import ch.uzh.ifi.seal.soprafs20.chat.SpectatorChat;
 import ch.uzh.ifi.seal.soprafs20.constant.Action;
 import ch.uzh.ifi.seal.soprafs20.constant.GameRound;
-import ch.uzh.ifi.seal.soprafs20.constant.UserStatus;
 import ch.uzh.ifi.seal.soprafs20.entity_in_game.*;
-import ch.uzh.ifi.seal.soprafs20.service.GameService;
 import ch.uzh.ifi.seal.soprafs20.exceptions.SopraServiceException;
+
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -52,6 +52,7 @@ public class Game {
     private int timesRaisedPerFlop = 0;
     private int timesRaisedTurnCard= 0;
     private int timesRaisedRiverCard = 0;
+    private List <Action> possibleActions = new ArrayList<>();
 
     /*
 Constructor
@@ -233,11 +234,11 @@ Constructor
     }
 
     public GameLog roundStartGameLog(Game game){
-
+        this.possibleActions.add(Action.BET);
         return new GameLog(1, GameRound.Preflop, Action.NONE, game.getPlayers(), game.getActivePlayers(), game.getTableCards(),
                 game.getGameName(), 0, game.getActivePlayers().get(0).getPlayerName(), game.activePlayers.get(0).getId(), game.activePlayers.get(1).getPlayerName(),
                 game.getNextPlayer(game.getCurrentPlayer((long) 1)).getId(), 0,0, false, false, 0, activePlayers.get(0).isThisPlayersTurn(),
-                activePlayers.get(1).isThisPlayersTurn());
+                activePlayers.get(1).isThisPlayersTurn(), game.getPossibleActions());
     }
 
     public int getTimesRaisedPerPreflop() {
@@ -270,6 +271,14 @@ Constructor
 
     public void setTimesRaisedRiverCard(int timesRaisedRiverCard) {
         this.timesRaisedRiverCard = timesRaisedRiverCard;
+    }
+
+    public List<Action> getPossibleActions() {
+        return possibleActions;
+    }
+
+    public void setPossibleActions(List<Action> possibleActions) {
+        this.possibleActions = possibleActions;
     }
 }
 

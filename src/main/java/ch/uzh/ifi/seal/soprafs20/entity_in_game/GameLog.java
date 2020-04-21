@@ -17,6 +17,7 @@ public class GameLog {
     private List<Player> players;
     private List<Player> activePlayers;
     private List<Card> revealedCards;
+    private List<Action> possibleActions;
     private String gameName;
     private long playerId, nextPlayerId;
     private boolean roundOver, gameOver, thisPlayersTurn, nextPlayersTurn;
@@ -27,7 +28,7 @@ public class GameLog {
 	
     public GameLog(int transactionNr, GameRound gameRound, Action action, List<Player> players, List<Player> activePlayers, List<Card> revealedCards, String gameName,
 					int raiseAmount, String playerName, long playerId, String nextPlayerName, long nextPlayerId, int playerPot, int potAmount, boolean roundOver,
-					boolean gameOver, int amountToCall, boolean thisPlayersTurn, boolean nextPlayersTurn){
+					boolean gameOver, int amountToCall, boolean thisPlayersTurn, boolean nextPlayersTurn, List<Action> possibleActions){
 
         this.transactionNr = transactionNr;
         this.gameRound = gameRound;
@@ -48,6 +49,7 @@ public class GameLog {
         this.amountToCall = amountToCall;
         this.thisPlayersTurn = thisPlayersTurn;
         this.nextPlayersTurn = nextPlayersTurn;
+        this.possibleActions = possibleActions;
 
     }
 
@@ -81,5 +83,7 @@ public class GameLog {
     public boolean getNextPlayersTurn(){return nextPlayersTurn;}
 
     public void setAmountToCall(int amount){amountToCall = amount;}
+
+    public List<Action> getPossibleActions(){return possibleActions;}
 
 }
