@@ -5,6 +5,7 @@ import ch.uzh.ifi.seal.soprafs20.entity.User;
 import ch.uzh.ifi.seal.soprafs20.rest.dto.GamePostDTO;
 import ch.uzh.ifi.seal.soprafs20.rest.dto.UserGetDTO;
 import ch.uzh.ifi.seal.soprafs20.rest.dto.UserPostDTO;
+import ch.uzh.ifi.seal.soprafs20.rest.dto.UserPutDTO;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
@@ -36,5 +37,9 @@ public interface DTOMapper {
     @Mapping(source = "gameHostID", target = "gameHostID")
     @Mapping(source = "potType", target = "potType")
     Game convertGamePostDTOtoEntity(GamePostDTO gamePostDTO);
+
+//    @Mapping(source = "userId", target = "userId")
+    @Mapping(source = "amount", target = "amount")
+    UserPutDTO convertPutDTOtoEntity(UserPutDTO userPutDTO);
 
 }

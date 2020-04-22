@@ -4,6 +4,7 @@ import ch.uzh.ifi.seal.soprafs20.entity.User;
 import ch.uzh.ifi.seal.soprafs20.rest.dto.LoginPutDTO;
 import ch.uzh.ifi.seal.soprafs20.rest.dto.UserGetDTO;
 import ch.uzh.ifi.seal.soprafs20.rest.dto.UserPostDTO;
+import ch.uzh.ifi.seal.soprafs20.rest.dto.UserPutDTO;
 import ch.uzh.ifi.seal.soprafs20.rest.mapper.DTOMapper;
 import ch.uzh.ifi.seal.soprafs20.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -87,13 +88,19 @@ public class UserController {
     @GetMapping("/users/{userId}/balance")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public int getBalance(@PathVariable long userId, @RequestHeader (value = "Authorization") String token){return -1;}
+    public int getBalance(@PathVariable long userId, @RequestHeader (value = "Authorization") String token){
+        return -1;}
 
     @PutMapping("/users/{userId}/balance")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public int addBalance(@PathVariable (value = "userId") long userId, @RequestBody int amount, @RequestHeader (value = "Authorization") String token){
-        return UserService.addBalance(userId);
+    public long addBalance(@PathVariable long userId, @RequestBody UserPutDTO userPutDTO, @RequestHeader (value = "Authorization") String token) throws Exception {
+
+        UserPutDTO userInput = DTOMapper.INSTANCE.convertPutDTOtoEntity(userPutDTO);
+
+        //long userId = userInput.getUserId();
+        long amount = userInput.getAmount();
+        return userService.addBalance(userId, amount);
     }
 
     @GetMapping("/users/{userId}")

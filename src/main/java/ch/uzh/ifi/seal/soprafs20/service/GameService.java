@@ -719,18 +719,22 @@ public class GameService {
 
     public void updateBlinds(Game game){
 
+        /*
+        input is the game that needs to update blinds
+        -the small blind of the previous round becomes a "NO Blind"
+        -the big blind of the previous round becomes the small blind
+         -the player after the previous big blind becomes the new big blind
+         */
+
         List<Player> players = game.getPlayers();
-
-        //TODO maybe big and small blinds have to be switched discuss with front end how they want to display the players
-
-        game.setSmallBlind(players.get(1));
-        game.setBigBlind(players.get(0));
-
 
 
         Player player = players.get(0);
         players.remove(0);
-        players.add(player);
+        players.add(players.size()+1, player);
+
+        game.setSmallBlind(players.get(0));
+        game.setBigBlind(players.get(1));
 
     }
 
@@ -786,25 +790,25 @@ public class GameService {
 
         /*FOR TESTING PURPOSES*/
 
-//        User user1 = new User();
-//        user1.setUsername("MOCKUSER1");
-//        user1.setPassword("password");
-//        user1.setToken("token");
-//        user1.setId((long) 2);
-//
-//        User user2 = new User();
-//        user2.setUsername("MOCKUSER2");
-//        user2.setPassword("password2");
-//        user2.setToken("token2");
-//        user2.setId((long) 3);
-//
-//        Player player1 = new Player(user1);
-//        Player player2 = new Player(user2);
-//
-//        game.addPlayer(player1);
-//        game.addPlayer(player2);
-//        game.addActivePlayer(player1);
-//        game.addActivePlayer(player2);
+        User user1 = new User();
+        user1.setUsername("MOCKUSER1");
+        user1.setPassword("password");
+        user1.setToken("token");
+        user1.setId((long) 2);
+
+        User user2 = new User();
+        user2.setUsername("MOCKUSER2");
+        user2.setPassword("password2");
+        user2.setToken("token2");
+        user2.setId((long) 3);
+
+        Player player1 = new Player(user1);
+        Player player2 = new Player(user2);
+
+        game.addPlayer(player1);
+        game.addPlayer(player2);
+        game.addActivePlayer(player1);
+        game.addActivePlayer(player2);
 
         /*END TESTING PURPOSES*/
 
@@ -813,7 +817,6 @@ public class GameService {
         updateBlinds(game);
 
         List<Action> possibleActions = new ArrayList<>();
-        possibleActions.add(Action.CHECK);
         possibleActions.add(Action.BET);
         possibleActions.add(Action.FOLD);
         possibleActions.add(Action.MAKESPECTATOR);

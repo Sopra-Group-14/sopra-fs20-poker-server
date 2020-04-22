@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -42,8 +44,13 @@ public class UserService {
     }
 
     public User createUser(User newUser) {
+
+        Date registrationDate = new Date(System.currentTimeMillis());
+
         newUser.setToken(UUID.randomUUID().toString());
         newUser.setStatus(UserStatus.ONLINE);
+        newUser.setBalance(1000);
+        newUser.setLastToppedUp(registrationDate);
 
         checkIfUserExists(newUser);
 
@@ -93,10 +100,28 @@ public class UserService {
         }
     }
 
-    public static int addBalance(long userId){
-        return -1;
+    public long addBalance(long userId, long amount) throws Exception {
+
+        final int COOLDOWN_TIME = -1;
+
+        User user = userRepository.findById(userId);
+
+        Date currTime = new Date(System.currentTimeMillis());
+
+        if(hoursDifference(user.getLastToppedUp(), currTime) > COOLDOWN_TIME){
+            user.setBalance((long) amount);
+        }else{
+            throw new SopraServiceException("Cannot top up account as user's accout has been topped up within the last "
+                                            + COOLDOWN_TIME + " hours.");
+        }
+        
+        return user.getBalance();
     }
 
+    private static int hoursDifference(Date lastDate, Date currDate){
+        final int MILLI_TO_HOUR = 1000 * 60 * 60;
+        return (int) (lastDate.getTime() - currDate.getTime())/MILLI_TO_HOUR;
+    }
     public void updateUserMode(long userId, String mode){}
 
     public User getUserById(long userId){

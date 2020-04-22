@@ -40,12 +40,12 @@ public class User implements Serializable {
     private UserStatus status;
 
 
-//    @Column(nullable = false)
-//    private long balance;
-//
-//    @Column(nullable = false)
-//    private Date lastToppedUp;
-//
+    @Column(nullable = false)
+    private long balance;
+
+    @Column(nullable = false)
+    private Date lastToppedUp;
+
 //    private UserMode mode;
 
 
@@ -93,8 +93,23 @@ public class User implements Serializable {
         this.status = status;
     }
 
+    public void setLastToppedUp(Date lastToppedUp) {
+        this.lastToppedUp = lastToppedUp;
+    }
 
-//    public void setLastToppedUp(Date lastToppedUp) {
+    public Date getLastToppedUp() {
+        return lastToppedUp;
+    }
+
+    public void setBalance(long balance) {
+        this.balance = balance;
+    }
+
+    public long getBalance() {
+        return balance;
+    }
+
+    //    public void setLastToppedUp(Date lastToppedUp) {
 //        this.lastToppedUp = lastToppedUp;
 //    }
 //
