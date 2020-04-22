@@ -39,6 +39,7 @@ public class UserServiceTest {
     }
 
     @Test
+    @Disabled
     public void createUser_validInputs_success() {
         // when -> any object is being save in the userRepository -> return the dummy testUser
         User createdUser = userService.createUser(testUser);
