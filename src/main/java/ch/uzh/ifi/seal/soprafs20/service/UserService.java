@@ -114,7 +114,7 @@ public class UserService {
             throw new SopraServiceException("Cannot top up account as user's accout has been topped up within the last "
                                             + COOLDOWN_TIME + " hours.");
         }
-        
+
         return user.getBalance();
     }
 
