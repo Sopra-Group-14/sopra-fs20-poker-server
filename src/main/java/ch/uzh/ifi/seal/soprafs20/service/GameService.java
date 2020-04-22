@@ -424,8 +424,36 @@ public class GameService {
 
         if(action == Action.FOLD){
 
-            game.playerFolds(currentPlayer);
+            for (int i = 0; i < activePlayers.size(); i++){
+                activePlayers.get(i).setThisPlayersTurn(false);
+            }
+            nextPlayer.setThisPlayersTurn(true);
 
+
+            game.playerFolds(currentPlayer);
+            gameLog = new GameLog(game.getTransactionNr(),
+                    game.getGameRound(),
+                    Action.FOLD,
+                    game.getPlayers(),
+                    game.getActivePlayers(),
+                    game.getTableCards(),
+                    game.getGameName(),
+                    0,
+                    currentPlayer.getPlayerName(),
+                    currentPlayer.getId(),
+                    nextPlayer.getPlayerName(),
+                    nextPlayer.getId(),
+                    currentPlayer.getAmountInPot(),
+                    pot.getAmount(),
+                    game.isRoundOver(),
+                    game.isGameOver(),
+                    0,
+                    currentPlayer.isThisPlayersTurn(),
+                    nextPlayer.isThisPlayersTurn(),
+                    possibleActions);
+
+
+            return gameLog;
         }
         if(action == Action.RAISE) {
             int addedAmount = (playerWithMostAmountInPot.getAmountInPot() - currentPlayer.getAmountInPot()) + amount;
