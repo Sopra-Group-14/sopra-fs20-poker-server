@@ -1,6 +1,7 @@
 package ch.uzh.ifi.seal.soprafs20.entity_in_game;
 
 import ch.uzh.ifi.seal.soprafs20.cards.Card;
+import ch.uzh.ifi.seal.soprafs20.constant.PlayerReadyStatus;
 import ch.uzh.ifi.seal.soprafs20.entity.User;
 
 import java.util.LinkedList;
@@ -27,6 +28,8 @@ public class Player{
     private boolean folded = false;
 
     private boolean checked= false;
+
+    private PlayerReadyStatus readyStatus = PlayerReadyStatus.UNREADY;
 
 
     public Player(User user){
@@ -79,5 +82,15 @@ public class Player{
     public void check(){this.checked = true;}
 
     public boolean hasChecked(){return this.checked;}
+
+    public PlayerReadyStatus getReadyStatus(){return this.readyStatus;}
+
+    public void toggleReadyStatus(){
+        if(readyStatus == PlayerReadyStatus.READY){
+            readyStatus = PlayerReadyStatus.UNREADY;
+        }else{
+            readyStatus = PlayerReadyStatus.READY;
+        }
+    }
 
 }

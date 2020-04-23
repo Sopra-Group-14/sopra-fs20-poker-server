@@ -179,6 +179,16 @@ Constructor
         }
     }
 
+    public Player getPlayerById(long id){
+        int i;
+        for(i=0;i<players.size();i++){
+            if(players.get(i).getId() == id){
+                return players.get(i);
+            }
+        }
+        return null;
+    }
+
     public void addSpectator(Spectator spectator){
         this.spectators.add(spectator);
     }

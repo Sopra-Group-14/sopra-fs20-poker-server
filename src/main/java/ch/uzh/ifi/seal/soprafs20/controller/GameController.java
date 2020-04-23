@@ -125,11 +125,11 @@ public class GameController {
             return gameService.executeAction(actionDTO.getAction(), actionDTO.getAmount(), gameId, playerId, token);
     }
 
- /*   @PutMapping("/games/{gameId}/players/{playerId}")
+    @PutMapping("/games/{gameId}/players/{playerId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ResponseBody
-    public GameLog makePlayer(@PathVariable long gameId, @PathVariable long playerId){return null;}
-*/
+    public void togglePlayerReadyStatus(@PathVariable long gameId, @PathVariable long playerId){gameService.togglePlayerReadyStatus(gameId, playerId);}
+
 
     @PutMapping("/games/{gameId}/spectators/{playerId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

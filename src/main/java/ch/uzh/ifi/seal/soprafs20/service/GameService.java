@@ -97,6 +97,12 @@ public class GameService {
 
     }
 
+    public void togglePlayerReadyStatus(long gameid, long playerid){
+
+        gameSelect.getGameById(gameid).getPlayerById(playerid).toggleReadyStatus();
+
+    }
+
     public GameLog executeAction(Action action, int amount, long gameId, long playerId, String token){
 
         GameLog gameLog;
