@@ -1,5 +1,6 @@
 package ch.uzh.ifi.seal.soprafs20.rest.dto;
 
+import ch.uzh.ifi.seal.soprafs20.constant.UserMode;
 import ch.uzh.ifi.seal.soprafs20.constant.UserStatus;
 
 public class UserGetDTO {
@@ -10,6 +11,7 @@ public class UserGetDTO {
     private UserStatus status;
     private String token;
     private String password;
+    private UserMode mode;
 
     public Long getId() {
         return id;
@@ -54,5 +56,9 @@ public class UserGetDTO {
     public void setToken(String token) {
         this.token = token;
     }
+
+    public UserMode getMode(){return mode;}
+
+    public void setMode(UserMode mode){this.mode = mode;}
 
 }

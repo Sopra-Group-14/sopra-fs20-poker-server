@@ -46,6 +46,8 @@ public class User implements Serializable {
     @Column(nullable = false)
     private Date lastToppedUp;
 
+    private UserMode mode;
+
 //    private UserMode mode;
 
 
@@ -108,6 +110,10 @@ public class User implements Serializable {
     public long getBalance() {
         return balance;
     }
+
+    public UserMode getMode(){return mode;}
+
+    public void setMode(UserMode mode){this.mode = mode;}
 
     //    public void setLastToppedUp(Date lastToppedUp) {
 //        this.lastToppedUp = lastToppedUp;
