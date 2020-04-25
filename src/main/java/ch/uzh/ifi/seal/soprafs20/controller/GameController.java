@@ -141,11 +141,4 @@ public class GameController {
     @ResponseBody
     public Player currentPlayer(@PathVariable long gameId){return null;}
 
-    @PutMapping("/games/{gameId}/players/{playerId}")
-    @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
-    public void toggleReadyStatus(@PathVariable long gameId, @PathVariable long playerId){
-        gameService.toggleReadyStatus(gameId, playerId);
-    }
-
 }
