@@ -42,6 +42,7 @@ public class GameService {
         this.userService = userService;
     }
 
+
     public Game createGame(String gameName, long hostID, String potType){
 
         /*createGame receives gameName, hostId and potType from client. The game constructor expects the hostName;
