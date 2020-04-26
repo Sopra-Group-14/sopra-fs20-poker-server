@@ -2,8 +2,10 @@ package ch.uzh.ifi.seal.soprafs20.controller;
 
 import ch.uzh.ifi.seal.soprafs20.cards.Card;
 import ch.uzh.ifi.seal.soprafs20.constant.Action;
+import ch.uzh.ifi.seal.soprafs20.constant.GameRound;
 import ch.uzh.ifi.seal.soprafs20.constant.UserStatus;
 import ch.uzh.ifi.seal.soprafs20.entity.Game;
+import ch.uzh.ifi.seal.soprafs20.entity.GameSelect;
 import ch.uzh.ifi.seal.soprafs20.entity_in_game.GameLog;
 import ch.uzh.ifi.seal.soprafs20.entity_in_game.Player;
 import ch.uzh.ifi.seal.soprafs20.rest.dto.ActionDTO;
@@ -57,6 +59,8 @@ public class GameController {
         Game game = this.gameService.createGame(gameName, hostId, potType);
         gameService.addHost(hostId, game);
 
+        gameService.addGame(game);
+
         return game;
     }
 
@@ -68,7 +72,12 @@ public class GameController {
     @GetMapping("/games/{gameId}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public GameLog getGameLog(@PathVariable long gameId){return null;}
+    public GameLog getGameLog(@PathVariable long gameId){
+
+        return new GameLog(8, GameRound.Flop, null, null, null, null, "REEEEEE", 0, "PlayerName", 1, "NextPlayer", 2, 1000, 1000, false, false, 50, true, false, null);
+
+        //return gameService.getGameLog(gameId);
+    }
 
     @PutMapping("games/{gameId}/roundStart")
     @ResponseStatus(HttpStatus.OK)
