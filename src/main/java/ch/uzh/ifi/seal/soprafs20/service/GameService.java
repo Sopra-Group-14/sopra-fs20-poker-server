@@ -75,7 +75,7 @@ public class GameService {
         newGame.setHostToken(hostToken);
 //        GameLog nullGameLog = newGame.nullGameLog();
 
-        this.gameSelect.addGame(newGame);
+        gameSelect.addGame(newGame);
 //        newGame.addGameLog(nullGameLog);
 
         return newGame;
@@ -101,6 +101,18 @@ public class GameService {
     public void togglePlayerReadyStatus(long gameid, long playerid){
 
         gameSelect.getGameById(gameid).getPlayerById(playerid).toggleReadyStatus();
+
+    }
+
+    public GameLog getGameLog(long gameId){
+
+        return gameSelect.getGameById(gameId).getGameLog();
+
+    }
+
+    public void addGame(Game game){
+
+        gameSelect.addGame(game);
 
     }
 
