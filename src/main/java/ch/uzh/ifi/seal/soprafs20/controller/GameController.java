@@ -56,7 +56,7 @@ public class GameController {
         long hostId = postGame.getGameHostID();
         String potType = postGame.getPotType();
 
-        Game game = this.gameService.createGame(gameName, hostId, potType);
+        Game game = gameService.createGame(gameName, hostId, potType);
         gameService.addHost(hostId, game);
 
         gameService.addGame(game);
@@ -73,10 +73,7 @@ public class GameController {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public GameLog getGameLog(@PathVariable long gameId){
-
-        return new GameLog(8, GameRound.Flop, null, null, null, null, "REEEEEE", 0, "PlayerName", 1, "NextPlayer", 2, 1000, 1000, false, false, 50, true, false, null);
-
-        //return gameService.getGameLog(gameId);
+        return gameService.getGameLog(gameId);
     }
 
     @PutMapping("games/{gameId}/roundStart")

@@ -316,10 +316,10 @@ Constructor
     }
 
 
+
     public GameLog getGameLog(){
 
-        //TESTING PURPOSES
-        return new GameLog(transactionNr, gameRound, null, players, activePlayers, tableCards, "REEEEEE", 0, "PlayerName", 1, "NextPlayer", 2, 1000, 1000, false, false, 50, true, false, null);
+        return new GameLog(transactionNr, gameRound, null, players, activePlayers, tableCards, gameName, 0, "CurrentPlayer", 1, "NextPlayer", 2, 1000, 1000, false, false, 50, true, false, null);
 
     }
 

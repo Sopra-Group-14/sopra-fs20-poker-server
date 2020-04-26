@@ -42,7 +42,7 @@ public class GameService {
         this.userService = userService;
     }
 
-    public Game createGame(String gameName, long hostID, String potType){
+    public Game createGame(String name, long hostID, String potType){
 
         /*createGame receives gameName, hostId and potType from client. The game constructor expects the hostName;
 
@@ -55,19 +55,19 @@ public class GameService {
         String hostToken = host.getToken();
         Game newGame = new Game();
 
-        long currentId;
+        long currentGameId;
         if(this.gameSelect.getAllGames() != null){
-            currentId = this.gameSelect.getAllGames().size() + 1;
+            currentGameId = this.gameSelect.getAllGames().size() + 1;
         }else{
-            currentId = 1;
+            currentGameId = 1;
         }
 
         this.gameName = gameName;
         this.hostID = hostID;
         this.potType = potType;
 
-        newGame.setGameId(currentId);
-        newGame.setGameName(this.gameName);
+        newGame.setGameId(currentGameId);
+        newGame.setGameName(name);
         newGame.setPotType(this.potType);
         newGame.setGameHostID(this.hostID);
         newGame.setGameHostName(hostName);

@@ -88,4 +88,8 @@ public class GameLog {
 
     public List<Action> getPossibleActions(){return possibleActions;}
 
+    public String getGameName(){return gameName;}
+
+    public void setGameName(String name){this.gameName = name;}
+
 }
