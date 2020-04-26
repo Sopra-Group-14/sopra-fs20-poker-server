@@ -53,7 +53,7 @@ public class Game {
     private int timesRaisedTurnCard= 0;
     private int timesRaisedRiverCard = 0;
     private List <Action> possibleActions = new ArrayList<>();
-
+    private GameLog gameLog;
     //private List<GameLog> gameTracker = new LinkedList<>();
 
     public Game() {
@@ -253,12 +253,12 @@ Constructor
 
         this.possibleActions.add(Action.BET);
 
-        GameLog gameLog = new GameLog(-1, GameRound.Preflop, Action.NONE, this.getPlayers(), this.getActivePlayers(), this.getTableCards(),
+        setGameLog(new GameLog(-1, GameRound.Preflop, Action.NONE, this.getPlayers(), this.getActivePlayers(), this.getTableCards(),
                 this.getGameName(), 0, "", (long) -1, "", (long) -1, 0, 0, false,
-                false, 0, false, false, this.getPossibleActions());
+                false, 0, false, false, this.getPossibleActions()));
 
 
-        return gameLog;
+        return getGameLog();
     }
 
 //    public void removeGameLog(){
@@ -316,13 +316,15 @@ Constructor
     }
 
 
-
     public GameLog getGameLog(){
 
-        return new GameLog(transactionNr, gameRound, null, players, activePlayers, tableCards, gameName, 0, "CurrentPlayer", 1, "NextPlayer", 2, 1000, 1000, false, false, 50, true, false, null);
-
+        //TESTING PURPOSES
+        return this.gameLog;
     }
 
+    public void setGameLog(GameLog gameLog) {
+        this.gameLog = gameLog;
+    }
 }
 
 

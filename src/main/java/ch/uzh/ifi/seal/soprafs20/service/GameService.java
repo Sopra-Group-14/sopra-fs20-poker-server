@@ -36,13 +36,12 @@ public class GameService {
     private String gameName;
     private long hostID;
     private String potType;
-    private GameLog gameLog;
-
     public GameService(UserService userService){
         this.userService = userService;
     }
 
-    public Game createGame(String name, long hostID, String potType){
+
+    public Game createGame(String gameName, long hostID, String potType){
 
         /*createGame receives gameName, hostId and potType from client. The game constructor expects the hostName;
 
@@ -55,19 +54,19 @@ public class GameService {
         String hostToken = host.getToken();
         Game newGame = new Game();
 
-        long currentGameId;
+        long currentId;
         if(this.gameSelect.getAllGames() != null){
-            currentGameId = this.gameSelect.getAllGames().size() + 1;
+            currentId = this.gameSelect.getAllGames().size() + 1;
         }else{
-            currentGameId = 1;
+            currentId = 1;
         }
 
         this.gameName = gameName;
         this.hostID = hostID;
         this.potType = potType;
 
-        newGame.setGameId(currentGameId);
-        newGame.setGameName(name);
+        newGame.setGameId(currentId);
+        newGame.setGameName(this.gameName);
         newGame.setPotType(this.potType);
         newGame.setGameHostID(this.hostID);
         newGame.setGameHostName(hostName);
@@ -117,8 +116,9 @@ public class GameService {
 
     public GameLog executeAction(Action action, int amount, long gameId, long playerId, String token){
 
-        GameLog gameLog;
+
         Game game = gameSelect.getGameById(gameId);
+        GameLog gameLog = game.getGameLog();
         List<Player> players = game.getPlayers();
         List<Player> activePlayers = game.getActivePlayers();
         Player currentPlayer = game.getCurrentPlayer(playerId);
@@ -410,7 +410,6 @@ public class GameService {
                 activePlayers.get(i).setThisPlayersTurn(false);
             }
             nextPlayer.setThisPlayersTurn(true);
-
 
 
             gameLog = new GameLog(game.getTransactionNr(),
@@ -835,6 +834,7 @@ public class GameService {
     public GameLog roundStart(Game game){
 
         /*FOR TESTING PURPOSES*/
+        GameLog gameLog = game.getGameLog();
 
         User user1 = new User();
         user1.setUsername("MOCKUSER1");
@@ -889,7 +889,7 @@ public class GameService {
                 false,
                 game.getPossibleActions());
 
-        return this.gameLog;
+        return gameLog;
     }
 
 }
