@@ -36,8 +36,6 @@ public class GameService {
     private String gameName;
     private long hostID;
     private String potType;
-    private GameLog gameLog;
-
     public GameService(UserService userService){
         this.userService = userService;
     }
@@ -118,8 +116,9 @@ public class GameService {
 
     public GameLog executeAction(Action action, int amount, long gameId, long playerId, String token){
 
-        GameLog gameLog;
+
         Game game = gameSelect.getGameById(gameId);
+        GameLog gameLog = game.getGameLog();
         List<Player> players = game.getPlayers();
         List<Player> activePlayers = game.getActivePlayers();
         Player currentPlayer = game.getCurrentPlayer(playerId);
@@ -411,7 +410,6 @@ public class GameService {
                 activePlayers.get(i).setThisPlayersTurn(false);
             }
             nextPlayer.setThisPlayersTurn(true);
-
 
 
             gameLog = new GameLog(game.getTransactionNr(),
@@ -836,6 +834,7 @@ public class GameService {
     public GameLog roundStart(Game game){
 
         /*FOR TESTING PURPOSES*/
+        GameLog gameLog = game.getGameLog();
 
         User user1 = new User();
         user1.setUsername("MOCKUSER1");
@@ -890,7 +889,7 @@ public class GameService {
                 false,
                 game.getPossibleActions());
 
-        return this.gameLog;
+        return gameLog;
     }
 
 }

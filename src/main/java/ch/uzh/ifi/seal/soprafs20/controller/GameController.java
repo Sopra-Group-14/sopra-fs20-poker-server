@@ -2,6 +2,7 @@ package ch.uzh.ifi.seal.soprafs20.controller;
 
 import ch.uzh.ifi.seal.soprafs20.cards.Card;
 import ch.uzh.ifi.seal.soprafs20.constant.Action;
+import ch.uzh.ifi.seal.soprafs20.constant.GameRound;
 import ch.uzh.ifi.seal.soprafs20.constant.UserStatus;
 import ch.uzh.ifi.seal.soprafs20.entity.Game;
 import ch.uzh.ifi.seal.soprafs20.entity_in_game.GameLog;
@@ -68,7 +69,7 @@ public class GameController {
     @GetMapping("/games/{gameId}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public GameLog getGameLog(@PathVariable long gameId){return null;}
+    public GameLog getGameLog(@PathVariable long gameId){return gameService.getGameLog(gameId);}
 
     @PutMapping("games/{gameId}/roundStart")
     @ResponseStatus(HttpStatus.OK)
