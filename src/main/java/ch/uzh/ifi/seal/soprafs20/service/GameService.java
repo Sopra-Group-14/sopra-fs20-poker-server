@@ -770,7 +770,7 @@ public class GameService {
          -the player after the previous big blind becomes the new big blind
          */
 
-        List<Player> players = game.getPlayers();
+        /*List<Player> players = game.getPlayers();
 
 
         Player player = players.get(0);
@@ -778,7 +778,7 @@ public class GameService {
         players.add(players.size()+1, player);
 
         game.setSmallBlind(players.get(0));
-        game.setBigBlind(players.get(1));
+        game.setBigBlind(players.get(1));*/
 
     }
 
