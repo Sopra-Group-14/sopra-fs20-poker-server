@@ -52,7 +52,7 @@ public class GameService {
 
         String hostName = host.getUsername();
         String hostToken = host.getToken();
-        Game newGame = new Game();
+        Game newGame = new Game(gameName);
 
         long currentId;
         if(this.gameSelect.getAllGames() != null){
@@ -61,14 +61,10 @@ public class GameService {
             currentId = 1;
         }
 
-        this.gameName = gameName;
-        this.hostID = hostID;
-        this.potType = potType;
-
         newGame.setGameId(currentId);
-        newGame.setGameName(this.gameName);
-        newGame.setPotType(this.potType);
-        newGame.setGameHostID(this.hostID);
+        //newGame.setGameName(gameName);
+        newGame.setPotType(potType);
+        newGame.setGameHostID(hostID);
         newGame.setGameHostName(hostName);
         newGame.setHostToken(hostToken);
 //        GameLog nullGameLog = newGame.nullGameLog();

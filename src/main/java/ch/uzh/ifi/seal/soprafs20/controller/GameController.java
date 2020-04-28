@@ -59,16 +59,13 @@ public class GameController {
         Game game = gameService.createGame(gameName, hostId, potType);
         gameService.addHost(hostId, game);
 
-
         return game;
     }
 
     @PutMapping("/games/{gameId}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public Game joinGame(@RequestBody UserPostDTO userPostDTO, @RequestBody UserStatus userStatus, @RequestHeader (value = "Authorization") String token, @PathVariable long gameId){
-        return null;
-    }
+    public Game joinGame(@RequestBody UserPostDTO userPostDTO, @RequestBody UserStatus userStatus, @RequestHeader (value = "Authorization") String token, @PathVariable long gameId){return null;}
 
     @GetMapping("/games/{gameId}")
     @ResponseStatus(HttpStatus.OK)
