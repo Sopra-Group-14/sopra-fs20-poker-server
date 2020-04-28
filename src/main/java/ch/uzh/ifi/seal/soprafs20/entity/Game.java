@@ -345,6 +345,10 @@ Constructor
             }
         }
 
+        List<Action> actionList = new LinkedList<>();
+        actionList.add(Action.BET);
+        gameLog.setPossibleActions(actionList);
+
     }
 
 
