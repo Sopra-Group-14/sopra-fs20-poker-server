@@ -1,9 +1,7 @@
 package ch.uzh.ifi.seal.soprafs20.controller;
 
 import ch.uzh.ifi.seal.soprafs20.cards.Card;
-import ch.uzh.ifi.seal.soprafs20.constant.Action;
-import ch.uzh.ifi.seal.soprafs20.constant.GameRound;
-import ch.uzh.ifi.seal.soprafs20.constant.UserStatus;
+import ch.uzh.ifi.seal.soprafs20.constant.*;
 import ch.uzh.ifi.seal.soprafs20.entity.Game;
 import ch.uzh.ifi.seal.soprafs20.entity.GameSelect;
 import ch.uzh.ifi.seal.soprafs20.entity_in_game.GameLog;
@@ -20,6 +18,7 @@ import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 
@@ -138,6 +137,19 @@ public class GameController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ResponseBody
     public void togglePlayerReadyStatus(@PathVariable long gameId, @PathVariable long playerId){gameService.togglePlayerReadyStatus(gameId, playerId);}
+
+    @GetMapping("/games/{gameId}/players/{playerId}")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public List<Card> getPlayerHandCardsByPlayerId(@PathVariable long gameId, @PathVariable long playerId, @RequestHeader(value = "Authorization") String token){
+
+        List<Card> returnList = new LinkedList<>();
+        returnList.add(new Card(Suit.CLUBS, Rank.THREE));
+        returnList.add(new Card(Suit.DIAMONDS, Rank.FOUR));
+
+        return returnList;
+
+    }
 
 
     @PutMapping("/games/{gameId}/spectators/{playerId}")
