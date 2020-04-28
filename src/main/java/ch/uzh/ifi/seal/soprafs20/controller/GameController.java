@@ -113,7 +113,10 @@ public class GameController {
     @PutMapping("/games/{gameId}/players/{playerId}/leave")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public void leave(@PathVariable long gameId, @PathVariable long playerId){
+    public void leave(@PathVariable long gameId, @PathVariable long playerId, @RequestHeader (value = "Authorization") String token){
+        if (gameService.checkAuthorizationGet(token, gameId) == false) {
+            throw new TransactionSystemException("error");
+        }
         gameService.removePlayer(gameId, playerId);
     }
 

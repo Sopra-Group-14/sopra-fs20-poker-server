@@ -790,6 +790,8 @@ public class GameService {
 
     public void removePlayer(long gameId, long userId){
         Game game = gameSelect.getGameById(gameId);
+        Player player = game.getPlayerById(userId);
+        game.removePlayer(player);
 
     }
 
