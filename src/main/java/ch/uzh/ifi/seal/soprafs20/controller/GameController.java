@@ -9,6 +9,7 @@ import ch.uzh.ifi.seal.soprafs20.entity_in_game.GameLog;
 import ch.uzh.ifi.seal.soprafs20.entity_in_game.Player;
 import ch.uzh.ifi.seal.soprafs20.rest.dto.ActionDTO;
 import ch.uzh.ifi.seal.soprafs20.rest.dto.GamePostDTO;
+import ch.uzh.ifi.seal.soprafs20.rest.dto.JoinGameDTO;
 import ch.uzh.ifi.seal.soprafs20.rest.dto.UserPostDTO;
 import ch.uzh.ifi.seal.soprafs20.rest.mapper.DTOMapper;
 import ch.uzh.ifi.seal.soprafs20.service.GameService;
@@ -18,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Status;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -65,7 +67,9 @@ public class GameController {
     @PutMapping("/games/{gameId}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public Game joinGame(@RequestBody UserPostDTO userPostDTO, @RequestBody UserStatus userStatus, @RequestHeader (value = "Authorization") String token, @PathVariable long gameId){return null;}
+    public Game joinGame(@RequestBody JoinGameDTO joinGameDTO, @RequestHeader (value = "Authorization") String token, @PathVariable long gameId){
+        return null;
+    }
 
     @GetMapping("/games/{gameId}")
     @ResponseStatus(HttpStatus.OK)
