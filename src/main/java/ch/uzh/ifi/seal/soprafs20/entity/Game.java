@@ -56,9 +56,13 @@ public class Game {
     private GameLog gameLog;
     //private List<GameLog> gameTracker = new LinkedList<>();
 
-    public Game() {
-        this.gameLog=new GameLog();
+    public Game(String gameName) {
+        this.gameLog = new GameLog();
+        //this.gameLog=new GameLog(0,null,null,null,null,null,"TestName",0,null,1L,null,2L,0,0,false,false,0,true,false,null);
+        gameLog.setGameName(gameName);
     }
+
+    public Game(){}
 
     /*
 Constructor
@@ -320,8 +324,7 @@ Constructor
     public GameLog getGameLog(){
 
         //TESTING PURPOSES
-        return this.gameLog;
-    }
+        return this.gameLog; }
 
     public void setGameLog(GameLog gameLog) {
         this.gameLog = gameLog;

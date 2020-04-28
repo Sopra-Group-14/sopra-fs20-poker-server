@@ -59,8 +59,6 @@ public class GameController {
         Game game = gameService.createGame(gameName, hostId, potType);
         gameService.addHost(hostId, game);
 
-        gameService.addGame(game);
-
         return game;
     }
 
