@@ -67,8 +67,11 @@ public class GameController {
     @PutMapping("/games/{gameId}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public Game joinGame(@RequestBody JoinGameDTO joinGameDTO, @RequestHeader (value = "Authorization") String token, @PathVariable long gameId){
-        return null;
+    public GameLog joinGame(@RequestBody JoinGameDTO joinGameDTO, @RequestHeader (value = "Authorization") String token, @PathVariable long gameId){
+
+        gameService.addJoiningPlayer(joinGameDTO.getUserId(), gameId);
+        return gameService.getGameLog(gameId);
+
     }
 
     @GetMapping("/games/{gameId}")

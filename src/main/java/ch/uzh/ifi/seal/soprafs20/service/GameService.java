@@ -93,6 +93,15 @@ public class GameService {
         game.addPlayer(player);
         game.addActivePlayer(player);
 
+    }
+
+    public void addJoiningPlayer(long userId, long gameId){
+
+        User joiningUser = userService.getUserById(userId);
+        Player joiningPlayer = new Player(joiningUser);
+
+        gameSelect.getGameById(gameId).addPlayer(joiningPlayer);
+        gameSelect.getGameById(gameId).addActivePlayer(joiningPlayer);
 
     }
 
