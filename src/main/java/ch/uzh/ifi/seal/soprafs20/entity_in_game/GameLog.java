@@ -4,6 +4,7 @@ import ch.uzh.ifi.seal.soprafs20.cards.Card;
 import ch.uzh.ifi.seal.soprafs20.constant.Action;
 import ch.uzh.ifi.seal.soprafs20.constant.GameRound;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -31,6 +32,7 @@ public class GameLog {
     private boolean thisPlayersTurn;
     private boolean nextPlayersTurn;
     private Action action;
+    private List<Card> tableCards = new LinkedList<>();
 
     //All the parameters are set in the constructor
 
@@ -59,6 +61,7 @@ public class GameLog {
         this.setThisPlayersTurn(thisPlayersTurn);
         this.setNextPlayersTurn(nextPlayersTurn);
         this.setPossibleActions(possibleActions);
+
 
     }
 
@@ -198,5 +201,14 @@ public class GameLog {
 
     public void setPotAmount(int potAmount) {
         this.potAmount = potAmount;
+    }
+
+
+    public List<Card> getTableCards() {
+        return tableCards;
+    }
+
+    public void setTableCards(List<Card> tableCards) {
+        this.tableCards = tableCards;
     }
 }
