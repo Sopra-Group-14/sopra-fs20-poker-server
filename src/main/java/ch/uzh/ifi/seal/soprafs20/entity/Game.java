@@ -250,7 +250,7 @@ Constructor
         }
         deck.shuffle();
         tableCards.add(deck.getTopCard());
-        gameLog.setTableCards(tableCards);
+        gameLog.setRevealedCards(tableCards);
     }
 
     public void removeTableCards(){
