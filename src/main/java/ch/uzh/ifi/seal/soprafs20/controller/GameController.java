@@ -4,6 +4,7 @@ import ch.uzh.ifi.seal.soprafs20.cards.Card;
 import ch.uzh.ifi.seal.soprafs20.constant.*;
 import ch.uzh.ifi.seal.soprafs20.entity.Game;
 import ch.uzh.ifi.seal.soprafs20.entity.GameSelect;
+import ch.uzh.ifi.seal.soprafs20.entity.User;
 import ch.uzh.ifi.seal.soprafs20.entity_in_game.GameLog;
 import ch.uzh.ifi.seal.soprafs20.entity_in_game.Player;
 import ch.uzh.ifi.seal.soprafs20.rest.dto.ActionDTO;
@@ -71,6 +72,17 @@ public class GameController {
     @ResponseBody
     public GameLog getGameLog(@PathVariable long gameId){
         return gameService.getGameLog(gameId);
+    }
+
+    @PutMapping("games/{gameId}/gameStart")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public GameLog gameStart(@PathVariable long gameId){
+
+        Game game = gameService.findGameById(gameId);
+        game.startGame();
+        return game.getGameLog();
+
     }
 
     @PutMapping("games/{gameId}/roundStart")
@@ -141,13 +153,9 @@ public class GameController {
     @GetMapping("/games/{gameId}/players/{playerId}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public List<Card> getPlayerHandCardsByPlayerId(@PathVariable long gameId, @PathVariable long playerId, @RequestHeader(value = "Authorization") String token){
+    public Player getPlayerHandCardsByPlayerId(@PathVariable long gameId, @PathVariable long playerId, @RequestHeader(value = "Authorization") String token){
 
-        List<Card> returnList = new LinkedList<>();
-        returnList.add(new Card(Suit.CLUBS, Rank.THREE));
-        returnList.add(new Card(Suit.DIAMONDS, Rank.FOUR));
-
-        return returnList;
+        return gameService.findGameById(gameId).getPlayerById(playerId);
 
     }
 

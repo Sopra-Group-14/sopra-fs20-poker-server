@@ -334,6 +334,19 @@ Constructor
         this.gameLog = gameLog;
     }
 
+    public void startGame(){
+
+        deck.shuffle();
+
+        int i,e;
+        for(i=0;i<players.size();i++){
+            for(e=0;e<2;e++){
+                players.get(i).addToHand(deck.getTopCard());
+            }
+        }
+
+    }
+
 
 }
 
