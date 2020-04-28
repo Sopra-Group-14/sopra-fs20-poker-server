@@ -57,6 +57,7 @@ public class Game {
     //private List<GameLog> gameTracker = new LinkedList<>();
 
     public Game() {
+        this.gameLog=new GameLog();
     }
 
     /*

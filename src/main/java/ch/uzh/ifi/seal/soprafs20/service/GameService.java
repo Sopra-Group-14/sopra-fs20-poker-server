@@ -411,32 +411,34 @@ public class GameService {
             }
             nextPlayer.setThisPlayersTurn(true);
 
-
-            gameLog = new GameLog(game.getTransactionNr(),
-                    game.getGameRound(),
-                    Action.BET,
-                    game.getPlayers(),
-                    game.getActivePlayers(),
-                    game.getTableCards(),
-                    game.getGameName(),
-                    amount,
-                    currentPlayer.getPlayerName(),
-                    currentPlayer.getId(),
-                    nextPlayer.getPlayerName(),
-                    nextPlayer.getId(),
-                    currentPlayer.getAmountInPot(),
-                    pot.getAmount(),
-                    game.isRoundOver(),
-                    game.isGameOver(),
-                    0,
-                    currentPlayer.isThisPlayersTurn(),
-                    nextPlayer.isThisPlayersTurn(),
-                    possibleActions);
-
-
+            log.info("ich war hier");
+            String a= Integer.toString(game.getTransactionNr());
+            log.info(a);
+            gameLog.setTransactionNr(game.getTransactionNr());
+            log.info("ich war hier 2");
+            gameLog.setGameRound(game.getGameRound());
+            gameLog.setAction(Action.BET);
+            gameLog.setPlayers(game.getPlayers());
+            gameLog.setActivePlayers(game.getActivePlayers());
+            gameLog.setRevealedCards(game.getTableCards());
+            gameLog.setGameName(game.getGameName());
+            gameLog.setRaiseAmount(amount);
+            gameLog.setPlayerName(currentPlayer.getPlayerName());
+            gameLog.setPlayerId(currentPlayer.getId());
+            gameLog.setNextPlayerName(nextPlayer.getPlayerName());
+            gameLog.setNextPlayerId(nextPlayer.getId());
+            gameLog.setPlayerPot(currentPlayer.getAmountInPot());
+            gameLog.setPotAmount(pot.getAmount());
+            gameLog.setRoundOver(game.isRoundOver());
+            gameLog.setGameOver(game.isGameOver());
+            gameLog.setAmountToCall(0);
+            gameLog.setThisPlayersTurn(currentPlayer.isThisPlayersTurn());
+            gameLog.setNextPlayersTurn(nextPlayer.isThisPlayersTurn());
+            gameLog.setPossibleActions(possibleActions);
             //return gameLog to GameController
-            return gameLog;
 
+            log.info("war hier again");
+            return gameLog;
         }
 
         if(action == Action.FOLD){
@@ -448,27 +450,27 @@ public class GameService {
 
 
             game.playerFolds(currentPlayer);
-            gameLog = new GameLog(game.getTransactionNr(),
-                    game.getGameRound(),
-                    Action.FOLD,
-                    game.getPlayers(),
-                    game.getActivePlayers(),
-                    game.getTableCards(),
-                    game.getGameName(),
-                    0,
-                    currentPlayer.getPlayerName(),
-                    currentPlayer.getId(),
-                    nextPlayer.getPlayerName(),
-                    nextPlayer.getId(),
-                    currentPlayer.getAmountInPot(),
-                    pot.getAmount(),
-                    game.isRoundOver(),
-                    game.isGameOver(),
-                    0,
-                    currentPlayer.isThisPlayersTurn(),
-                    nextPlayer.isThisPlayersTurn(),
-                    possibleActions);
 
+            gameLog.setTransactionNr(game.getTransactionNr());
+            gameLog.setGameRound(game.getGameRound());
+            gameLog.setAction(Action.FOLD);
+            gameLog.setPlayers(game.getPlayers());
+            gameLog.setActivePlayers(game.getActivePlayers());
+            gameLog.setRevealedCards(game.getTableCards());
+            gameLog.setGameName(game.getGameName());
+            gameLog.setRaiseAmount(0);
+            gameLog.setPlayerName(currentPlayer.getPlayerName());
+            gameLog.setPlayerId(currentPlayer.getId());
+            gameLog.setNextPlayerName(nextPlayer.getPlayerName());
+            gameLog.setNextPlayerId(nextPlayer.getId());
+            gameLog.setPlayerPot(currentPlayer.getAmountInPot());
+            gameLog.setPotAmount(pot.getAmount());
+            gameLog.setRoundOver(game.isRoundOver());
+            gameLog.setGameOver(game.isGameOver());
+            gameLog.setAmountToCall(0);
+            gameLog.setThisPlayersTurn(currentPlayer.isThisPlayersTurn());
+            gameLog.setNextPlayersTurn(nextPlayer.isThisPlayersTurn());
+            gameLog.setPossibleActions(possibleActions);
 
             return gameLog;
         }
@@ -642,27 +644,26 @@ public class GameService {
             nextPlayer.setThisPlayersTurn(true);
 
 
-                gameLog = new GameLog(game.getTransactionNr(),
-                        game.getGameRound(),
-                        Action.RAISE,
-                        game.getPlayers(),
-                        game.getActivePlayers(),
-                        game.getTableCards(),
-                        game.getGameName(),
-                        amount,
-                        currentPlayer.getPlayerName(),
-                        currentPlayer.getId(),
-                        nextPlayer.getPlayerName(),
-                        nextPlayer.getId(),
-                        currentPlayer.getAmountInPot(),
-                        pot.getAmount(),
-                        game.isRoundOver(),
-                        game.isGameOver(),
-                        amountToCall,
-                        currentPlayer.isThisPlayersTurn(),
-                        nextPlayer.isThisPlayersTurn(),
-                        possibleActions);
-
+            gameLog.setTransactionNr(game.getTransactionNr());
+            gameLog.setGameRound(game.getGameRound());
+            gameLog.setAction(Action.RAISE);
+            gameLog.setPlayers(game.getPlayers());
+            gameLog.setActivePlayers(game.getActivePlayers());
+            gameLog.setRevealedCards(game.getTableCards());
+            gameLog.setGameName(game.getGameName());
+            gameLog.setRaiseAmount(amount);
+            gameLog.setPlayerName(currentPlayer.getPlayerName());
+            gameLog.setPlayerId(currentPlayer.getId());
+            gameLog.setNextPlayerName(nextPlayer.getPlayerName());
+            gameLog.setNextPlayerId(nextPlayer.getId());
+            gameLog.setPlayerPot(currentPlayer.getAmountInPot());
+            gameLog.setPotAmount(pot.getAmount());
+            gameLog.setRoundOver(game.isRoundOver());
+            gameLog.setGameOver(game.isGameOver());
+            gameLog.setAmountToCall(amountToCall);
+            gameLog.setThisPlayersTurn(currentPlayer.isThisPlayersTurn());
+            gameLog.setNextPlayersTurn(nextPlayer.isThisPlayersTurn());
+            gameLog.setPossibleActions(possibleActions);
 
             //return gameLog to GameController
             return gameLog;
@@ -704,28 +705,26 @@ public class GameService {
             }
             nextPlayer.setThisPlayersTurn(true);
 
-
-                gameLog = new GameLog(game.getTransactionNr(),
-                        game.getGameRound(),
-                        Action.CALL,
-                        game.getPlayers(),
-                        game.getActivePlayers(),
-                        game.getTableCards(),
-                        game.getGameName(),
-                        amount,
-                        currentPlayer.getPlayerName(),
-                        currentPlayer.getId(),
-                        nextPlayer.getPlayerName(),
-                        nextPlayer.getId(),
-                        currentPlayer.getAmountInPot(),
-                        pot.getAmount(),
-                        game.isRoundOver(),
-                        game.isGameOver(),
-                        amount,
-                        currentPlayer.isThisPlayersTurn(),
-                        nextPlayer.isThisPlayersTurn(),
-                        possibleActions);
-
+            gameLog.setTransactionNr(game.getTransactionNr());
+            gameLog.setGameRound(game.getGameRound());
+            gameLog.setAction(Action.CALL);
+            gameLog.setPlayers(game.getPlayers());
+            gameLog.setActivePlayers(game.getActivePlayers());
+            gameLog.setRevealedCards(game.getTableCards());
+            gameLog.setGameName(game.getGameName());
+            gameLog.setRaiseAmount(amount);
+            gameLog.setPlayerName(currentPlayer.getPlayerName());
+            gameLog.setPlayerId(currentPlayer.getId());
+            gameLog.setNextPlayerName(nextPlayer.getPlayerName());
+            gameLog.setNextPlayerId(nextPlayer.getId());
+            gameLog.setPlayerPot(currentPlayer.getAmountInPot());
+            gameLog.setPotAmount(pot.getAmount());
+            gameLog.setRoundOver(game.isRoundOver());
+            gameLog.setGameOver(game.isGameOver());
+            gameLog.setAmountToCall(amount);
+            gameLog.setThisPlayersTurn(currentPlayer.isThisPlayersTurn());
+            gameLog.setNextPlayersTurn(nextPlayer.isThisPlayersTurn());
+            gameLog.setPossibleActions(possibleActions);
 
             return gameLog;
         }
@@ -868,26 +867,27 @@ public class GameService {
         possibleActions.add(Action.MAKESPECTATOR);
         game.setPossibleActions(possibleActions);
 
-        gameLog = new GameLog(game.getTransactionNr(),
-                GameRound.Preflop,
-                Action.NONE,
-                game.getPlayers(),
-                game.getActivePlayers(),
-                game.getTableCards(),
-                game.getGameName(),
-                0,
-                game.getActivePlayers().get(0).getPlayerName(),
-                game.getActivePlayers().get(0).getId(),
-                game.getActivePlayers().get(1).getPlayerName(),
-                game.getActivePlayers().get(1).getId(),
-                0,
-                0,
-                false,
-                false,
-                0,
-                true,
-                false,
-                game.getPossibleActions());
+        gameLog.setTransactionNr(game.getTransactionNr());
+        gameLog.setGameRound(GameRound.Preflop);
+        gameLog.setAction(Action.BET);
+        gameLog.setPlayers(game.getPlayers());
+        gameLog.setActivePlayers(game.getActivePlayers());
+        gameLog.setRevealedCards(game.getTableCards());
+        gameLog.setGameName(game.getGameName());
+        gameLog.setRaiseAmount(0);
+        gameLog.setPlayerName(game.getActivePlayers().get(0).getPlayerName());
+        gameLog.setPlayerId(game.getActivePlayers().get(0).getId());
+        gameLog.setNextPlayerName(game.getActivePlayers().get(1).getPlayerName());
+        gameLog.setNextPlayerId(game.getActivePlayers().get(1).getId());
+        gameLog.setPlayerPot(0);
+        gameLog.setPotAmount(0);
+        gameLog.setRoundOver(false);
+        gameLog.setGameOver(false);
+        gameLog.setAmountToCall(0);
+        gameLog.setThisPlayersTurn(false);
+        gameLog.setNextPlayersTurn(true);
+        gameLog.setPossibleActions(game.getPossibleActions());
+
 
         return gameLog;
     }

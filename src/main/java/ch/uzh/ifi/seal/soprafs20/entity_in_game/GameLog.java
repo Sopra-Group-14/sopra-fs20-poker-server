@@ -3,7 +3,6 @@ package ch.uzh.ifi.seal.soprafs20.entity_in_game;
 import ch.uzh.ifi.seal.soprafs20.cards.Card;
 import ch.uzh.ifi.seal.soprafs20.constant.Action;
 import ch.uzh.ifi.seal.soprafs20.constant.GameRound;
-import ch.uzh.ifi.seal.soprafs20.entity.Game;
 
 import java.util.List;
 
@@ -12,16 +11,25 @@ import java.util.List;
  */
 public class GameLog {
 
-    private int transactionNr, raiseAmount, playerPot, amountToCall, potAmount;
+    private int transactionNr;
+    private int raiseAmount;
+    private int playerPot;
+    private int amountToCall;
+    private int potAmount;
     private GameRound gameRound;
-    private String playerName, nextPlayerName;
+    private String playerName;
+    private String nextPlayerName;
     private List<Player> players;
     private List<Player> activePlayers;
     private List<Card> revealedCards;
     private List<Action> possibleActions;
     private String gameName;
-    private long playerId, nextPlayerId;
-    private boolean roundOver, gameOver, thisPlayersTurn, nextPlayersTurn;
+    private long playerId;
+    private long nextPlayerId;
+    private boolean roundOver;
+    private boolean gameOver;
+    private boolean thisPlayersTurn;
+    private boolean nextPlayersTurn;
     private Action action;
 
     //All the parameters are set in the constructor
@@ -31,30 +39,32 @@ public class GameLog {
 					int raiseAmount, String playerName, long playerId, String nextPlayerName, long nextPlayerId, int playerPot, int potAmount, boolean roundOver,
 					boolean gameOver, int amountToCall, boolean thisPlayersTurn, boolean nextPlayersTurn, List<Action> possibleActions){
 
-        this.transactionNr = transactionNr;
-        this.gameRound = gameRound;
-        this.action = action;
-        this.players = players;
-        this.activePlayers = activePlayers;
-        this.revealedCards = revealedCards;
-        this.gameName = gameName;
-        this.raiseAmount = raiseAmount;
-        this.playerName = playerName;
-        this.playerId = playerId;
-        this.nextPlayerName = nextPlayerName;
-        this.nextPlayerId = nextPlayerId;
-        this.playerPot = playerPot;
-        this.potAmount = potAmount;
-        this.roundOver = roundOver;
-        this.gameOver = gameOver;
-        this.amountToCall = amountToCall;
-        this.thisPlayersTurn = thisPlayersTurn;
-        this.nextPlayersTurn = nextPlayersTurn;
-        this.possibleActions = possibleActions;
+        this.setTransactionNr(transactionNr);
+        this.setGameRound(gameRound);
+        this.setAction(action);
+        this.setPlayers(players);
+        this.setActivePlayers(activePlayers);
+        this.setRevealedCards(revealedCards);
+        this.setGameName(gameName);
+        this.setRaiseAmount(raiseAmount);
+        this.setPlayerName(playerName);
+        this.setPlayerId(playerId);
+        this.setNextPlayerName(nextPlayerName);
+        this.setNextPlayerId(nextPlayerId);
+        this.setPlayerPot(playerPot);
+        this.setPotAmount(potAmount);
+        this.setRoundOver(roundOver);
+        this.setGameOver(gameOver);
+        this.setAmountToCall(amountToCall);
+        this.setThisPlayersTurn(thisPlayersTurn);
+        this.setNextPlayersTurn(nextPlayersTurn);
+        this.setPossibleActions(possibleActions);
 
     }
 
+    public GameLog() {
 
+    }
 
     public int getTransactionNr(){return transactionNr;}
 
@@ -74,15 +84,15 @@ public class GameLog {
 
     public int getPlayerPot(){return playerPot;}
 
-    public boolean getRoundOver(){return roundOver;}
+    public boolean getRoundOver(){return isRoundOver();}
 
-    public boolean getGameOver(){return gameOver;}
+    public boolean getGameOver(){return isGameOver();}
 
     public int getAmountToCall(){return amountToCall;}
 
-    public boolean getThisPlayersTurn(){return thisPlayersTurn;}
+    public boolean getThisPlayersTurn(){return isThisPlayersTurn();}
 
-    public boolean getNextPlayersTurn(){return nextPlayersTurn;}
+    public boolean getNextPlayersTurn(){return isNextPlayersTurn();}
 
     public void setAmountToCall(int amount){amountToCall = amount;}
 
@@ -92,4 +102,101 @@ public class GameLog {
 
     public void setGameName(String name){this.gameName = name;}
 
+    public void setTransactionNr(int transactionNr){ this.transactionNr = transactionNr;}
+
+    public void setGameRound(GameRound gameRound){this.gameRound = gameRound;}
+
+    public void setAction(Action action){this.action = action;}
+
+    public List<Player> getPlayers() {
+        return players;
+    }
+
+    public void setPlayers(List<Player> players) {
+        this.players = players;
+    }
+
+    public List<Player> getActivePlayers() {
+        return activePlayers;
+    }
+
+    public void setActivePlayers(List<Player> activePlayers) {
+        this.activePlayers = activePlayers;
+    }
+
+    public List<Card> getRevealedCards() {
+        return revealedCards;
+    }
+
+    public void setRevealedCards(List<Card> revealedCards) {
+        this.revealedCards = revealedCards;
+    }
+
+    public void setRaiseAmount(int raiseAmount) {
+        this.raiseAmount = raiseAmount;
+    }
+
+    public void setPlayerPot(int playerPot) {
+        this.playerPot = playerPot;
+    }
+
+    public void setPlayerName(String playerName) {
+        this.playerName = playerName;
+    }
+
+    public void setNextPlayerName(String nextPlayerName) {
+        this.nextPlayerName = nextPlayerName;
+    }
+
+    public void setPossibleActions(List<Action> possibleActions) {
+        this.possibleActions = possibleActions;
+    }
+
+    public void setPlayerId(long playerId) {
+        this.playerId = playerId;
+    }
+
+    public void setNextPlayerId(long nextPlayerId) {
+        this.nextPlayerId = nextPlayerId;
+    }
+
+    public boolean isRoundOver() {
+        return roundOver;
+    }
+
+    public void setRoundOver(boolean roundOver) {
+        this.roundOver = roundOver;
+    }
+
+    public boolean isGameOver() {
+        return gameOver;
+    }
+
+    public void setGameOver(boolean gameOver) {
+        this.gameOver = gameOver;
+    }
+
+    public boolean isThisPlayersTurn() {
+        return thisPlayersTurn;
+    }
+
+    public void setThisPlayersTurn(boolean thisPlayersTurn) {
+        this.thisPlayersTurn = thisPlayersTurn;
+    }
+
+    public boolean isNextPlayersTurn() {
+        return nextPlayersTurn;
+    }
+
+    public void setNextPlayersTurn(boolean nextPlayersTurn) {
+        this.nextPlayersTurn = nextPlayersTurn;
+    }
+
+    public int getPotAmount() {
+        return potAmount;
+    }
+
+    public void setPotAmount(int potAmount) {
+        this.potAmount = potAmount;
+    }
 }
