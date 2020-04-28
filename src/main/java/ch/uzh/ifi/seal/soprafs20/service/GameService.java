@@ -800,6 +800,8 @@ public class GameService {
     public void removePlayer(long gameId, long userId){
         Game game = gameSelect.getGameById(gameId);
         Player player = game.getPlayerById(userId);
+        User user = userService.getUserById(userId);
+        user.setBalance(player.getCredit());
         game.removePlayer(player);
 
     }
