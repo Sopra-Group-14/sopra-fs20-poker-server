@@ -136,6 +136,7 @@ Constructor
     public void removePlayer(Player player){
         this.players.remove(player);
         removeActivePlayer(player);
+        gameLog.setPlayers(players);
     }
 
     public List<Player> getPlayers(){return players;}
