@@ -111,7 +111,10 @@ Constructor
     }
 
     public void addPlayer(Player player){
+
         this.players.add(player);
+        gameLog.setPlayers(players);
+
     }
 
     public void setBigBlind(Player bigBlind) {
@@ -247,6 +250,7 @@ Constructor
         }
         deck.shuffle();
         tableCards.add(deck.getTopCard());
+        gameLog.setTableCards(tableCards);
     }
 
     public void removeTableCards(){
@@ -329,6 +333,8 @@ Constructor
     public void setGameLog(GameLog gameLog) {
         this.gameLog = gameLog;
     }
+
+
 }
 
 
