@@ -113,7 +113,9 @@ public class GameController {
     @PutMapping("/games/{gameId}/players/{playerId}/leave")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public void leave(@PathVariable long gameId, @PathVariable long playerId){gameService.removePlayer(gameId, playerId);}
+    public void leave(@PathVariable long gameId, @PathVariable long playerId){
+        gameService.removePlayer(gameId, playerId);
+    }
 
     /*@PutMapping("/games/{gameId}/players/{playerId}/actions")
     @ResponseStatus(HttpStatus.OK)

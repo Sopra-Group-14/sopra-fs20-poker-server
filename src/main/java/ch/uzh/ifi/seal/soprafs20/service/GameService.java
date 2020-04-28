@@ -788,13 +788,24 @@ public class GameService {
         return gameSelect.getGameById(gameId).getPlayers();
     }
 
-    public void removePlayer(long gameId, long userId){}
+    public void removePlayer(long gameId, long userId){
+        Game game = gameSelect.getGameById(gameId);
+
+    }
 
     public List<Game> getAllGames(){return gameSelect.getAllGames();}
 
     public boolean checkAuthorizationPut(long gameId, long playerId, String token){
         User user = userService.getUserById(playerId);
-        if (user.getToken().equals(token)){
+        Game game = gameSelect.getGameById(gameId);
+        List<Player> players = game.getPlayers();
+        boolean playerIsInGame = false;
+        for (int i = 0; i<players.size();i++){
+            if (players.get(i).getId() == playerId){
+                playerIsInGame = true;
+            }
+        }
+        if (user.getToken().equals(token)&& playerIsInGame == true){
             return true;
         }
         else{
