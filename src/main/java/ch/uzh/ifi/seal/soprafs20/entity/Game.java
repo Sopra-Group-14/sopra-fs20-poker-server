@@ -145,6 +145,12 @@ Constructor
 
     public void addActivePlayer(Player player){
         this.activePlayers.add(player);
+        gameLog.setActivePlayers(activePlayers);
+    }
+
+    public void removeActivePlayer(Player player){
+        this.activePlayers.remove(player);
+        gameLog.setActivePlayers(activePlayers);
     }
 
 
