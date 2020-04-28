@@ -56,8 +56,9 @@ public class Game {
     private GameLog gameLog;
     //private List<GameLog> gameTracker = new LinkedList<>();
 
-    public Game() {
+    public Game(String gameName) {
         this.gameLog=new GameLog();
+        this.gameLog.setGameName(gameName);
     }
 
     /*
