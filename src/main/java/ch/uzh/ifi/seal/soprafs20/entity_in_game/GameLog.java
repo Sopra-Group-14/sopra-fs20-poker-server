@@ -33,6 +33,7 @@ public class GameLog {
     private boolean nextPlayersTurn;
     private Action action;
     private List<Card> tableCards = new LinkedList<>();
+    private boolean gameStarted;
 
     //All the parameters are set in the constructor
 
@@ -203,4 +204,11 @@ public class GameLog {
         this.potAmount = potAmount;
     }
 
+    public boolean isGameStarted() {
+        return gameStarted;
+    }
+
+    public void setGameStarted(boolean gameStarted) {
+        this.gameStarted = gameStarted;
+    }
 }
