@@ -135,6 +135,7 @@ Constructor
 
     public void removePlayer(Player player){
         this.players.remove(player);
+        removeActivePlayer(player);
     }
 
     public List<Player> getPlayers(){return players;}
