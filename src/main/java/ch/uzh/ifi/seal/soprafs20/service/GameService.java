@@ -90,6 +90,7 @@ public class GameService {
         User playerHost = userService.getUserById(hostID);
         Player player = userService.setToPlayer(playerHost);
 
+        player.toggleReadyStatus();
         game.addPlayer(player);
         game.addActivePlayer(player);
 
