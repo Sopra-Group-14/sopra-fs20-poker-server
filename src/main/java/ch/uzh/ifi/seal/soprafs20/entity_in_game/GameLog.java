@@ -203,12 +203,4 @@ public class GameLog {
         this.potAmount = potAmount;
     }
 
-
-    public List<Card> getTableCards() {
-        return tableCards;
-    }
-
-    public void setTableCards(List<Card> tableCards) {
-        this.tableCards = tableCards;
-    }
 }
