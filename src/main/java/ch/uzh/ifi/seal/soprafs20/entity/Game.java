@@ -356,7 +356,8 @@ Constructor
                 players.get(i).addToHand(deck.getTopCard());
             }
         }
-
+        gameLog.setActivePlayers(activePlayers);
+        gameLog.setPlayers(players);
         List<Action> actionList = new LinkedList<>();
         actionList.add(Action.BET);
         gameLog.setPossibleActions(actionList);
