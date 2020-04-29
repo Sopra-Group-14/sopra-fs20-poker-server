@@ -68,9 +68,6 @@ public class GameService {
         newGame.setGameHostName(hostName);
         newGame.setHostToken(hostToken);
 
-        //TESTING
-        newGame.addTableCard();
-
 //        GameLog nullGameLog = newGame.nullGameLog();
 
         gameSelect.addGame(newGame);
