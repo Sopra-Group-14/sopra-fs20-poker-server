@@ -62,7 +62,7 @@ public class GameService {
         }
 
         newGame.setGameId(currentId);
-        //newGame.setGameName(gameName);
+        newGame.setGameName(gameName);
         newGame.setPotType(potType);
         newGame.setGameHostID(hostID);
         newGame.setGameHostName(hostName);
