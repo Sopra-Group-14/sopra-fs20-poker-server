@@ -103,7 +103,9 @@ public class UserService {
 
     public long addBalance(long userId, long amount) throws Exception {
 
-        final int COOLDOWN_TIME = -1;
+
+        //amount of hours that have to be between two top up requests
+        final int COOLDOWN_TIME = 24;
 
         User user = userRepository.findById(userId);
 
