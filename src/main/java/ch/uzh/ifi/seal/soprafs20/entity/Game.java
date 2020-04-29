@@ -260,7 +260,7 @@ Constructor
         if (tableCards.size()>2){
             throw new SopraServiceException("There are already three cards on the table in the game");
         }
-        deck.shuffle();
+        //deck.shuffle();
         tableCards.add(deck.getTopCard());
         gameLog.setRevealedCards(tableCards);
     }
@@ -372,6 +372,9 @@ Constructor
         gameLog.setPlayerId(activePlayers.get(0).getId());
         gameLog.setNextPlayerId(activePlayers.get(1).getId());
         gameLog.setNextPlayerName(activePlayers.get(1).getPlayerName());
+
+        //Testing
+        addTableCard();
 
 
     }
