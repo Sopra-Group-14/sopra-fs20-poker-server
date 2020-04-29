@@ -104,7 +104,7 @@ public class User implements Serializable {
     }
 
     public void setBalance(long balance) {
-        this.balance = balance;
+        this.balance += balance;
     }
 
     public long getBalance() {
