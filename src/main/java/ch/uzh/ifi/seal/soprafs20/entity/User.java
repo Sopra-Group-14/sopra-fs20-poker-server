@@ -47,9 +47,6 @@ public class User implements Serializable {
 
     private UserMode mode;
 
-//    private UserMode mode;
-
-
     public Long getId() {
         return id;
     }
@@ -113,17 +110,5 @@ public class User implements Serializable {
     public UserMode getMode(){return mode;}
 
     public void setMode(UserMode mode){this.mode = mode;}
-
-    //    public void setLastToppedUp(Date lastToppedUp) {
-//        this.lastToppedUp = lastToppedUp;
-//    }
-//
-//    public Date getLastToppedUp() {
-//        return lastToppedUp;
-//    }
-//
-//    public void setMode(UserMode mode){this.mode = mode;}
-//
-//    public UserMode getMode(){return mode;}
 
 }
