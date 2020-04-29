@@ -149,7 +149,9 @@ public class GameController {
             if (!gameService.checkAuthorizationPut(gameId, playerId, token)) {
                 throw new TransactionSystemException("error");
             }
-            return gameService.executeAction(actionDTO.getAction(), actionDTO.getAmount(), gameId, playerId, token);
+            Game game = gameService.getGame(gameId);
+            game.playGame(actionDTO.getAction(), playerId);
+            return gameService.executeAction(actionDTO.getAction(), actionDTO.getAmount(), gameId, playerId);
     }
 
     @PutMapping("/games/{gameId}/players/{playerId}")

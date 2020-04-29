@@ -22,6 +22,8 @@ public class GameLog {
     private String nextPlayerName;
     private List<Player> players;
     private List<Player> activePlayers;
+    private List<Player> winners;
+    private int wonAmount;
     private List<Card> revealedCards;
     private List<Action> possibleActions;
     private String gameName;
@@ -210,5 +212,21 @@ public class GameLog {
 
     public void setGameStarted(boolean gameStarted) {
         this.gameStarted = gameStarted;
+    }
+
+    public List<Player> getWinners() {
+        return winners;
+    }
+
+    public void setWinners(List<Player> winners) {
+        this.winners = winners;
+    }
+
+    public int getWonAmount() {
+        return wonAmount;
+    }
+
+    public void setWonAmount(int wonAmount) {
+        this.wonAmount = wonAmount;
     }
 }

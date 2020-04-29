@@ -35,9 +35,9 @@ public class Game {
     private Player smallBlind;
     private Player bigBlind;
 
-    private Pot mainPot = new Pot();
+    private Pot pot = new Pot();
     private Deck deck = new Deck();
-    private WinnerCalculator winnerCalculator;
+    private WinnerCalculator winnerCalculator = new WinnerCalculator();
 
     //Create lists for spectators, players and the active players
     private List<Player> players = new LinkedList<>();
@@ -54,6 +54,9 @@ public class Game {
     private int timesRaisedRiverCard = 0;
     private List <Action> possibleActions = new ArrayList<>();
     private GameLog gameLog;
+    private int roundCounter;
+    private int actionsAfterRaise;
+
     //private List<GameLog> gameTracker = new LinkedList<>();
 
     public Game(String gameName) {
@@ -345,8 +348,8 @@ Constructor
 
     public void startGame(){
 
+        //hand out hand cards before round one
         deck.shuffle();
-
         int i,e;
         for(i=0;i<players.size();i++){
             for(e=0;e<2;e++){
@@ -358,10 +361,100 @@ Constructor
         actionList.add(Action.BET);
         gameLog.setPossibleActions(actionList);
         gameLog.setGameStarted(true);
+        roundCounter = 0;
+        actionsAfterRaise = 0;
+        gameLog.setGameRound(GameRound.Preflop);
+        setGameRound(GameRound.Preflop);
+        gameLog.setNextPlayersTurn(false);
+        gameLog.setThisPlayersTurn(true);
+        gameLog.setPlayerName(activePlayers.get(0).getPlayerName());
+        gameLog.setPlayerId(activePlayers.get(0).getId());
+        gameLog.setNextPlayerId(activePlayers.get(1).getId());
+        gameLog.setNextPlayerName(activePlayers.get(1).getPlayerName());
+
+
+    }
+
+    public void playGame(Action action, long playerId) {
+        Player currentPlayer = getCurrentPlayer(playerId);
+
+        if (action == Action.RAISE || action == Action.BET){
+            actionsAfterRaise = 0;
+        }else if (action == Action.FOLD) {
+            actionsAfterRaise += 0;
+        }
+        else {
+                actionsAfterRaise += 1;
+        }
+
+        //old round finished and initialising new round
+        if (actionsAfterRaise == activePlayers.size()-1){
+            actionsAfterRaise = 0;
+            roundCounter +=1;
+
+            //enter folded players back into the list active players  at same position and make them unfolded
+            activePlayers.clear();
+            for (int i = 0; i< players.size(); i++){
+                activePlayers.add(i, players.get(i));
+                activePlayers.get(i).setFolded(false);
+            }
+
+            //shift active players and players to the right so that BigBlind and SmallBlind is shifted one player
+            Player player = players.get(players.size()-1);
+            Player activePlayer = activePlayers.get(players.size()-1);
+
+            for (int i = players.size()-1; i>0; i--){
+                players.set(i, players.get(i-1));
+                activePlayers.set(i, activePlayers.get(i-1));
+            }
+            players.set(0, player);
+            activePlayers.set(0, activePlayer);
+
+           //uncover a card before the second, third and fourth rounds
+            // name second round Flop, third round TurnCard and fourth round RiverCard
+            if (roundCounter ==1){
+                addTableCard();
+                gameLog.setGameRound(GameRound.Flop);
+                setGameRound(GameRound.Flop);
+            }else if (roundCounter ==2){
+                addTableCard();
+                gameLog.setGameRound(GameRound.TurnCard);
+                setGameRound(GameRound.TurnCard);
+            }else if (roundCounter == 3){
+                addTableCard();
+                gameLog.setGameRound(GameRound.RiverCard);
+                setGameRound(GameRound.RiverCard);
+            }else if (roundCounter == 4){
+
+                //game is finished
+                gameLog.setGameOver(true);
+                //calculate the winners
+                List<Player> winners = winnerCalculator.isWinner(players, tableCards);
+                gameLog.setWinners(winners);
+                //calculate the amount won by every winner
+                int wonAmount = pot.getAmount()/winners.size();
+                gameLog.setWonAmount(wonAmount);
+                //add won amount to the credit of the winnerPlayers
+                for (int i =0; i< winners.size(); i++){
+                    winners.get(i).addCredit(wonAmount);
+                }
+                gameLog.setPlayers(players);
+            }
+
+        }
+
+
 
     }
 
 
+    public Pot getPot() {
+        return pot;
+    }
+
+    public void setPot(Pot pot) {
+        this.pot = pot;
+    }
 }
 
 

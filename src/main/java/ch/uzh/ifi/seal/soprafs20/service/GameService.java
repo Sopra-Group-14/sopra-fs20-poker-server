@@ -80,9 +80,8 @@ public class GameService {
 
     }
 
-    public Game getGame(){
-
-        return null;
+    public Game getGame(long gameId){
+        return gameSelect.getGameById(gameId);
     }
 
     public void addHost(long hostID, Game game){
@@ -124,7 +123,7 @@ public class GameService {
 
     }
 
-    public GameLog executeAction(Action action, int amount, long gameId, long playerId, String token){
+    public GameLog executeAction(Action action, int amount, long gameId, long playerId){
 
 
         Game game = gameSelect.getGameById(gameId);
@@ -134,7 +133,7 @@ public class GameService {
         Player currentPlayer = game.getCurrentPlayer(playerId);
         Player previousPlayer = game.getPreviousPlayer(currentPlayer);
         Player nextPlayer = game.getNextPlayer(currentPlayer);
-        Pot pot = new Pot();
+        Pot pot = game.getPot();
         int smallBlind = 5;
         int bigBlind = 10;
         Player playerWithMostAmountInPot;
@@ -145,7 +144,7 @@ public class GameService {
             }
         }
 
-
+// enters the posssible actions for the next player into the gameLog
         List <Action> possibleActions = game.getPossibleActions();
         //fist player of first round has to bet, second player of first round has to raise
         if (action == Action.BET && game.getGameRound() == GameRound.Preflop && currentPlayer == activePlayers.get(0)){
