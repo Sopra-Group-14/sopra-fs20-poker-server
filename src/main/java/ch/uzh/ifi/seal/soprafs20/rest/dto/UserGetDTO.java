@@ -12,6 +12,7 @@ public class UserGetDTO {
     private String token;
     private String password;
     private UserMode mode;
+    private long balance;
 
     public Long getId() {
         return id;
@@ -61,4 +62,11 @@ public class UserGetDTO {
 
     public void setMode(UserMode mode){this.mode = mode;}
 
+    public long getBalance() {
+        return balance;
+    }
+
+    public void setBalance(long balance) {
+        this.balance = balance;
+    }
 }
