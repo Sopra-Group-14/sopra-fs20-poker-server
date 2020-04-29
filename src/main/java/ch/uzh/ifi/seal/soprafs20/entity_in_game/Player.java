@@ -75,9 +75,10 @@ public class Player{
 
     public boolean isThisPlayersTurn(){return this.thisPlayersTurn;}
 
-    public void fold(){this.folded = true;}
+    public void fold(){
+        this.setFolded(true);}
 
-    public boolean hasFolded(){return this.folded;}
+    public boolean hasFolded(){return this.isFolded();}
 
     public void check(){this.checked = true;}
 
@@ -93,4 +94,11 @@ public class Player{
         }
     }
 
+    public boolean isFolded() {
+        return folded;
+    }
+
+    public void setFolded(boolean folded) {
+        this.folded = folded;
+    }
 }
