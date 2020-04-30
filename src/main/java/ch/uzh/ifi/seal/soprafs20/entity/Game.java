@@ -362,6 +362,7 @@ Constructor
         actionList.add(Action.BET);
         gameLog.setPossibleActions(actionList);
         gameLog.setGameStarted(true);
+        gameLog.setGameOver(false);
         roundCounter = 0;
         actionsAfterRaise = 0;
         gameLog.setGameRound(GameRound.Preflop);

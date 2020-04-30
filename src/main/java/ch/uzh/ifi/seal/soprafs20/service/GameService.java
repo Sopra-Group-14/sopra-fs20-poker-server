@@ -143,7 +143,7 @@ public class GameService {
 
 
 
-/*
+
 
 
 // enters the posssible actions for the next player into the gameLog
@@ -332,17 +332,17 @@ public class GameService {
 
 
 
-*/
 
 
-//testing
+
+/*testing
         List <Action> possibleActions = game.getPossibleActions();
         possibleActions.clear();
         possibleActions.add(Action.RAISE);
         possibleActions.add(Action.BET);
         possibleActions.add(Action.CHECK);
         possibleActions.add(Action.FOLD);
-
+*/
         if (action == Action.BET){
 
             /*
