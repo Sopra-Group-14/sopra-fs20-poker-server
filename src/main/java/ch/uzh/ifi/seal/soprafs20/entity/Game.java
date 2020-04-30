@@ -360,6 +360,7 @@ Constructor
         gameLog.setPlayers(players);
         List<Action> actionList = new LinkedList<>();
         actionList.add(Action.BET);
+        actionList.add(Action.FOLD);
         gameLog.setPossibleActions(actionList);
         gameLog.setGameStarted(true);
         gameLog.setGameOver(false);
