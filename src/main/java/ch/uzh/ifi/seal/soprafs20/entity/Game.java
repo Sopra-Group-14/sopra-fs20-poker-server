@@ -257,8 +257,8 @@ Constructor
     }
 
     public void addTableCard(){
-        if (tableCards.size()>2){
-            throw new SopraServiceException("There are already three cards on the table in the game");
+        if (tableCards.size()>4){
+            throw new SopraServiceException("There are already five cards on the table in the game");
         }
         //deck.shuffle();
         tableCards.add(deck.getTopCard());
@@ -417,6 +417,8 @@ Constructor
            //uncover a card before the second, third and fourth rounds
             // name second round Flop, third round TurnCard and fourth round RiverCard
             if (roundCounter ==1){
+                addTableCard();
+                addTableCard();
                 addTableCard();
                 gameLog.setGameRound(GameRound.Flop);
                 setGameRound(GameRound.Flop);
