@@ -315,7 +315,7 @@ public class GameService {
         }
 
         //the second player of first round has to raise (preflop)  at least as high as the bigblind or higher
-        if (game.getGameRound() == GameRound.Preflop && currentPlayer == activePlayers.get(1)){
+        if (game.getGameRound() == GameRound.Preflop && pot.getAmount() == smallBlind && currentPlayer == activePlayers.get(1)){
             if (action != Action.RAISE || amount != smallBlind){
                 String baseErrorMessage = "The Player %s with Id %d has to raise by the amount of the small blind because he is the second player of first round!";
                 throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, String.format(baseErrorMessage, currentPlayer.getPlayerName(),currentPlayer.getId()));
