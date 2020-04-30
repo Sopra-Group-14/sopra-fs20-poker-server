@@ -370,8 +370,8 @@ Constructor
         gameLog.setThisPlayersTurn(true);
         gameLog.setPlayerName(activePlayers.get(0).getPlayerName());
         gameLog.setPlayerId(activePlayers.get(0).getId());
-        gameLog.setNextPlayerId(activePlayers.get(1).getId());
-        gameLog.setNextPlayerName(activePlayers.get(1).getPlayerName());
+        gameLog.setNextPlayerId(activePlayers.get(0).getId());
+        gameLog.setNextPlayerName(activePlayers.get(0).getPlayerName());
 
         //Testing
         addTableCard();
