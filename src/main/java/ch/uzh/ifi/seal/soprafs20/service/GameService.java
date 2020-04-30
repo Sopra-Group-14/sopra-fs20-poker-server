@@ -141,6 +141,11 @@ public class GameService {
             }
         }
 
+
+
+/*
+
+
 // enters the posssible actions for the next player into the gameLog
         List <Action> possibleActions = game.getPossibleActions();
         //fist player of first round has to bet, second player of first round has to raise
@@ -327,7 +332,21 @@ public class GameService {
 
 
 
+*/
+
+
+//testing
+        List <Action> possibleActions = game.getPossibleActions();
+        possibleActions.clear();
+        possibleActions.add(Action.RAISE);
+        possibleActions.add(Action.BET);
+        possibleActions.add(Action.CHECK);
+        possibleActions.add(Action.FOLD);
+
         if (action == Action.BET){
+
+            /*
+
             log.info("bei bet angekommen");
             //betting is only possible if every active player has the same amount in the pot
             for (Player activePlayer : activePlayers) {
@@ -404,7 +423,7 @@ public class GameService {
             }
             log.info("bet amount bigger than actual credit gecheckt");
 
-
+*/
 
             currentPlayer.removeCredit(amount);
             currentPlayer.setAmountInPot(currentPlayer.getAmountInPot() + amount);
@@ -483,6 +502,9 @@ public class GameService {
         if(action == Action.RAISE) {
             int addedAmount = (playerWithMostAmountInPot.getAmountInPot() - currentPlayer.getAmountInPot()) + amount;
             int amountToCall = (playerWithMostAmountInPot.getAmountInPot() - currentPlayer.getAmountInPot());
+
+            /*
+
 
             //if pot type no limit: maximum raise can be all the credit, player has left. (all in)
             if (game.getPotType().equals("no limit")) {
@@ -633,6 +655,8 @@ public class GameService {
             }*/
 
             //the raised amount must be bigger or equal than 1
+
+
             if (amount<=1){
                 String baseErrorMessage = "The Player %s tries to raise by an amount lower than 1!";
                 throw new ResponseStatusException(HttpStatus.CONFLICT, String.format(baseErrorMessage, currentPlayer.getPlayerName()));
@@ -676,6 +700,10 @@ public class GameService {
         }
 
         if(action == Action.CALL) {
+            /*
+
+
+
             //the called amount mustn't be bigger than the actual credit of the player.
             if (amount > currentPlayer.getCredit()) {
                 String baseErrorMessage = "A call involves matching the amount already bet. The credit of the Player %s is too low!";
@@ -696,14 +724,16 @@ public class GameService {
                 throw new ResponseStatusException(HttpStatus.CONFLICT, String.format(baseErrorMessage, currentPlayer.getPlayerName(), playerWithMostAmountInPot.getPlayerName()));
             }
 
+
+
+
+             */
+
                 currentPlayer.removeCredit(amount);
                 currentPlayer.setAmountInPot(currentPlayer.getAmountInPot() + amount);
                 pot.addAmount(amount);
                 game.setTransactionNr(game.getTransactionNr() + 1);
-            for (Player activePlayer : activePlayers) {
-                activePlayer.setThisPlayersTurn(false);
-            }
-            nextPlayer.setThisPlayersTurn(true);
+
 
             // Important: setThisPlayerTurn for all players but nextPlayer to false
             for (Player activePlayer : activePlayers) {
