@@ -56,6 +56,7 @@ public class Game {
     private GameLog gameLog;
     private int roundCounter;
     private int actionsAfterRaise;
+    private int checksPerRound;
 
     //private List<GameLog> gameTracker = new LinkedList<>();
 
@@ -366,6 +367,7 @@ Constructor
         gameLog.setGameOver(false);
         roundCounter = 0;
         setActionsAfterRaise(0);
+        setChecksPerRound(0);
         gameLog.setGameRound(GameRound.Preflop);
         setGameRound(GameRound.Preflop);
         gameLog.setNextPlayersTurn(false);
@@ -387,13 +389,17 @@ Constructor
         }else if (action == Action.FOLD) {
             setActionsAfterRaise(getActionsAfterRaise() + 0);
         }
-        else {
+        else if (action == Action.BET){
                 setActionsAfterRaise(getActionsAfterRaise() + 1);
+        }
+        else if (action == Action.CHECK){
+            setChecksPerRound(getChecksPerRound()+1);
         }
 
         //old round finished and initialising new round
-        if (getActionsAfterRaise() == activePlayers.size()-1){
+        if (getActionsAfterRaise() == activePlayers.size()-1 || getChecksPerRound() == activePlayers.size()){
             setActionsAfterRaise(0);
+            setChecksPerRound(0);
             roundCounter +=1;
 
             //enter folded players back into the list active players  at same position and make them unfolded
@@ -468,6 +474,14 @@ Constructor
 
     public void setActionsAfterRaise(int actionsAfterRaise) {
         this.actionsAfterRaise = actionsAfterRaise;
+    }
+
+    public int getChecksPerRound() {
+        return checksPerRound;
+    }
+
+    public void setChecksPerRound(int checksPerRound) {
+        this.checksPerRound = checksPerRound;
     }
 }
 
