@@ -677,6 +677,9 @@ public class GameService {
                 possibleActions.clear();
                 possibleActions.add(Action.BET);
                 possibleActions.add(Action.FOLD);
+                if (nextPlayer.getAmountInPot()<currentPlayer.getAmountInPot()) {
+                    possibleActions.add(Action.CALL);
+                }
                 //checking is only possible if all players have same amount in pot
                 if (nextPlayer.getAmountInPot() == currentPlayer.getAmountInPot()+ amount) {
                     possibleActions.add(Action.CHECK);
