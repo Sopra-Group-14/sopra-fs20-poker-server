@@ -375,8 +375,6 @@ Constructor
         gameLog.setNextPlayerId(activePlayers.get(0).getId());
         gameLog.setNextPlayerName(activePlayers.get(0).getPlayerName());
 
-        //Testing
-        addTableCard();
 
 
     }

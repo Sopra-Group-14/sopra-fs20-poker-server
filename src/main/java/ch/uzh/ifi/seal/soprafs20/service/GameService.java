@@ -307,7 +307,7 @@ public class GameService {
 
 
         //the first player of first round (preflop) has to bet the small blind
-        if (game.getGameRound() == GameRound.Preflop && game.getActionsAfterRaise()==0 && currentPlayer == activePlayers.get(0)){
+        if (game.getGameRound() == GameRound.Preflop && pot.getAmount() == 0 && currentPlayer == activePlayers.get(0)){
             if (action != Action.BET || amount != smallBlind){
                 String baseErrorMessage = "The Player %s with Id %d has to bet the small blind because he is the first player of first round!";
                 throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, String.format(baseErrorMessage, currentPlayer.getPlayerName(),currentPlayer.getId()));
@@ -321,7 +321,7 @@ public class GameService {
                 throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, String.format(baseErrorMessage, currentPlayer.getPlayerName(),currentPlayer.getId()));
             }
         }
-
+/*
         //the third player of first round (preflop) has to call or raise
         if (game.getGameRound() == GameRound.Preflop && currentPlayer == activePlayers.get(2)){
             if (action != Action.CALL && action != Action.RAISE){
@@ -330,7 +330,7 @@ public class GameService {
             }
         }
 
-
+*/
 
 
 
