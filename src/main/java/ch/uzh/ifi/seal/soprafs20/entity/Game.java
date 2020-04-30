@@ -365,7 +365,7 @@ Constructor
         gameLog.setGameStarted(true);
         gameLog.setGameOver(false);
         roundCounter = 0;
-        actionsAfterRaise = 0;
+        setActionsAfterRaise(0);
         gameLog.setGameRound(GameRound.Preflop);
         setGameRound(GameRound.Preflop);
         gameLog.setNextPlayersTurn(false);
@@ -385,17 +385,17 @@ Constructor
         Player currentPlayer = getCurrentPlayer(playerId);
 
         if (action == Action.RAISE || action == Action.BET){
-            actionsAfterRaise = 0;
+            setActionsAfterRaise(0);
         }else if (action == Action.FOLD) {
-            actionsAfterRaise += 0;
+            setActionsAfterRaise(getActionsAfterRaise() + 0);
         }
         else {
-                actionsAfterRaise += 1;
+                setActionsAfterRaise(getActionsAfterRaise() + 1);
         }
 
         //old round finished and initialising new round
-        if (actionsAfterRaise == activePlayers.size()-1){
-            actionsAfterRaise = 0;
+        if (getActionsAfterRaise() == activePlayers.size()-1){
+            setActionsAfterRaise(0);
             roundCounter +=1;
 
             //enter folded players back into the list active players  at same position and make them unfolded
@@ -462,6 +462,14 @@ Constructor
 
     public void setPot(Pot pot) {
         this.pot = pot;
+    }
+
+    public int getActionsAfterRaise() {
+        return actionsAfterRaise;
+    }
+
+    public void setActionsAfterRaise(int actionsAfterRaise) {
+        this.actionsAfterRaise = actionsAfterRaise;
     }
 }
 
