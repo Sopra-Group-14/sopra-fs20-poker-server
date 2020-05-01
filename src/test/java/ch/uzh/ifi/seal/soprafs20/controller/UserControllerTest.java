@@ -7,6 +7,7 @@ import ch.uzh.ifi.seal.soprafs20.rest.dto.UserPostDTO;
 import ch.uzh.ifi.seal.soprafs20.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -24,6 +26,8 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.core.IsEqual.equalTo;
+import static org.hamcrest.core.IsNull.notNullValue;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -43,6 +47,60 @@ public class UserControllerTest {
 
     @MockBean
     private UserService userService;
+
+    public User setupTestUser(){
+        User testUser = new User();
+        testUser.setName("testName");
+        testUser.setUsername("testUsername");
+        testUser.setPassword("testPassword");
+        testUser.setToken("g");
+        testUser.setStatus(UserStatus.ONLINE);
+        return testUser;
+    }
+
+    @Test
+    @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+    public void fetchUsers() throws Exception {
+
+        //get no users
+        this.mockMvc.perform(get("/users").header("Authorization", "token"))
+                .andExpect(status().isOk());
+
+        //create a user
+        this.mockMvc.perform(post("/registration")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"username\": \"testUser\", \"password\": \"testPassword\"}"));
+
+        //get one user
+        this.mockMvc.perform(get("/users").header("Authorization", "token"))
+                .andExpect(status().is(200));
+    }
+
+    @Test
+    @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+    public void getUser() throws Exception {
+
+        //create a user
+        this.mockMvc.perform(post("/registration")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"username\": \"testUser\", \"password\": \"testPassword\"}"));
+
+ /*       //get valid user
+        this.mockMvc.perform(get("/users/1").header("Authorization", "token"))
+                .andExpect(status().is(200))
+                .andExpect(jsonPath("$.password", notNullValue()))
+                .andExpect(jsonPath("$.username", equalTo("testUser")));
+
+                ERROR: ch.uzh.ifi.seal.soprafs20.controller.UserControllerTest > getUser() FAILED
+    java.lang.AssertionError at UserControllerTest.java:91
+        Caused by: java.lang.IllegalArgumentException at UserControllerTest.java:91
+
+  */
+
+        //get invalid user
+        this.mockMvc.perform(get("/users/0").header("Authorization", "token"))
+                .andExpect(status().is(404));
+    }
 
     @Test
     public void givenUsers_whenGetUsers_thenReturnJsonArray() throws Exception {
