@@ -58,6 +58,7 @@ public class Game {
     private int actionsAfterRaise;
     private int checksPerRound;
 
+
     //private List<GameLog> gameTracker = new LinkedList<>();
 
     public Game(String gameName) {
@@ -235,9 +236,11 @@ Constructor
         activePlayers.remove(player);
     }
 
-    public void setGameOver(){this.gameOver = true;}
+    public void setGameOver(){
+        this.setGameOver(true);}
     public boolean isGameOver(){return this.gameOver;}
-    public void setRoundOver(){this.roundOver = true;}
+    public void setRoundOver(){
+        this.setRoundOver(true);}
     public boolean isRoundOver(){return this.roundOver;}
 
     public int getMaxPlayers(){return maxPlayers;}
@@ -414,7 +417,9 @@ Constructor
             Player activePlayer = activePlayers.get(players.size()-1);
 
             gameLog.setBigBlind(activePlayers.get(1));
+            setBigBlind(activePlayers.get(1));
             gameLog.setSmallBlind(activePlayers.get(0));
+            setSmallBlind(activePlayers.get(0));
 
             for (int i = players.size()-1; i>0; i--){
                 players.set(i, players.get(i-1));
@@ -439,10 +444,16 @@ Constructor
                 addTableCard();
                 gameLog.setGameRound(GameRound.RiverCard);
                 setGameRound(GameRound.RiverCard);
-            }else if (roundCounter == 4){
+            }else if (roundCounter >= 4){
 
                 //game is finished
+                possibleActions.clear();
+                gameLog.setPossibleActions(possibleActions);
+                setPossibleActions(possibleActions);
                 gameLog.setGameOver(true);
+                setGameOver(true);
+                gameLog.setRoundOver(true);
+                setRoundOver(true);
                 //calculate the winners
                 List<Player> winners = winnerCalculator.isWinner(players, tableCards);
                 gameLog.setWinners(winners);
@@ -485,6 +496,14 @@ Constructor
 
     public void setChecksPerRound(int checksPerRound) {
         this.checksPerRound = checksPerRound;
+    }
+
+    public void setRoundOver(boolean roundOver) {
+        this.roundOver = roundOver;
+    }
+
+    public void setGameOver(boolean gameOver) {
+        this.gameOver = gameOver;
     }
 }
 

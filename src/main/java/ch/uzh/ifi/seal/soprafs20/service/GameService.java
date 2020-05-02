@@ -696,6 +696,11 @@ public class GameService {
                 possibleActions.add(Action.CHECK);
                 possibleActions.add(Action.FOLD);
             }
+
+
+            if (gameLog.isGameOver()==true){
+                possibleActions.clear();
+            }
         }
 /*
 
