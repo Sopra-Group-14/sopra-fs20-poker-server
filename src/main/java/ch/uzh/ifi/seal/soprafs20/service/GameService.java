@@ -49,10 +49,18 @@ public class GameService {
          */
 
         //TODO resolve null pointer exception if user that does not exist creates a game
-        User host = userService.getUserById(hostID);
+        //--> To avoid this, set the hostID to -1; it will work for testing purposes.
+        String hostName, hostToken;
 
-        String hostName = host.getUsername();
-        String hostToken = host.getToken();
+        if(hostID > -1){
+            User host = userService.getUserById(hostID);
+            hostName = host.getUsername();
+            hostToken = host.getToken();
+        }else{
+            hostName = "N/A";
+            hostToken = "N/A";
+        }
+
         Game newGame = new Game(gameName);
 
         long currentId;

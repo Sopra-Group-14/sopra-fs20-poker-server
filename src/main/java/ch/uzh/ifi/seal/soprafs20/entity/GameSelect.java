@@ -21,6 +21,12 @@ public class GameSelect {
         gameList.remove(game);
     }
 
+    public void removeAllGames(){
+        while(gameList.size()>0){
+            gameList.remove(0);
+        }
+    }
+
     public List<Game> getAllGames(){
         return gameList;
     }
