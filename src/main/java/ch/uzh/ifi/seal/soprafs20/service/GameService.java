@@ -295,7 +295,7 @@ public class GameService {
             gameLog.setPotAmount(pot.getAmount());
             gameLog.setRoundOver(game.isRoundOver());
             gameLog.setGameOver(game.isGameOver());
-            gameLog.setAmountToCall(0);
+            gameLog.setAmountToCall(amount);
             gameLog.setThisPlayersTurn(currentPlayer.isThisPlayersTurn());
             gameLog.setNextPlayersTurn(nextPlayer.isThisPlayersTurn());
 
@@ -330,7 +330,7 @@ public class GameService {
             gameLog.setPotAmount(pot.getAmount());
             gameLog.setRoundOver(game.isRoundOver());
             gameLog.setGameOver(game.isGameOver());
-            gameLog.setAmountToCall(0);
+            gameLog.setAmountToCall(playerWithMostAmountInPot.getAmountInPot()-nextPlayer.getAmountInPot());
             gameLog.setThisPlayersTurn(currentPlayer.isThisPlayersTurn());
             gameLog.setNextPlayersTurn(nextPlayer.isThisPlayersTurn());
 
@@ -527,7 +527,7 @@ public class GameService {
             gameLog.setPotAmount(pot.getAmount());
             gameLog.setRoundOver(game.isRoundOver());
             gameLog.setGameOver(game.isGameOver());
-            gameLog.setAmountToCall(amountToCall);
+            gameLog.setAmountToCall(playerWithMostAmountInPot.getAmountInPot()-nextPlayer.getAmountInPot());
             gameLog.setThisPlayersTurn(currentPlayer.isThisPlayersTurn());
             gameLog.setNextPlayersTurn(nextPlayer.isThisPlayersTurn());
 
@@ -592,7 +592,7 @@ public class GameService {
             gameLog.setPotAmount(pot.getAmount());
             gameLog.setRoundOver(game.isRoundOver());
             gameLog.setGameOver(game.isGameOver());
-            gameLog.setAmountToCall(amountToCall);
+            gameLog.setAmountToCall(playerWithMostAmountInPot.getAmountInPot()-nextPlayer.getAmountInPot());
             gameLog.setThisPlayersTurn(currentPlayer.isThisPlayersTurn());
             gameLog.setNextPlayersTurn(nextPlayer.isThisPlayersTurn());
 
