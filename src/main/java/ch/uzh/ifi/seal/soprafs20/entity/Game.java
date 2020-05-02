@@ -413,6 +413,9 @@ Constructor
             Player player = players.get(players.size()-1);
             Player activePlayer = activePlayers.get(players.size()-1);
 
+            gameLog.setBigBlind(activePlayers.get(1));
+            gameLog.setSmallBlind(activePlayers.get(0));
+
             for (int i = players.size()-1; i>0; i--){
                 players.set(i, players.get(i-1));
                 activePlayers.set(i, activePlayers.get(i-1));

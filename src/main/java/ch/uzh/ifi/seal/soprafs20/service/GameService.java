@@ -97,10 +97,11 @@ public class GameService {
 
         User joiningUser = userService.getUserById(userId);
         Player joiningPlayer = new Player(joiningUser);
-
-        gameSelect.getGameById(gameId).addPlayer(joiningPlayer);
-        gameSelect.getGameById(gameId).addActivePlayer(joiningPlayer);
-
+        Game game = gameSelect.getGameById(gameId);
+        game.addPlayer(joiningPlayer);
+        game.addActivePlayer(joiningPlayer);
+        game.getGameLog().setBigBlind(game.getActivePlayers().get(1));
+        game.getGameLog().setSmallBlind(game.getActivePlayers().get(0));
     }
 
     public void togglePlayerReadyStatus(long gameid, long playerid){
