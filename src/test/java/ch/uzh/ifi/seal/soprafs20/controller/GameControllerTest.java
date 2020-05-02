@@ -9,7 +9,9 @@ import ch.uzh.ifi.seal.soprafs20.entity.Game;
 import ch.uzh.ifi.seal.soprafs20.entity.GameSelect;
 import ch.uzh.ifi.seal.soprafs20.entity.User;
 import ch.uzh.ifi.seal.soprafs20.entity_in_game.GameLog;
+import ch.uzh.ifi.seal.soprafs20.entity_in_game.Player;
 import ch.uzh.ifi.seal.soprafs20.rest.dto.UserPostDTO;
+import ch.uzh.ifi.seal.soprafs20.rest.mapper.DTOMapper;
 import ch.uzh.ifi.seal.soprafs20.service.GameService;
 import ch.uzh.ifi.seal.soprafs20.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -29,6 +31,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -64,10 +67,8 @@ public class GameControllerTest {
         //givenString gameName, long HostId, String potType
         //The game we post
         Game postGame = gameService.createGame("TestGame", 1L, "None");
-        postGame.setId(1L);
         //The game we want to get back
         Game testGame = gameService.createGame("TestGame", 1L, "None");
-        testGame.setId(1L);
 
         given(gameService.createGame("TestGame", 1L, "None")).willReturn(testGame);
 
@@ -81,27 +82,8 @@ public class GameControllerTest {
         Game returnedGame = gameService.createGame("TestGame", 1L, "None");
 
         //Comparing what we want with what we actually get returned
-        assertEquals(returnedGame.getId(), testGame.getId());
+        //assertEquals(returnedGame.getGameId(), testGame.getGameId());
         assertEquals(returnedGame.getGameName(), testGame.getGameName());
-
-    }*/
-
-    /*@Test
-    public void gameLogObjectHasParametersOfProvidedInput() throws Exception{
-
-        //given
-        GameLog putGameLog = new GameLog(2,2,Action.FOLD, 0, "Other1", 3L, "Other2", 4L, 400, false, false, 1);
-        GameLog testGameLog = new GameLog(1, 1, Action.RAISE, 10, "TestPlayer", 1L, "NextTestPlayer", 2L, 100, false, false, 1);
-        String testToken = "testToken";
-
-        given(gameService.executeAction(Action.RAISE, 10, 1L,1L, "Token")).willReturn(testGameLog);
-
-        //when
-        MockHttpServletRequestBuilder putRequest = put("/games/1/players/1/actions").contentType(MediaType.APPLICATION_JSON).content(asJsonString(Action.RAISE))
-                .content(asJsonString(100)).header(testToken);
-
-        //then
-        mockMvc.perform(putRequest).andExpect(status().isOk());
 
     }*/
 
@@ -149,6 +131,41 @@ public class GameControllerTest {
         assertEquals(testTableCardList2.get(2).getRank(), returnedCardList.get(2).getRank());
 
     }*/
+
+   @Test
+   public void getGameLogReturnsRightParameters() throws Exception{
+
+       //We set up a testGameLog that we want returned
+       GameLog testGameLog = new GameLog();
+       Long testId = 1L;
+
+       List<Action> actionList = new LinkedList<>();
+       actionList.add(Action.BET);
+       List<Card> revealedCards = new LinkedList<>();
+       revealedCards.add(new Card(Suit.CLUBS, Rank.EIGHT));
+
+       testGameLog.setPossibleActions(actionList);
+       testGameLog.setRevealedCards(revealedCards);
+       testGameLog.setGameName("TestGameName");
+
+       //given
+       given(gameService.getGameLog(Mockito.anyLong())).willReturn(testGameLog);
+
+       //when
+       MockHttpServletRequestBuilder getRequest = get("/games/1");
+
+       //then
+       mockMvc.perform(getRequest).andExpect(status().isOk());
+
+       //returned gameLog
+       GameLog returnedGameLog = gameService.getGameLog(testId);
+
+       //assertions
+       assertEquals(testGameLog.getPossibleActions(), returnedGameLog.getPossibleActions());
+       assertEquals(testGameLog.getRevealedCards(), returnedGameLog.getRevealedCards());
+       assertEquals(testGameLog.getGameName(), returnedGameLog.getGameName());
+
+    }
 
     /**
      * Helper Method to convert userPostDTO into a JSON string such that the input can be processed
