@@ -391,6 +391,9 @@ Constructor
             activePlayers.get(i).setFolded(false);
         }
 
+        gameLog.setPotAmount(0);
+        gameLog.setPlayerPot(0);
+
 //shift active players and players to the right so that BigBlind and SmallBlind is shifted one player
         Player player = players.get(players.size()-1);
         Player activePlayer = activePlayers.get(players.size()-1);
@@ -565,6 +568,8 @@ Constructor
                 }
                 gameLog.setPlayers(players);
                 pot.removeAmount(pot.getAmount());
+                gameLog.setPotAmount(0);
+
 
                 //open new round again
                 startNewRound();
