@@ -49,10 +49,18 @@ public class GameService {
          */
 
         //TODO resolve null pointer exception if user that does not exist creates a game
-        User host = userService.getUserById(hostID);
+        //--> To avoid this, set the hostID to -1; it will work for testing purposes.
+        String hostName, hostToken;
 
-        String hostName = host.getUsername();
-        String hostToken = host.getToken();
+        if(hostID > -1){
+            User host = userService.getUserById(hostID);
+            hostName = host.getUsername();
+            hostToken = host.getToken();
+        }else{
+            hostName = "N/A";
+            hostToken = "N/A";
+        }
+
         Game newGame = new Game(gameName);
 
         long currentId;
@@ -97,10 +105,11 @@ public class GameService {
 
         User joiningUser = userService.getUserById(userId);
         Player joiningPlayer = new Player(joiningUser);
-
-        gameSelect.getGameById(gameId).addPlayer(joiningPlayer);
-        gameSelect.getGameById(gameId).addActivePlayer(joiningPlayer);
-
+        Game game = gameSelect.getGameById(gameId);
+        game.addPlayer(joiningPlayer);
+        game.addActivePlayer(joiningPlayer);
+        game.getGameLog().setBigBlind(game.getActivePlayers().get(1));
+        game.getGameLog().setSmallBlind(game.getActivePlayers().get(0));
     }
 
     public void togglePlayerReadyStatus(long gameid, long playerid){
@@ -295,7 +304,7 @@ public class GameService {
             gameLog.setPotAmount(pot.getAmount());
             gameLog.setRoundOver(game.isRoundOver());
             gameLog.setGameOver(game.isGameOver());
-            gameLog.setAmountToCall(0);
+            gameLog.setAmountToCall(amount);
             gameLog.setThisPlayersTurn(currentPlayer.isThisPlayersTurn());
             gameLog.setNextPlayersTurn(nextPlayer.isThisPlayersTurn());
 
@@ -330,7 +339,7 @@ public class GameService {
             gameLog.setPotAmount(pot.getAmount());
             gameLog.setRoundOver(game.isRoundOver());
             gameLog.setGameOver(game.isGameOver());
-            gameLog.setAmountToCall(0);
+            gameLog.setAmountToCall(playerWithMostAmountInPot.getAmountInPot()-nextPlayer.getAmountInPot());
             gameLog.setThisPlayersTurn(currentPlayer.isThisPlayersTurn());
             gameLog.setNextPlayersTurn(nextPlayer.isThisPlayersTurn());
 
@@ -527,7 +536,7 @@ public class GameService {
             gameLog.setPotAmount(pot.getAmount());
             gameLog.setRoundOver(game.isRoundOver());
             gameLog.setGameOver(game.isGameOver());
-            gameLog.setAmountToCall(amountToCall);
+            gameLog.setAmountToCall(playerWithMostAmountInPot.getAmountInPot()-nextPlayer.getAmountInPot());
             gameLog.setThisPlayersTurn(currentPlayer.isThisPlayersTurn());
             gameLog.setNextPlayersTurn(nextPlayer.isThisPlayersTurn());
 
@@ -592,7 +601,7 @@ public class GameService {
             gameLog.setPotAmount(pot.getAmount());
             gameLog.setRoundOver(game.isRoundOver());
             gameLog.setGameOver(game.isGameOver());
-            gameLog.setAmountToCall(amountToCall);
+            gameLog.setAmountToCall(playerWithMostAmountInPot.getAmountInPot()-nextPlayer.getAmountInPot());
             gameLog.setThisPlayersTurn(currentPlayer.isThisPlayersTurn());
             gameLog.setNextPlayersTurn(nextPlayer.isThisPlayersTurn());
 
@@ -694,6 +703,11 @@ public class GameService {
                 }
                 possibleActions.add(Action.CHECK);
                 possibleActions.add(Action.FOLD);
+            }
+
+
+            if (gameLog.isGameOver()==true){
+                possibleActions.clear();
             }
         }
 /*

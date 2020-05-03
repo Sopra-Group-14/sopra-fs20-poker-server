@@ -36,6 +36,8 @@ public class GameLog {
     private Action action;
     private List<Card> tableCards = new LinkedList<>();
     private boolean gameStarted;
+    private Player bigBlind;
+    private Player smallBlind;
 
     //All the parameters are set in the constructor
 
@@ -228,5 +230,21 @@ public class GameLog {
 
     public void setWonAmount(int wonAmount) {
         this.wonAmount = wonAmount;
+    }
+
+    public Player getBigBlind() {
+        return bigBlind;
+    }
+
+    public void setBigBlind(Player bigBlind) {
+        this.bigBlind = bigBlind;
+    }
+
+    public Player getSmallBlind() {
+        return smallBlind;
+    }
+
+    public void setSmallBlind(Player smallBlind) {
+        this.smallBlind = smallBlind;
     }
 }

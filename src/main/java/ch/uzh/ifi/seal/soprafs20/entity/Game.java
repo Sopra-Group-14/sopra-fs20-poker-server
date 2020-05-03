@@ -58,6 +58,7 @@ public class Game {
     private int actionsAfterRaise;
     private int checksPerRound;
 
+
     //private List<GameLog> gameTracker = new LinkedList<>();
 
     public Game(String gameName) {
@@ -235,9 +236,11 @@ Constructor
         activePlayers.remove(player);
     }
 
-    public void setGameOver(){this.gameOver = true;}
+    public void setGameOver(){
+        this.setGameOver(true);}
     public boolean isGameOver(){return this.gameOver;}
-    public void setRoundOver(){this.roundOver = true;}
+    public void setRoundOver(){
+        this.setRoundOver(true);}
     public boolean isRoundOver(){return this.roundOver;}
 
     public int getMaxPlayers(){return maxPlayers;}
@@ -365,6 +368,7 @@ Constructor
         gameLog.setPossibleActions(actionList);
         gameLog.setGameStarted(true);
         gameLog.setGameOver(false);
+        setGameOver(false);
         roundCounter = 0;
         setActionsAfterRaise(0);
         setChecksPerRound(0);
@@ -377,19 +381,98 @@ Constructor
         gameLog.setNextPlayerId(activePlayers.get(0).getId());
         gameLog.setNextPlayerName(activePlayers.get(0).getPlayerName());
 
+    }
 
+    public void startNewRound(){
+        //enter folded players back into the list active players  at same position and make them unfolded
+        activePlayers.clear();
+        for (int i = 0; i< players.size(); i++){
+            activePlayers.add(i, players.get(i));
+            activePlayers.get(i).setFolded(false);
+        }
+
+//shift active players and players to the right so that BigBlind and SmallBlind is shifted one player
+        Player player = players.get(players.size()-1);
+        Player activePlayer = activePlayers.get(players.size()-1);
+
+        for (int i = players.size()-1; i>0; i--){
+            players.set(i, players.get(i-1));
+            activePlayers.set(i, activePlayers.get(i-1));
+        }
+        players.set(0, player);
+        activePlayers.set(0, activePlayer);
+
+        gameLog.setBigBlind(activePlayers.get(1));
+        setBigBlind(activePlayers.get(1));
+        gameLog.setSmallBlind(activePlayers.get(0));
+        setSmallBlind(activePlayers.get(0));
+
+
+
+        //hand out hand cards before new round
+        deck.shuffle();
+        int i,e;
+        for(i=0;i<players.size();i++){
+            for(e=0;e<2;e++){
+                players.get(i).addToHand(deck.getTopCard());
+            }
+        }
+
+
+
+        gameLog.setActivePlayers(activePlayers);
+        gameLog.setPlayers(players);
+
+        List<Action> actionList = new LinkedList<>();
+        actionList.add(Action.BET);
+        actionList.add(Action.FOLD);
+        gameLog.setPossibleActions(actionList);
+        gameLog.setGameStarted(true);
+        gameLog.setGameOver(false);
+        roundCounter = 0;
+        setActionsAfterRaise(0);
+        setChecksPerRound(0);
+        gameLog.setGameRound(GameRound.Preflop);
+        setGameRound(GameRound.Preflop);
+        gameLog.setNextPlayersTurn(false);
+        gameLog.setThisPlayersTurn(true);
+        gameLog.setPlayerName(activePlayers.get(0).getPlayerName());
+        gameLog.setPlayerId(activePlayers.get(0).getId());
+        gameLog.setNextPlayerId(activePlayers.get(0).getId());
+        gameLog.setNextPlayerName(activePlayers.get(0).getPlayerName());
 
     }
 
     public void playGame(Action action, long playerId) {
-        Player currentPlayer = getCurrentPlayer(playerId);
+
+        //if less than one player in the game than gameOver
+        if (players.size() <= 1 ){
+            gameLog.setGameOver(true);
+            setGameOver(true);
+            return;
+        }
+        //if only one player in the game has credit, than game is over
+        int playersWithCredit = 0;
+        for (int i = 0;i < players.size();i++){
+            if (players.get(i).getCredit()>0){
+                playersWithCredit++;
+            }
+            if (playersWithCredit <2){
+                gameLog.setGameOver(true);
+                setGameOver(true);
+            }
+        }
+
+        //set roundOver to false
+        gameLog.setRoundOver(false);
+        setRoundOver(false);
 
         if (action == Action.RAISE || action == Action.BET){
             setActionsAfterRaise(0);
         }else if (action == Action.FOLD) {
             setActionsAfterRaise(getActionsAfterRaise() + 0);
         }
-        else if (action == Action.BET){
+        else if (action == Action.CALL){
                 setActionsAfterRaise(getActionsAfterRaise() + 1);
         }
         else if (action == Action.CHECK){
@@ -402,13 +485,6 @@ Constructor
             setChecksPerRound(0);
             roundCounter +=1;
 
-            //enter folded players back into the list active players  at same position and make them unfolded
-            activePlayers.clear();
-            for (int i = 0; i< players.size(); i++){
-                activePlayers.add(i, players.get(i));
-                activePlayers.get(i).setFolded(false);
-            }
-
             //shift active players and players to the right so that BigBlind and SmallBlind is shifted one player
             Player player = players.get(players.size()-1);
             Player activePlayer = activePlayers.get(players.size()-1);
@@ -419,6 +495,11 @@ Constructor
             }
             players.set(0, player);
             activePlayers.set(0, activePlayer);
+
+            gameLog.setBigBlind(activePlayers.get(1));
+            setBigBlind(activePlayers.get(1));
+            gameLog.setSmallBlind(activePlayers.get(0));
+            setSmallBlind(activePlayers.get(0));
 
            //uncover a card before the second, third and fourth rounds
             // name second round Flop, third round TurnCard and fourth round RiverCard
@@ -436,10 +517,14 @@ Constructor
                 addTableCard();
                 gameLog.setGameRound(GameRound.RiverCard);
                 setGameRound(GameRound.RiverCard);
-            }else if (roundCounter == 4){
+            }else if (roundCounter >= 4){
 
-                //game is finished
-                gameLog.setGameOver(true);
+                //all rounds are finished
+                possibleActions.clear();
+                gameLog.setPossibleActions(possibleActions);
+                setPossibleActions(possibleActions);
+                gameLog.setRoundOver(true);
+                setRoundOver(true);
                 //calculate the winners
                 List<Player> winners = winnerCalculator.isWinner(players, tableCards);
                 gameLog.setWinners(winners);
@@ -451,6 +536,9 @@ Constructor
                     winners.get(i).addCredit(wonAmount);
                 }
                 gameLog.setPlayers(players);
+
+                //open new round again
+                startNewRound();
             }
 
         }
@@ -482,6 +570,14 @@ Constructor
 
     public void setChecksPerRound(int checksPerRound) {
         this.checksPerRound = checksPerRound;
+    }
+
+    public void setRoundOver(boolean roundOver) {
+        this.roundOver = roundOver;
+    }
+
+    public void setGameOver(boolean gameOver) {
+        this.gameOver = gameOver;
     }
 }
 
