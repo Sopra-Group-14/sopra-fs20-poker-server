@@ -31,6 +31,7 @@ public class Deck {
         public Card getTopCard(){
             Random rand = new Random();
             Card topCard = this.cards.get(rand.nextInt(this.cards.size()));
+            this.cards.remove(topCard);
             return new Card(topCard.getSuit(), topCard.getRank());
         }
 
