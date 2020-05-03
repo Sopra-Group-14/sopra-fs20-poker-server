@@ -1,5 +1,6 @@
 package ch.uzh.ifi.seal.soprafs20.service;
 import ch.uzh.ifi.seal.soprafs20.cards.Card;
+import ch.uzh.ifi.seal.soprafs20.cards.WinnerCalculator;
 import ch.uzh.ifi.seal.soprafs20.constant.Action;
 import ch.uzh.ifi.seal.soprafs20.constant.GameRound;
 import ch.uzh.ifi.seal.soprafs20.controller.GameController;
@@ -320,8 +321,29 @@ public class GameService {
             }
             nextPlayer.setThisPlayersTurn(true);
 
-
+            game.getActivePlayers().remove(currentPlayer);
             game.playerFolds(currentPlayer);
+
+            if (game.getActivePlayers().size() < 2){
+                game.setRoundOver(true);
+                gameLog.setRoundOver(true);
+                //calculate the winners
+                WinnerCalculator winnerCalculator = new WinnerCalculator();
+                List<Player> winners = winnerCalculator.isWinner(players, game.getTableCards());
+                gameLog.setWinners(winners);
+                //calculate the amount won by every winner
+                int wonAmount = pot.getAmount()/winners.size();
+                gameLog.setWonAmount(wonAmount);
+                //add won amount to the credit of the winnerPlayers
+                for (int i =0; i< winners.size(); i++){
+                    winners.get(i).addCredit(wonAmount);
+                }
+                gameLog.setPlayers(players);
+                pot.removeAmount(pot.getAmount());
+
+                //open new round again
+                game.startNewRound();
+            }
 
             gameLog.setTransactionNr(game.getTransactionNr());
             gameLog.setGameRound(game.getGameRound());

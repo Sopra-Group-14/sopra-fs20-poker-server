@@ -413,7 +413,7 @@ Constructor
         }
         activePlayers.get(0).setThisPlayersTurn(true);
 
-//Delete all table Cards
+        //Delete all table Cards
         tableCards.clear();
         gameLog.setRevealedCards(tableCards);
 
@@ -454,6 +454,8 @@ Constructor
     }
 
     public void playGame(Action action, long playerId) {
+
+
 
         //if less than one player in the game than gameOver
         if (players.size() <= 1 ){
@@ -562,6 +564,7 @@ Constructor
                     winners.get(i).addCredit(wonAmount);
                 }
                 gameLog.setPlayers(players);
+                pot.removeAmount(pot.getAmount());
 
                 //open new round again
                 startNewRound();
@@ -604,6 +607,10 @@ Constructor
 
     public void setGameOver(boolean gameOver) {
         this.gameOver = gameOver;
+    }
+
+    public void setTableCards(List<Card> tableCards) {
+        this.tableCards = tableCards;
     }
 }
 
