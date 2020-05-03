@@ -9,6 +9,7 @@ import ch.uzh.ifi.seal.soprafs20.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.aspectj.lang.annotation.Before;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -53,7 +54,6 @@ public class UserControllerTest {
 
     @MockBean
     private UserService userService;
-
 
     @Test
     public void givenUsers_whenGetUsers_thenReturnJsonArray() throws Exception {

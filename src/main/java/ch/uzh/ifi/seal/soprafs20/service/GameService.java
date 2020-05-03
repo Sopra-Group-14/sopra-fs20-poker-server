@@ -1,5 +1,6 @@
 package ch.uzh.ifi.seal.soprafs20.service;
 import ch.uzh.ifi.seal.soprafs20.cards.Card;
+import ch.uzh.ifi.seal.soprafs20.cards.WinnerCalculator;
 import ch.uzh.ifi.seal.soprafs20.constant.Action;
 import ch.uzh.ifi.seal.soprafs20.constant.GameRound;
 import ch.uzh.ifi.seal.soprafs20.controller.GameController;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -320,9 +322,36 @@ public class GameService {
             }
             nextPlayer.setThisPlayersTurn(true);
 
-
             game.playerFolds(currentPlayer);
 
+            if (game.getActivePlayers().size() < 2) {
+                game.setRoundOver(true);
+                gameLog.setRoundOver(true);
+
+                Player winner = game.getActivePlayers().get(0);
+                winner.addCredit(game.getPot().getAmount());
+                game.getPot().removeAmount(game.getPot().getAmount());
+                List<Player> winners = new LinkedList<>();
+                winners.add(winner);
+                game.getGameLog().setWinners(winners);
+                game.getGameLog().setPotAmount(game.getPot().getAmount());
+                game.startNewRound();
+
+
+
+                gameLog.setTransactionNr(game.getTransactionNr());
+                gameLog.setGameRound(game.getGameRound());
+                gameLog.setAction(Action.FOLD);
+                gameLog.setRaiseAmount(0);
+                gameLog.setPlayerId(currentPlayer.getId());
+                gameLog.setNextPlayerName(nextPlayer.getPlayerName());
+                gameLog.setNextPlayerId(nextPlayer.getId());
+                gameLog.setPlayerPot(currentPlayer.getAmountInPot());
+                gameLog.setAmountToCall(playerWithMostAmountInPot.getAmountInPot()-nextPlayer.getAmountInPot());
+                gameLog.setThisPlayersTurn(currentPlayer.isThisPlayersTurn());
+                gameLog.setNextPlayersTurn(nextPlayer.isThisPlayersTurn());
+                return gameLog;
+            }
             gameLog.setTransactionNr(game.getTransactionNr());
             gameLog.setGameRound(game.getGameRound());
             gameLog.setAction(Action.FOLD);

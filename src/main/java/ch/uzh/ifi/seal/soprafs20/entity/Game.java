@@ -353,7 +353,7 @@ Constructor
     public void startGame(){
 
         //hand out hand cards before round one
-        deck.shuffle();
+        //deck.shuffle();
         int i,e;
         for(i=0;i<players.size();i++){
             for(e=0;e<2;e++){
@@ -380,6 +380,7 @@ Constructor
         gameLog.setPlayerId(activePlayers.get(0).getId());
         gameLog.setNextPlayerId(activePlayers.get(0).getId());
         gameLog.setNextPlayerName(activePlayers.get(0).getPlayerName());
+        gameLog.setRevealedCards(tableCards);
 
     }
 
@@ -390,6 +391,9 @@ Constructor
             activePlayers.add(i, players.get(i));
             activePlayers.get(i).setFolded(false);
         }
+
+        gameLog.setPotAmount(0);
+        gameLog.setPlayerPot(0);
 
 //shift active players and players to the right so that BigBlind and SmallBlind is shifted one player
         Player player = players.get(players.size()-1);
@@ -413,7 +417,7 @@ Constructor
         }
         activePlayers.get(0).setThisPlayersTurn(true);
 
-//Delete all table Cards
+        //Delete all table Cards
         tableCards.clear();
         gameLog.setRevealedCards(tableCards);
 
@@ -433,7 +437,9 @@ Constructor
         gameLog.setActivePlayers(activePlayers);
         gameLog.setPlayers(players);
 
+
         List<Action> actionList = new LinkedList<>();
+        actionList.clear();
         actionList.add(Action.BET);
         actionList.add(Action.FOLD);
         gameLog.setPossibleActions(actionList);
@@ -455,6 +461,8 @@ Constructor
 
     public void playGame(Action action, long playerId) {
 
+        List<Player> winners;
+
         //if less than one player in the game than gameOver
         if (players.size() <= 1 ){
             gameLog.setGameOver(true);
@@ -475,7 +483,7 @@ Constructor
 
         if (gameOver == true){
             //calculate the winners
-            List<Player> winners = winnerCalculator.isWinner(players, tableCards);
+            winners = winnerCalculator.isWinner(players, tableCards);
             gameLog.setWinners(winners);
             //calculate the amount won by every winner
             int wonAmount = pot.getAmount()/winners.size();
@@ -509,21 +517,7 @@ Constructor
             setChecksPerRound(0);
             roundCounter +=1;
 
-            //shift active players and players to the right so that BigBlind and SmallBlind is shifted one player
-            Player player = players.get(players.size()-1);
-            Player activePlayer = activePlayers.get(players.size()-1);
 
-            for (int i = players.size()-1; i>0; i--){
-                players.set(i, players.get(i-1));
-                activePlayers.set(i, activePlayers.get(i-1));
-            }
-            players.set(0, player);
-            activePlayers.set(0, activePlayer);
-
-            gameLog.setBigBlind(activePlayers.get(1));
-            setBigBlind(activePlayers.get(1));
-            gameLog.setSmallBlind(activePlayers.get(0));
-            setSmallBlind(activePlayers.get(0));
 
            //uncover a card before the second, third and fourth rounds
             // name second round Flop, third round TurnCard and fourth round RiverCard
@@ -552,7 +546,7 @@ Constructor
 
 
                 //calculate the winners
-                List<Player> winners = winnerCalculator.isWinner(players, tableCards);
+                winners = winnerCalculator.isWinner(players, tableCards);
                 gameLog.setWinners(winners);
                 //calculate the amount won by every winner
                 int wonAmount = pot.getAmount()/winners.size();
@@ -562,6 +556,9 @@ Constructor
                     winners.get(i).addCredit(wonAmount);
                 }
                 gameLog.setPlayers(players);
+                pot.removeAmount(pot.getAmount());
+                gameLog.setPotAmount(0);
+
 
                 //open new round again
                 startNewRound();
@@ -604,6 +601,10 @@ Constructor
 
     public void setGameOver(boolean gameOver) {
         this.gameOver = gameOver;
+    }
+
+    public void setTableCards(List<Card> tableCards) {
+        this.tableCards = tableCards;
     }
 }
 

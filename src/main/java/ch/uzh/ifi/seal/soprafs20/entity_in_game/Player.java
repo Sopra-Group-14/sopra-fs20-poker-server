@@ -38,6 +38,11 @@ public class Player{
         this.playerName = user.getUsername();
     }
 
+    //Alternate constructor for testing purposes only!
+    public Player(String name){
+        this.playerName = name;
+    }
+
 
     public void addCredit(int amount){
         credit += amount;
