@@ -368,6 +368,7 @@ Constructor
         gameLog.setPossibleActions(actionList);
         gameLog.setGameStarted(true);
         gameLog.setGameOver(false);
+        setGameOver(false);
         roundCounter = 0;
         setActionsAfterRaise(0);
         setChecksPerRound(0);
@@ -471,7 +472,7 @@ Constructor
         }else if (action == Action.FOLD) {
             setActionsAfterRaise(getActionsAfterRaise() + 0);
         }
-        else if (action == Action.BET){
+        else if (action == Action.CALL){
                 setActionsAfterRaise(getActionsAfterRaise() + 1);
         }
         else if (action == Action.CHECK){
