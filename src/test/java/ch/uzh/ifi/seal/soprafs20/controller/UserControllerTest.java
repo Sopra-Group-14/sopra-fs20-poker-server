@@ -9,6 +9,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -16,6 +17,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -32,6 +34,7 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
@@ -39,6 +42,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * This is a WebMvcTest which allows to test the UserController i.e. GET/POST request without actually sending them over the network.
  * This tests if the UserController works.
  */
+@ExtendWith(SpringExtension.class)
 @WebMvcTest(UserController.class)
 public class UserControllerTest {
 
@@ -85,21 +89,46 @@ public class UserControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"username\": \"testUser\", \"password\": \"testPassword\"}"));
 
- /*       //get valid user
+        //get valid user
         this.mockMvc.perform(get("/users/1").header("Authorization", "token"))
                 .andExpect(status().is(200))
                 .andExpect(jsonPath("$.password", notNullValue()))
                 .andExpect(jsonPath("$.username", equalTo("testUser")));
 
-                ERROR: ch.uzh.ifi.seal.soprafs20.controller.UserControllerTest > getUser() FAILED
+/*                ERROR: ch.uzh.ifi.seal.soprafs20.controller.UserControllerTest > getUser() FAILED
     java.lang.AssertionError at UserControllerTest.java:91
         Caused by: java.lang.IllegalArgumentException at UserControllerTest.java:91
+ */
 
-  */
 
         //get invalid user
         this.mockMvc.perform(get("/users/0").header("Authorization", "token"))
                 .andExpect(status().is(404));
+    }
+
+    @Test
+    @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+    public void createUser() throws Exception {
+
+        //create a user
+        this.mockMvc.perform(post("/registration")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"username\": \"testUser\", \"password\": \"testPassword\"}"))
+                .andExpect(status().is(201)).andDo(print())
+                .andExpect(jsonPath("$._links", notNullValue()))
+                .andExpect(jsonPath("$.username", equalTo("testUser")));
+
+        //create an already existing user
+        this.mockMvc.perform(post("/registration")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"username\": \"testUser\", \"password\": \"test11Password\"}"))
+                .andExpect(status().is(409));
+
+        //create an already existing user + password
+        this.mockMvc.perform(post("/registration")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"username\": \"testUser\", \"password\": \"testPassword\"}"))
+                .andExpect(status().is(409));
     }
 
     @Test
