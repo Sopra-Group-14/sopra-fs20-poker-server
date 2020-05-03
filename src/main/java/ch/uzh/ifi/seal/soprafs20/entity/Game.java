@@ -380,6 +380,7 @@ Constructor
         gameLog.setPlayerId(activePlayers.get(0).getId());
         gameLog.setNextPlayerId(activePlayers.get(0).getId());
         gameLog.setNextPlayerName(activePlayers.get(0).getPlayerName());
+        gameLog.setRevealedCards(tableCards);
 
     }
 
