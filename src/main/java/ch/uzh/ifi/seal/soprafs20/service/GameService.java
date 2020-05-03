@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -328,20 +329,17 @@ public class GameService {
                 game.setRoundOver(true);
                 gameLog.setRoundOver(true);
                 //calculate the winners
-                WinnerCalculator winnerCalculator = new WinnerCalculator();
-                List<Player> winners = winnerCalculator.isWinner(players, game.getTableCards());
+                List<Player> winners = null;
+                winners.add(game.getActivePlayers().get(0));
                 gameLog.setWinners(winners);
                 //calculate the amount won by every winner
-                int wonAmount = pot.getAmount()/winners.size();
+                int wonAmount = pot.getAmount();
+                pot.removeAmount(pot.getAmount());
                 gameLog.setWonAmount(wonAmount);
                 //add won amount to the credit of the winnerPlayers
-                for (int i =0; i< winners.size(); i++){
-                    winners.get(i).addCredit(wonAmount);
-                }
-                gameLog.setPlayers(players);
-                pot.removeAmount(pot.getAmount());
-
-                //open new round again
+                game.getActivePlayers().get(0).addCredit(wonAmount);
+                game.getPot().removeAmount(pot.getAmount());
+                gameLog.setPotAmount(game.getPot().getAmount());
                 game.startNewRound();
             }
 

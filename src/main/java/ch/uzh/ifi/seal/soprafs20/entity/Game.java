@@ -459,7 +459,7 @@ Constructor
 
     public void playGame(Action action, long playerId) {
 
-
+        List<Player> winners;
 
         //if less than one player in the game than gameOver
         if (players.size() <= 1 ){
@@ -481,7 +481,7 @@ Constructor
 
         if (gameOver == true){
             //calculate the winners
-            List<Player> winners = winnerCalculator.isWinner(players, tableCards);
+            winners = winnerCalculator.isWinner(players, tableCards);
             gameLog.setWinners(winners);
             //calculate the amount won by every winner
             int wonAmount = pot.getAmount()/winners.size();
@@ -558,7 +558,7 @@ Constructor
 
 
                 //calculate the winners
-                List<Player> winners = winnerCalculator.isWinner(players, tableCards);
+                winners = winnerCalculator.isWinner(players, tableCards);
                 gameLog.setWinners(winners);
                 //calculate the amount won by every winner
                 int wonAmount = pot.getAmount()/winners.size();
