@@ -1,6 +1,7 @@
 package ch.uzh.ifi.seal.soprafs20.controller;
 
 import ch.uzh.ifi.seal.soprafs20.entity.User;
+import ch.uzh.ifi.seal.soprafs20.exceptions.SopraServiceException;
 import ch.uzh.ifi.seal.soprafs20.rest.dto.LoginPutDTO;
 import ch.uzh.ifi.seal.soprafs20.rest.dto.UserGetDTO;
 import ch.uzh.ifi.seal.soprafs20.rest.dto.UserPostDTO;
@@ -58,7 +59,7 @@ public class UserController {
             return DTOMapper.INSTANCE.convertEntityToUserGetDTO(createdUser);
         }
         catch (Exception ex){
-                throw new TransactionSystemException("error");
+                throw new SopraServiceException("error");
         }
 
     }

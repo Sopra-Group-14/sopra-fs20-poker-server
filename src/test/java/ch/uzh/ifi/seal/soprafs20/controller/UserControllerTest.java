@@ -2,6 +2,7 @@ package ch.uzh.ifi.seal.soprafs20.controller;
 
 import ch.uzh.ifi.seal.soprafs20.constant.UserStatus;
 import ch.uzh.ifi.seal.soprafs20.entity.User;
+import ch.uzh.ifi.seal.soprafs20.rest.dto.LoginPutDTO;
 import ch.uzh.ifi.seal.soprafs20.rest.dto.UserGetDTO;
 import ch.uzh.ifi.seal.soprafs20.rest.dto.UserPostDTO;
 import ch.uzh.ifi.seal.soprafs20.service.UserService;
@@ -31,9 +32,10 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.log;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -52,84 +54,6 @@ public class UserControllerTest {
     @MockBean
     private UserService userService;
 
-    public User setupTestUser(){
-        User testUser = new User();
-        testUser.setName("testName");
-        testUser.setUsername("testUsername");
-        testUser.setPassword("testPassword");
-        testUser.setToken("g");
-        testUser.setStatus(UserStatus.ONLINE);
-        return testUser;
-    }
-
-    @Test
-    @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-    public void fetchUsers() throws Exception {
-
-        //get no users
-        this.mockMvc.perform(get("/users").header("Authorization", "token"))
-                .andExpect(status().isOk());
-
-        //create a user
-        this.mockMvc.perform(post("/registration")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"username\": \"testUser\", \"password\": \"testPassword\"}"));
-
-        //get one user
-        this.mockMvc.perform(get("/users").header("Authorization", "token"))
-                .andExpect(status().is(200));
-    }
-
-    @Test
-    @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-    public void getUser() throws Exception {
-
-        //create a user
-        this.mockMvc.perform(post("/registration")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"username\": \"testUser\", \"password\": \"testPassword\"}"));
-
-        //get valid user
-        this.mockMvc.perform(get("/users/1").header("Authorization", "token"))
-                .andExpect(status().is(200))
-                .andExpect(jsonPath("$.password", notNullValue()))
-                .andExpect(jsonPath("$.username", equalTo("testUser")));
-
-/*                ERROR: ch.uzh.ifi.seal.soprafs20.controller.UserControllerTest > getUser() FAILED
-    java.lang.AssertionError at UserControllerTest.java:91
-        Caused by: java.lang.IllegalArgumentException at UserControllerTest.java:91
- */
-
-
-        //get invalid user
-        /*this.mockMvc.perform(get("/users/0").header("Authorization", "token"))
-                .andExpect(status().is(404));*/
-    }
-
-    @Test
-    @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-    public void createUser() throws Exception {
-
-        //create a user
-        this.mockMvc.perform(post("/registration")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"username\": \"testUser\", \"password\": \"testPassword\"}"))
-                .andExpect(status().is(201)).andDo(print())
-                .andExpect(jsonPath("$._links", notNullValue()))
-                .andExpect(jsonPath("$.username", equalTo("testUser")));
-
-        //create an already existing user
-        this.mockMvc.perform(post("/registration")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"username\": \"testUser\", \"password\": \"test11Password\"}"))
-                .andExpect(status().is(409));
-
-        //create an already existing user + password
-        this.mockMvc.perform(post("/registration")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"username\": \"testUser\", \"password\": \"testPassword\"}"))
-                .andExpect(status().is(409));
-    }
 
     @Test
     public void givenUsers_whenGetUsers_thenReturnJsonArray() throws Exception {
@@ -228,6 +152,39 @@ public class UserControllerTest {
         assertEquals(user.getId(), testUser2.getId());
 
     }
+
+    @Test
+    public void loginUser() throws Exception{
+
+
+        //Given User
+        User testUser = new User();
+        testUser.setUsername("TestUsername");
+        testUser.setPassword("TestPassword");
+        testUser.setName("TestName");
+        testUser.setStatus(UserStatus.ONLINE);
+
+        LoginPutDTO loginPutDTO = new LoginPutDTO();
+        loginPutDTO.setUsername(testUser.getUsername());
+        loginPutDTO.setPassword(testUser.getPassword());
+
+        given(userService.loginUser(testUser.getUsername(), testUser.getPassword())).willReturn(testUser);
+
+        //when
+        MockHttpServletRequestBuilder putRequest = put("/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(loginPutDTO));
+
+        //then
+
+        mockMvc.perform(putRequest)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.username", is(testUser.getUsername())))
+                .andExpect(jsonPath("$.password", is(testUser.getPassword())))
+                .andExpect(jsonPath("$.status", is(UserStatus.ONLINE.toString())));
+
+    }
+
 
     /**
      * Helper Method to convert userPostDTO into a JSON string such that the input can be processed
