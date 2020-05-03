@@ -336,23 +336,22 @@ public class GameService {
                 game.getGameLog().setWinners(winners);
                 game.getGameLog().setPotAmount(game.getPot().getAmount());
                 game.startNewRound();
+
+
+
+                gameLog.setTransactionNr(game.getTransactionNr());
+                gameLog.setGameRound(game.getGameRound());
+                gameLog.setAction(Action.FOLD);
+                gameLog.setRaiseAmount(0);
+                gameLog.setPlayerId(currentPlayer.getId());
+                gameLog.setNextPlayerName(nextPlayer.getPlayerName());
+                gameLog.setNextPlayerId(nextPlayer.getId());
+                gameLog.setPlayerPot(currentPlayer.getAmountInPot());
+                gameLog.setAmountToCall(playerWithMostAmountInPot.getAmountInPot()-nextPlayer.getAmountInPot());
+                gameLog.setThisPlayersTurn(currentPlayer.isThisPlayersTurn());
+                gameLog.setNextPlayersTurn(nextPlayer.isThisPlayersTurn());
+                return gameLog;
             }
-/*
-                //calculate the winners
-                List<Player> winners = null;
-                winners.add(game.getActivePlayers().get(0));
-                gameLog.setWinners(winners);
-                //calculate the amount won by every winner
-                int wonAmount = pot.getAmount();
-                pot.removeAmount(pot.getAmount());
-                gameLog.setWonAmount(wonAmount);
-                //add won amount to the credit of the winnerPlayers
-                game.getActivePlayers().get(0).addCredit(wonAmount);
-                game.getPot().removeAmount(pot.getAmount());
-                gameLog.setPotAmount(game.getPot().getAmount());
-                game.startNewRound();
-            }
-*/
             gameLog.setTransactionNr(game.getTransactionNr());
             gameLog.setGameRound(game.getGameRound());
             gameLog.setAction(Action.FOLD);

@@ -437,7 +437,9 @@ Constructor
         gameLog.setActivePlayers(activePlayers);
         gameLog.setPlayers(players);
 
+
         List<Action> actionList = new LinkedList<>();
+        actionList.clear();
         actionList.add(Action.BET);
         actionList.add(Action.FOLD);
         gameLog.setPossibleActions(actionList);
