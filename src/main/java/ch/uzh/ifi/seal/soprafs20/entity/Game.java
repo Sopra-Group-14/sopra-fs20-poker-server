@@ -353,7 +353,7 @@ Constructor
     public void startGame(){
 
         //hand out hand cards before round one
-        deck.shuffle();
+        //deck.shuffle();
         int i,e;
         for(i=0;i<players.size();i++){
             for(e=0;e<2;e++){
