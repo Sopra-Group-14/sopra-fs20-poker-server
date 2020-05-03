@@ -322,12 +322,22 @@ public class GameService {
             }
             nextPlayer.setThisPlayersTurn(true);
 
-            game.getActivePlayers().remove(currentPlayer);
             game.playerFolds(currentPlayer);
 
-            if (game.getActivePlayers().size() < 2){
+            if (game.getActivePlayers().size() < 2) {
                 game.setRoundOver(true);
                 gameLog.setRoundOver(true);
+
+                Player winner = game.getActivePlayers().get(0);
+                winner.addCredit(game.getPot().getAmount());
+                game.getPot().removeAmount(game.getPot().getAmount());
+                List<Player> winners = new LinkedList<>();
+                winners.add(winner);
+                game.getGameLog().setWinners(winners);
+                game.getGameLog().setPotAmount(game.getPot().getAmount());
+                game.startNewRound();
+            }
+/*
                 //calculate the winners
                 List<Player> winners = null;
                 winners.add(game.getActivePlayers().get(0));
@@ -342,7 +352,7 @@ public class GameService {
                 gameLog.setPotAmount(game.getPot().getAmount());
                 game.startNewRound();
             }
-
+*/
             gameLog.setTransactionNr(game.getTransactionNr());
             gameLog.setGameRound(game.getGameRound());
             gameLog.setAction(Action.FOLD);
