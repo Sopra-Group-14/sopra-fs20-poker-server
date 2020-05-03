@@ -16,10 +16,14 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.web.server.ResponseStatusException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@WebAppConfiguration
+@SpringBootTest
 public class GameServiceTest {
 
     @Qualifier("userRepository")
@@ -38,28 +42,26 @@ public class GameServiceTest {
     }*/
 
     @Test
-    @Disabled
     public void addJoiningPlayerAddsCorrectPlayer() {
 
         //given
-        Game testGame = gameService.createGame("TestGame", -3L, "Fixed");
-        //Long testGameId = testGame.getGameId();
-
-        User testUser = new User();
-        testUser.setName("TestUser");
-        testUser.setPassword("TestPassword");
-        testUser.setId(-2L);
-        User createdTestUser = userService.createUser(testUser);
-        createdTestUser.setName("TestUser");
-        Player testPlayer = new Player(createdTestUser);
-
-        testGame.addPlayer(testPlayer);
+        Game testGame = gameService.createGame("TestGameName", -1L, "Fixed");
+        Player testPlayer1 = new Player("TestPlayerOne");
+        Player testPlayer2 = new Player("TestPlayerTwo");
+        Player testPlayer3 = new Player("TestPlayerThree");
+        testGame.addPlayer(testPlayer1);
+        testGame.addPlayer(testPlayer2);
+        testGame.addPlayer(testPlayer3);
 
         // when
-        Player returnedPlayer = testGame.getPlayers().get(0);
+        Player returnedPlayer1 = testGame.getPlayers().get(0);
+        Player returnedPlayer2 = testGame.getPlayers().get(1);
+        Player returnedPlayer3 = testGame.getPlayers().get(2);
 
         // then
-        assertEquals(testPlayer.getPlayerName(), returnedPlayer.getPlayerName());
+        assertEquals(testPlayer1.getPlayerName(), returnedPlayer1.getPlayerName());
+        assertEquals(testPlayer2.getPlayerName(), returnedPlayer2.getPlayerName());
+        assertEquals(testPlayer3.getPlayerName(), returnedPlayer3.getPlayerName());
 
     }
 
