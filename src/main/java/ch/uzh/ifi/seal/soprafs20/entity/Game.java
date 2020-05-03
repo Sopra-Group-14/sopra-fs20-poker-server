@@ -407,19 +407,29 @@ Constructor
         gameLog.setSmallBlind(activePlayers.get(0));
         setSmallBlind(activePlayers.get(0));
 
+        // Important: setThisPlayerTurn for all players but nextPlayer to false
+        for (Player player1 : activePlayers) {
+            player1.setThisPlayersTurn(false);
+        }
+        activePlayers.get(0).setThisPlayersTurn(true);
+
+//Delete all table Cards
+        tableCards.clear();
+        gameLog.setRevealedCards(tableCards);
 
 
         //hand out hand cards before new round
-        deck.shuffle();
+        for (int i=0;i<players.size();i++){
+            players.get(i).getHand().clear();
+        }
+        Deck newDeck = new Deck();
+        newDeck.shuffle();
         int i,e;
         for(i=0;i<players.size();i++){
             for(e=0;e<2;e++){
-                players.get(i).addToHand(deck.getTopCard());
+                players.get(i).addToHand(newDeck.getTopCard());
             }
         }
-
-
-
         gameLog.setActivePlayers(activePlayers);
         gameLog.setPlayers(players);
 
@@ -457,10 +467,24 @@ Constructor
             if (players.get(i).getCredit()>0){
                 playersWithCredit++;
             }
-            if (playersWithCredit <2){
-                gameLog.setGameOver(true);
-                setGameOver(true);
+        }
+        if (playersWithCredit <2){
+            gameLog.setGameOver(true);
+            setGameOver(true);
+        }
+
+        if (gameOver == true){
+            //calculate the winners
+            List<Player> winners = winnerCalculator.isWinner(players, tableCards);
+            gameLog.setWinners(winners);
+            //calculate the amount won by every winner
+            int wonAmount = pot.getAmount()/winners.size();
+            gameLog.setWonAmount(wonAmount);
+            //add won amount to the credit of the winnerPlayers
+            for (int i =0; i< winners.size(); i++){
+                winners.get(i).addCredit(wonAmount);
             }
+            gameLog.setPlayers(players);
         }
 
         //set roundOver to false
@@ -525,6 +549,8 @@ Constructor
                 setPossibleActions(possibleActions);
                 gameLog.setRoundOver(true);
                 setRoundOver(true);
+
+
                 //calculate the winners
                 List<Player> winners = winnerCalculator.isWinner(players, tableCards);
                 gameLog.setWinners(winners);
