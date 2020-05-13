@@ -1,7 +1,7 @@
 package ch.uzh.ifi.seal.soprafs20.service;
 
-import ch.uzh.ifi.seal.soprafs20.chat.Chat;
 import ch.uzh.ifi.seal.soprafs20.entity.ChatLog;
+import ch.uzh.ifi.seal.soprafs20.entity.Game;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -14,14 +14,28 @@ import java.util.List;
 @Transactional
 public class ChatService {
 
+    private final GameService gameService;
 
-    public List<String> getHistory(String chatmode, long gameId){
-        return null;
+    public ChatService(GameService gameService) {
+        this.gameService = gameService;
+    }
+
+    public List<ChatLog> getHistory(String chatMode, long gameId){
+
+        Game game = gameService.getGame(gameId);
+
+        return game.getMessages(chatMode);
     }
 
     /*public void newMessage(Chat chat, String message){
         chat.newMessage(message);
     }*/
-    public ChatLog newMessage(String chatmode, long gameId, ChatLog chatLog){return null;}
+    public void newMessage(String chatMode, long gameId, ChatLog chatLog){
+
+        Game game = gameService.getGame(gameId);
+
+        game.addMessage(chatMode, chatLog);
+
+    }
 
 }

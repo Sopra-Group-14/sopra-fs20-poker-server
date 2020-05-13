@@ -2,10 +2,7 @@ package ch.uzh.ifi.seal.soprafs20.rest.mapper;
 
 import ch.uzh.ifi.seal.soprafs20.entity.Game;
 import ch.uzh.ifi.seal.soprafs20.entity.User;
-import ch.uzh.ifi.seal.soprafs20.rest.dto.GamePostDTO;
-import ch.uzh.ifi.seal.soprafs20.rest.dto.UserGetDTO;
-import ch.uzh.ifi.seal.soprafs20.rest.dto.UserPostDTO;
-import ch.uzh.ifi.seal.soprafs20.rest.dto.UserPutDTO;
+import ch.uzh.ifi.seal.soprafs20.rest.dto.*;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
@@ -43,5 +40,16 @@ public interface DTOMapper {
 //    @Mapping(source = "userId", target = "userId")
     @Mapping(source = "amount", target = "amount")
     UserPutDTO convertPutDTOtoEntity(UserPutDTO userPutDTO);
+
+//    @Mapping(source = "timeStamp", target = "timeStamp")
+//    @Mapping(source = "chatMode", target = "chatMode")
+//    @Mapping(source =  "message", target = "message")
+//    @Mapping(source = "username", target = "username")
+//    @Mapping(source = "gameId", target = "gameId")
+//    ChatPutDTO convertPutDTOtoEntity(ChatPutDTO chatPutDTO);
+//
+//    @Mapping(source = "gameId", target = "gameId")
+//    @Mapping(source = "chatMode", target = "chatMode")
+//    ChatGetDTO convertEntityToGetDTO(ChatGetDTO chatGetDTO);
 
 }

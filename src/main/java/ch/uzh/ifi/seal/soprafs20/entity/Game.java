@@ -2,6 +2,7 @@ package ch.uzh.ifi.seal.soprafs20.entity;
 import ch.uzh.ifi.seal.soprafs20.cards.Card;
 import ch.uzh.ifi.seal.soprafs20.cards.Deck;
 import ch.uzh.ifi.seal.soprafs20.cards.WinnerCalculator;
+import ch.uzh.ifi.seal.soprafs20.chat.Chat;
 import ch.uzh.ifi.seal.soprafs20.chat.PlayerChat;
 import ch.uzh.ifi.seal.soprafs20.chat.SpectatorChat;
 import ch.uzh.ifi.seal.soprafs20.constant.Action;
@@ -21,8 +22,8 @@ public class Game {
 
     //Define the objects
     //private final GameService gameService;
-    private final PlayerChat playerChat = new PlayerChat();
-    private final SpectatorChat spectatorChat = new SpectatorChat();
+    private final List<ChatLog> playerChat = new ArrayList<>();
+    private final List<ChatLog> spectatorChat = new ArrayList<>();
     private long gameId;
     private long gameHostID;
     private int maxPlayers;
@@ -66,6 +67,7 @@ public class Game {
         //this.gameLog=new GameLog(0,null,null,null,null,null,"TestName",0,null,1L,null,2L,0,0,false,false,0,true,false,null);
         gameLog.setGameName(gameName);
         gameLog.setGameStarted(false);
+
     }
 
     public Game(){}
@@ -570,6 +572,25 @@ Constructor
 
     }
 
+    public List<ChatLog> getMessages(String chatMode){
+        if(chatMode.equals("players")){
+            return this.playerChat;
+        }else if(chatMode.equals("spectators")){
+            return this.spectatorChat;
+        }else{
+            throw new SopraServiceException("Neither player no spectator chat has been specified!");
+        }
+    }
+
+    public void addMessage(String chatMode, ChatLog chatLog){
+        if(chatMode.equals("players")){
+            playerChat.add(chatLog);
+        }else if(chatMode.equals("spectators")){
+            spectatorChat.add(chatLog);
+        }else{
+            throw new SopraServiceException("Neither player nor spectator chat has been specified!");
+        }
+    }
 
     public Pot getPot() {
         return pot;

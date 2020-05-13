@@ -9,7 +9,7 @@ import java.util.List;
 public class GameSelect {
 
     private List<Game> gameList = new ArrayList<>();
-    public static final Game NULL_GAME = new Game();
+    public static final Game NULL_GAME = new Game("nullGame");
 
     public void addGame(Game game){
         if(!gameList.contains(game)) {
