@@ -1,5 +1,6 @@
 package ch.uzh.ifi.seal.soprafs20.entity_in_game;
 
+import ch.uzh.ifi.seal.soprafs20.cards.API_Card;
 import ch.uzh.ifi.seal.soprafs20.cards.Card;
 import ch.uzh.ifi.seal.soprafs20.constant.Action;
 import ch.uzh.ifi.seal.soprafs20.constant.GameRound;
@@ -25,6 +26,7 @@ public class GameLog {
     private List<Player> winners;
     private int wonAmount;
     private List<Card> revealedCards;
+    private List<String> revealedAPICards;
     private List<Action> possibleActions;
     private String gameName;
     private long playerId;
@@ -38,6 +40,7 @@ public class GameLog {
     private boolean gameStarted;
     private Player bigBlind;
     private Player smallBlind;
+    API_Card api_card;
 
     //All the parameters are set in the constructor
 
@@ -52,6 +55,7 @@ public class GameLog {
         this.setPlayers(players);
         this.setActivePlayers(activePlayers);
         this.setRevealedCards(revealedCards);
+        this.setRevealedAPICards(revealedCards);
         this.setGameName(gameName);
         this.setRaiseAmount(raiseAmount);
         this.setPlayerName(playerName);
@@ -138,6 +142,7 @@ public class GameLog {
 
     public void setRevealedCards(List<Card> revealedCards) {
         this.revealedCards = revealedCards;
+        setRevealedAPICards(this.revealedCards);
     }
 
     public void setRaiseAmount(int raiseAmount) {
@@ -246,5 +251,17 @@ public class GameLog {
 
     public void setSmallBlind(Player smallBlind) {
         this.smallBlind = smallBlind;
+    }
+
+    public List<String> getRevealedAPICards() {
+        return revealedAPICards;
+    }
+
+    public void setRevealedAPICards(List<Card> revealedCards) {
+        this.revealedAPICards.clear();
+        for (int i = 0; i<revealedCards.size(); i++) {
+            api_card = new API_Card(revealedCards.get(i).getSuit(), revealedCards.get(i).getRank());
+            this.revealedAPICards.add(api_card.getApiCard());
+        }
     }
 }

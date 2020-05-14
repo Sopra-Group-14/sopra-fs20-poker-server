@@ -1,5 +1,6 @@
 package ch.uzh.ifi.seal.soprafs20.entity_in_game;
 
+import ch.uzh.ifi.seal.soprafs20.cards.API_Card;
 import ch.uzh.ifi.seal.soprafs20.cards.Card;
 import ch.uzh.ifi.seal.soprafs20.constant.PlayerReadyStatus;
 import ch.uzh.ifi.seal.soprafs20.entity.User;
@@ -10,6 +11,7 @@ import java.util.List;
 public class Player{
 
     private List<Card> hand = new LinkedList<>();
+    private List<String> apiHand = new LinkedList<>();
 
     private static final int START_CREDIT = 1000;
 
@@ -28,6 +30,8 @@ public class Player{
     private boolean folded = false;
 
     private boolean checked= false;
+
+    API_Card api_card;
 
     private PlayerReadyStatus readyStatus = PlayerReadyStatus.UNREADY;
 
@@ -58,6 +62,7 @@ public class Player{
 
     public void addToHand(Card card){
         hand.add(card);
+        setApiHand(this.hand);
     }
 
     public List<Card> getHand(){
@@ -105,5 +110,17 @@ public class Player{
 
     public void setFolded(boolean folded) {
         this.folded = folded;
+    }
+
+    public List<String> getApiHand() {
+        return apiHand;
+    }
+
+    public void setApiHand(List<Card> hand) {
+        this.apiHand.clear();
+        for (int i = 0; i < hand.size(); i++) {
+            api_card = new API_Card(hand.get(i).getSuit(), hand.get(i).getRank());
+            this.apiHand.add(api_card.getApiCard());
+        }
     }
 }
