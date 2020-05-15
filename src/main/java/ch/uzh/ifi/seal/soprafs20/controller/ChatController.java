@@ -28,7 +28,7 @@ public class ChatController {
                                      @PathVariable long gameId,
                                      @RequestHeader (value = "Authorization") String token){
         chatService.newMessage("players", gameId, chatPutDTO.getChatLog());
-        chatService.newMessage("specators", gameId, chatPutDTO.getChatLog());
+        chatService.newMessage("spectators", gameId, chatPutDTO.getChatLog());
 
         List<ChatLog> playerChat = chatService.getHistory("players", gameId);
 
