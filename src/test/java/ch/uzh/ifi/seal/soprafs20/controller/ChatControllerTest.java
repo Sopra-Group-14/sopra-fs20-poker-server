@@ -180,6 +180,8 @@ public class ChatControllerTest {
 
     }
 
+    //Test to check whether all messages from player chat occur in spectator chat
+
     /**
      * Helper Method to convert userPostDTO into a JSON string such that the input can be processed
      * Input will look like this: {"name": "Test User", "username": "testUsername"}

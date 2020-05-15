@@ -5,6 +5,7 @@ import ch.uzh.ifi.seal.soprafs20.cards.Card;
 import ch.uzh.ifi.seal.soprafs20.constant.Action;
 import ch.uzh.ifi.seal.soprafs20.constant.GameRound;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -258,7 +259,11 @@ public class GameLog {
     }
 
     public void setRevealedAPICards(List<Card> revealedCards) {
-        this.revealedAPICards.clear();
+        if(api_card != null) {
+            this.revealedAPICards.clear();
+        }else{
+            this.revealedAPICards = new ArrayList<>();
+        }
         for (int i = 0; i<revealedCards.size(); i++) {
             api_card = new API_Card(revealedCards.get(i).getSuit(), revealedCards.get(i).getRank());
             this.revealedAPICards.add(api_card.getApiCard());
