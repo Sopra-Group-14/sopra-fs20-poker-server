@@ -16,6 +16,7 @@ import ch.uzh.ifi.seal.soprafs20.service.GameService;
 import ch.uzh.ifi.seal.soprafs20.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -36,6 +37,8 @@ import java.util.Random;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -56,38 +59,66 @@ public class GameControllerTest {
     @MockBean
     private GameService gameService;
 
+    @MockBean
+    private UserService userService;
+
     /**
      * When a new game is created, the backend sends back a new game object based on the parameters provided by the frontend.
      * This test checks if the content of the game match the provided ones.
      * @throws Exception
      */
-    /*@Test
+    @Test
     public void returnedCreatedGameIsTheRightOne() throws Exception{
 
-        //givenString gameName, long HostId, String potType
-        //The game we post
-        Game postGame = gameService.createGame("TestGame", 1L, "None");
-        //The game we want to get back
-        Game testGame = gameService.createGame("TestGame", 1L, "None");
+        Game game1 = new Game();
+        game1.setGameName("Game1");
 
-        given(gameService.createGame("TestGame", 1L, "None")).willReturn(testGame);
+        given(gameService.createGame(Mockito.anyString(), Mockito.anyLong(), Mockito.anyString())).willReturn(game1);
 
-        //when
-        MockHttpServletRequestBuilder postRequest = post("/games").contentType(MediaType.APPLICATION_JSON).content(asJsonString(postGame));
+        MockHttpServletRequestBuilder postRequest = post("/games").contentType(MediaType.APPLICATION_JSON).content(asJsonString(game1));
 
-        //then
         mockMvc.perform(postRequest).andExpect(status().isCreated());
 
-        //Game object we want returned
-        Game returnedGame = gameService.createGame("TestGame", 1L, "None");
+        Game returnedGame = gameService.createGame("AnyName", 1L, "AnyPot");
 
-        //Comparing what we want with what we actually get returned
-        //assertEquals(returnedGame.getGameId(), testGame.getGameId());
-        assertEquals(returnedGame.getGameName(), testGame.getGameName());
+        assertEquals(game1.getGameName(), returnedGame.getGameName());
 
-    }*/
+    }
 
-   /* @Test
+    @Test
+    public void retrievingPlayerNamesWorks() throws Exception{
+
+        Player player1 = new Player("Player1");
+        Player player2 = new Player("Player2");
+        Player player3 = new Player("Player3");
+
+        List<Player> playerList = new LinkedList<>();
+        playerList.add(player1);
+        playerList.add(player2);
+        playerList.add(player3);
+
+        Game game = new Game();
+        game.setGameLog(new GameLog());
+        game.addPlayer(player1);
+        game.addPlayer(player2);
+        game.addPlayer(player3);
+
+        given(gameService.getPlayers(Mockito.anyLong())).willReturn(playerList);
+
+        MockHttpServletRequestBuilder getRequest = get("/games/1/players").header("Authorization", "Token");
+
+        mockMvc.perform(getRequest).andExpect(status().isOk());
+
+        List<Player> names = gameService.getPlayers(1L);
+
+        assertEquals(playerList.get(0).getPlayerName(), names.get(0).getPlayerName());
+        assertEquals(playerList.get(1).getPlayerName(), names.get(1).getPlayerName());
+        assertEquals(playerList.get(2).getPlayerName(), names.get(2).getPlayerName());
+
+    }
+
+   @Test
+   @Disabled
     public void getTableCardsReturnsRightCards() throws Exception{
 
         //given
@@ -111,7 +142,7 @@ public class GameControllerTest {
 
         long testGameId = 1L;
 
-        given(gameService.getTableCards(Mockito.anyLong())).willReturn(testTableCardList);
+        //given(gameService.getTableCards(Mockito.anyLong())).willReturn(testTableCardList);
 
         //when
         MockHttpServletRequestBuilder getRequest = get("/games/1/table");
@@ -120,7 +151,7 @@ public class GameControllerTest {
         mockMvc.perform(getRequest).andExpect(status().isOk());
 
         //returned card list
-        List<Card> returnedCardList = gameService.getTableCards(testGameId);
+        /*List<Card> returnedCardList = gameService.getTableCards(testGameId);
 
         //assertions
         assertEquals(testTableCardList2.get(0).getSuit(), returnedCardList.get(0).getSuit());
@@ -128,9 +159,34 @@ public class GameControllerTest {
         assertEquals(testTableCardList2.get(1).getSuit(), returnedCardList.get(1).getSuit());
         assertEquals(testTableCardList2.get(1).getRank(), returnedCardList.get(1).getRank());
         assertEquals(testTableCardList2.get(2).getSuit(), returnedCardList.get(2).getSuit());
-        assertEquals(testTableCardList2.get(2).getRank(), returnedCardList.get(2).getRank());
+        assertEquals(testTableCardList2.get(2).getRank(), returnedCardList.get(2).getRank());*/
 
-    }*/
+    }
+
+   @Test
+   public void retrievingGamesGetsAllGames() throws Exception{
+
+       Game game1 = new Game();
+       Game game2 = new Game();
+       game1.setGameName("Game1");
+       game2.setGameName("Game2");
+
+       List<Game> testGameList = new LinkedList<>();
+       testGameList.add(game1);
+       testGameList.add(game2);
+
+       given(gameService.getAllGames()).willReturn(testGameList);
+
+       MockHttpServletRequestBuilder getRequest = get("/games");
+
+       mockMvc.perform(getRequest).andExpect(status().isOk());
+
+       List<Game> returnedGameList = gameService.getAllGames();
+
+       assertEquals(returnedGameList.get(0).getGameName(), testGameList.get(0).getGameName());
+       assertEquals(returnedGameList.get(1).getGameName(), testGameList.get(1).getGameName());
+
+   }
 
    @Test
    public void getGameLogReturnsRightParameters() throws Exception{
