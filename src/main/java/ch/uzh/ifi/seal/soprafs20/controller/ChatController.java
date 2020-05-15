@@ -32,7 +32,7 @@ public class ChatController {
 
         List<ChatLog> playerChat = chatService.getHistory("players", gameId);
 
-        return playerChat.get(playerChat.size()-1);
+        return chatService.getLatestMessage(playerChat);
 
     }
 
