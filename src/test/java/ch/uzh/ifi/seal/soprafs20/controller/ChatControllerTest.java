@@ -24,6 +24,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -60,10 +61,10 @@ public class ChatControllerTest {
         //given
         //history we want returned
         PlayerChat testPlayerChat = new PlayerChat();
-        List<String> testHistory = new LinkedList<>();
-        testHistory.add("Player1 [11:11:11]: First Message");
-        testHistory.add("Player2 [22:22:22]: Second Message");
-        testHistory.add("Player3 [33:33:33]: Third Message");
+        List<ChatLog> testHistory = new LinkedList<>();
+        testHistory.add(new ChatLog("11:11:11", "Player1", "First Message", "players"));
+        testHistory.add(new ChatLog("22:22:22", "Player2", "Second Message", "players"));
+        testHistory.add(new ChatLog("33:33:33", "Player3", "Third Message", "players"));
 
         long testGameId = 1L;
 
@@ -76,7 +77,7 @@ public class ChatControllerTest {
         mockMvc.perform(getRequest).andExpect(status().isOk());
 
         //chat history get returned
-        List<String> returnedHistory = chatService.getHistory("players", testGameId);
+        List<ChatLog> returnedHistory = chatService.getHistory("players", testGameId);
 
         //assertions
         assertEquals(testHistory.get(0), returnedHistory.get(0));
@@ -95,10 +96,11 @@ public class ChatControllerTest {
         //given
         //history we want returned
         SpectatorChat testSpectatorChat = new SpectatorChat();
-        List<String> testHistory = new LinkedList<>();
-        testHistory.add("Player1 [11:11:11]: First Message");
-        testHistory.add("Player2 [22:22:22]: Second Message");
-        testHistory.add("Player3 [33:33:33]: Third Message");
+        List<ChatLog> testHistory = new LinkedList<>();
+        testHistory.add(new ChatLog("11:11:11", "Player1", "First Message", "players"));
+        testHistory.add(new ChatLog("22:22:22", "Player2", "Second Message", "players"));
+        testHistory.add(new ChatLog("33:33:33", "Player3", "Third Message", "players"));
+
 
         long testGameId = 1L;
 
@@ -111,7 +113,7 @@ public class ChatControllerTest {
         mockMvc.perform(getRequest).andExpect(status().isOk());
 
         //chat history get returned
-        List<String> returnedHistory = chatService.getHistory("spectators", testGameId);
+        List<ChatLog> returnedHistory = chatService.getHistory("spectators", testGameId);
 
         //assertions
         assertEquals(testHistory.get(0), returnedHistory.get(0));
@@ -127,21 +129,25 @@ public class ChatControllerTest {
         //information we give over to the server
         long testGameId = 1L;
         //chatlog we want returned
-        ChatLog testChatLog = new ChatLog("11:11:11", "TestUsername", "TestMessage");
-        given(chatService.newMessage("players", testGameId, testChatLog)).willReturn(testChatLog);
+        ChatLog testChatLog = new ChatLog("11:11:11", "TestUsername", "TestMessage", "players");
+        List<ChatLog> testHistory = new ArrayList<>();
+        testHistory.add(testChatLog);
+        given(chatService.getHistory("players", testGameId)).willReturn(testHistory);
 
         //when
-        MockHttpServletRequestBuilder putRequest = put("/games/1/chats/players").contentType(MediaType.APPLICATION_JSON).content(asJsonString(testChatLog)).header("Authorization", "TestToken");
+        MockHttpServletRequestBuilder putRequest = put("/games/1/chats/players")
+                .contentType(MediaType.APPLICATION_JSON).content(asJsonString(testChatLog))
+                .header("Authorization", "TestToken");
 
         //then
         mockMvc.perform(putRequest).andExpect(status().isCreated());
 
-        ChatLog returnedChatLog = chatService.newMessage("players", testGameId, testChatLog);
+        List<ChatLog> returnedChatLog = chatService.getHistory("players", testGameId);
 
         //assertions
-        assertEquals(returnedChatLog.getMessage(), testChatLog.getMessage());
-        assertEquals(returnedChatLog.getTime(), testChatLog.getTime());
-        assertEquals(returnedChatLog.getUsername(), testChatLog.getUsername());
+        assertEquals(returnedChatLog.get(0).getMessage(), testChatLog.getMessage());
+        assertEquals(returnedChatLog.get(0).getTime(), testChatLog.getTime());
+        assertEquals(returnedChatLog.get(0).getUsername(), testChatLog.getUsername());
 
     }
 
@@ -152,21 +158,25 @@ public class ChatControllerTest {
         //information we give over to the server
         long testGameId = 1L;
         //chatlog we want returned
-        ChatLog testChatLog = new ChatLog("11:11:11", "TestUsername", "TestMessage");
-        given(chatService.newMessage("spectators", testGameId, testChatLog)).willReturn(testChatLog);
+        ChatLog testChatLog = new ChatLog("11:11:11", "TestUsername", "TestMessage", "spectators");
+        List<ChatLog> testHistory = new ArrayList<>();
+        testHistory.add(testChatLog);
+        given(chatService.getHistory("spectators", testGameId)).willReturn(testHistory);
 
         //when
-        MockHttpServletRequestBuilder putRequest = put("/games/1/chats/spectators").contentType(MediaType.APPLICATION_JSON).content(asJsonString(testChatLog)).header("Authorization", "TestToken");
+        MockHttpServletRequestBuilder putRequest = put("/games/1/chats/spectators")
+                .contentType(MediaType.APPLICATION_JSON).content(asJsonString(testChatLog))
+                .header("Authorization", "TestToken");
 
         //then
         mockMvc.perform(putRequest).andExpect(status().isCreated());
 
-        ChatLog returnedChatLog = chatService.newMessage("spectators", testGameId, testChatLog);
+        List<ChatLog> returnedChatLog = chatService.getHistory("spectators", testGameId);
 
         //assertions
-        assertEquals(returnedChatLog.getMessage(), testChatLog.getMessage());
-        assertEquals(returnedChatLog.getTime(), testChatLog.getTime());
-        assertEquals(returnedChatLog.getUsername(), testChatLog.getUsername());
+        assertEquals(returnedChatLog.get(0).getMessage(), testChatLog.getMessage());
+        assertEquals(returnedChatLog.get(0).getTime(), testChatLog.getTime());
+        assertEquals(returnedChatLog.get(0).getUsername(), testChatLog.getUsername());
 
     }
 

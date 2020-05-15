@@ -38,4 +38,12 @@ public class ChatService {
 
     }
 
+    public ChatLog getLatestMessage(List<ChatLog> chatLogs){
+        if(chatLogs != null) {
+            return chatLogs.get(chatLogs.size() - 1);
+        }else{
+            return new ChatLog(null, null, null, null);
+        }
+    }
+
 }

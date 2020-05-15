@@ -28,10 +28,11 @@ public class ChatController {
                                      @PathVariable long gameId,
                                      @RequestHeader (value = "Authorization") String token){
         chatService.newMessage("players", gameId, chatPutDTO.getChatLog());
+        chatService.newMessage("specators", gameId, chatPutDTO.getChatLog());
 
-        List<ChatLog> spectatorChat = chatService.getHistory("players", gameId);
+        List<ChatLog> playerChat = chatService.getHistory("players", gameId);
 
-        return spectatorChat.get(spectatorChat.size()-1);
+        return playerChat.get(playerChat.size()-1);
 
     }
 
@@ -53,7 +54,7 @@ public class ChatController {
 
         List<ChatLog> spectatorChat = chatService.getHistory("spectators", gameId);
 
-        return spectatorChat.get(spectatorChat.size()-1);
+        return chatService.getLatestMessage(spectatorChat);
     }
 
     @GetMapping("/games/{gameId}/chats/spectators")
