@@ -131,7 +131,7 @@ public class GameController {
     @ResponseBody
     public void leave(@PathVariable long gameId, @PathVariable long playerId, @RequestHeader (value = "Authorization") String token){
         if (gameService.checkAuthorizationGet(token, gameId) == false) {
-            throw new TransactionSystemException("error");
+            throw new TransactionSystemException("Authorization check error");
         }
         gameService.removePlayer(gameId, playerId);
     }
