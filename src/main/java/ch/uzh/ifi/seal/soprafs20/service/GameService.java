@@ -43,6 +43,17 @@ public class GameService {
         this.userService = userService;
     }
 
+    private Player getPlayerWithMostAmountInPot(Game game){
+        Player playerWithMostAmountInPot;
+        playerWithMostAmountInPot = game.getActivePlayers().get(0);
+        for (int i = 0; i<game.getActivePlayers().size();i++){
+            if (playerWithMostAmountInPot.getAmountInPot() <= game.getActivePlayers().get(i).getAmountInPot()){
+                playerWithMostAmountInPot = game.getActivePlayers().get(i);
+            }
+        }
+        return playerWithMostAmountInPot;
+    }
+
 
     public Game createGame(String gameName, long hostID, String potType){
 
@@ -145,13 +156,6 @@ public class GameService {
         Pot pot = game.getPot();
         int smallBlind = 5;
         int bigBlind = 10;
-        Player playerWithMostAmountInPot;
-        playerWithMostAmountInPot = game.getActivePlayers().get(0);
-        for (int i = 0; i<game.getActivePlayers().size();i++){
-            if (playerWithMostAmountInPot.getAmountInPot() <= game.getActivePlayers().get(i).getAmountInPot()){
-                playerWithMostAmountInPot = game.getActivePlayers().get(i);
-            }
-        }
 
 
 
@@ -286,11 +290,9 @@ public class GameService {
             }
             nextPlayer.setThisPlayersTurn(true);
 
-            log.info("ich war hier");
+
             String a= Integer.toString(game.getTransactionNr());
-            log.info(a);
             gameLog.setTransactionNr(game.getTransactionNr());
-            log.info("ich war hier 2");
             gameLog.setGameRound(game.getGameRound());
             gameLog.setAction(Action.BET);
             gameLog.setPlayers(game.getPlayers());
@@ -316,42 +318,14 @@ public class GameService {
         }
 
         if(action == Action.FOLD){
+            log.info("dumdum");
 
             for (int i = 0; i < activePlayers.size(); i++){
                 activePlayers.get(i).setThisPlayersTurn(false);
             }
             nextPlayer.setThisPlayersTurn(true);
-
             game.playerFolds(currentPlayer);
 
-            if (game.getActivePlayers().size() < 2) {
-                game.setRoundOver(true);
-                gameLog.setRoundOver(true);
-
-                Player winner = game.getActivePlayers().get(0);
-                winner.addCredit(game.getPot().getAmount());
-                game.getPot().removeAmount(game.getPot().getAmount());
-                List<Player> winners = new LinkedList<>();
-                winners.add(winner);
-                game.getGameLog().setWinners(winners);
-                game.getGameLog().setPotAmount(game.getPot().getAmount());
-                game.startNewRound();
-
-
-
-                gameLog.setTransactionNr(game.getTransactionNr());
-                gameLog.setGameRound(game.getGameRound());
-                gameLog.setAction(Action.FOLD);
-                gameLog.setRaiseAmount(0);
-                gameLog.setPlayerId(currentPlayer.getId());
-                gameLog.setNextPlayerName(nextPlayer.getPlayerName());
-                gameLog.setNextPlayerId(nextPlayer.getId());
-                gameLog.setPlayerPot(currentPlayer.getAmountInPot());
-                gameLog.setAmountToCall(playerWithMostAmountInPot.getAmountInPot()-nextPlayer.getAmountInPot());
-                gameLog.setThisPlayersTurn(currentPlayer.isThisPlayersTurn());
-                gameLog.setNextPlayersTurn(nextPlayer.isThisPlayersTurn());
-                return gameLog;
-            }
             gameLog.setTransactionNr(game.getTransactionNr());
             gameLog.setGameRound(game.getGameRound());
             gameLog.setAction(Action.FOLD);
@@ -368,169 +342,14 @@ public class GameService {
             gameLog.setPotAmount(pot.getAmount());
             gameLog.setRoundOver(game.isRoundOver());
             gameLog.setGameOver(game.isGameOver());
-            gameLog.setAmountToCall(playerWithMostAmountInPot.getAmountInPot()-nextPlayer.getAmountInPot());
+            gameLog.setAmountToCall(getPlayerWithMostAmountInPot(game).getAmountInPot()-nextPlayer.getAmountInPot());
             gameLog.setThisPlayersTurn(currentPlayer.isThisPlayersTurn());
             gameLog.setNextPlayersTurn(nextPlayer.isThisPlayersTurn());
 
 
         }
         if(action == Action.RAISE) {
-            int addedAmount = (playerWithMostAmountInPot.getAmountInPot() - currentPlayer.getAmountInPot()) + amount;
-            int amountToCall = (playerWithMostAmountInPot.getAmountInPot() - currentPlayer.getAmountInPot());
-
-            /*
-
-
-            //if pot type no limit: maximum raise can be all the credit, player has left. (all in)
-            if (game.getPotType().equals("no limit")) {
-                if (addedAmount > currentPlayer.getCredit()) {
-                    String baseErrorMessage = "The credit of the Player %s is too low!";
-                    throw new ResponseStatusException(HttpStatus.CONFLICT, String.format(baseErrorMessage, currentPlayer.getPlayerName()));
-                }
-            }
-
-            //if pot type fixed limit in rounds preflop and flop, raised amount must be Lower limit
-            //              in other rounds raised amount must be high limit
-            //            lower limit = bigblind
-            //            higher limit = 2* bigblind
-            //per round it is not possible to raise more than three times
-            if (game.getPotType().equals("fixed limit")) {
-                int lowerLimit = bigBlind;
-                int higherLimit = 2 * bigBlind;
-
-                if (game.getGameRound() == GameRound.Preflop && game.getTimesRaisedPerPreflop() >= 3) {
-                    String baseErrorMessage = "As the Pot Type is fixed limit, it is not possible to raise more than three times per round!";
-                    throw new ResponseStatusException(HttpStatus.CONFLICT, String.format(baseErrorMessage));
-                }
-                else {
-                    int times = game.getTimesRaisedPerPreflop() + 1;
-                    game.setTimesRaisedPerPreflop(times);
-                }
-
-                if (game.getGameRound() == GameRound.Flop && game.getTimesRaisedPerFlop() >= 3) {
-                    String baseErrorMessage = "As the Pot Type is fixed limit, it is not possible to raise more than three times per round!";
-                    throw new ResponseStatusException(HttpStatus.CONFLICT, String.format(baseErrorMessage));
-                }
-                else {
-                    int times = game.getTimesRaisedPerFlop() + 1;
-                    game.setTimesRaisedPerPreflop(times);
-                }
-
-                if (game.getGameRound() == GameRound.TurnCard && game.getTimesRaisedTurnCard() >= 3) {
-                    String baseErrorMessage = "As the Pot Type is fixed limit, it is not possible to raise more than three times per round!";
-                    throw new ResponseStatusException(HttpStatus.CONFLICT, String.format(baseErrorMessage));
-                }
-                else {
-                    int times = game.getTimesRaisedTurnCard() + 1;
-                    game.setTimesRaisedPerPreflop(times);
-                }
-
-                if (game.getGameRound() == GameRound.RiverCard && game.getTimesRaisedRiverCard() >= 3) {
-                    String baseErrorMessage = "As the Pot Type is fixed limit, it is not possible to raise more than three times per round!";
-                    throw new ResponseStatusException(HttpStatus.CONFLICT, String.format(baseErrorMessage));
-                }
-                else {
-                    int times = game.getTimesRaisedRiverCard() + 1;
-                    game.setTimesRaisedPerPreflop(times);
-                }
-
-                if (game.getGameRound() == GameRound.Preflop || game.getGameRound() == GameRound.Flop) {
-                    if (amount != lowerLimit) {
-                        String baseErrorMessage = "As the Pot Type is fixed limit, the raised amount in the rounds Preflop and flop must be equal to the lower limit %D!";
-                        throw new ResponseStatusException(HttpStatus.CONFLICT, String.format(baseErrorMessage, lowerLimit));
-                    }
-                }
-                else {
-                    if (amount != higherLimit) {
-                        String baseErrorMessage = "As the Pot Type is fixed limit, the raised amount in the rounds Turn Card and River Card must be equal to the higher limit %D!";
-                        throw new ResponseStatusException(HttpStatus.CONFLICT, String.format(baseErrorMessage, higherLimit));
-                    }
-                }
-
-            }
-
-            //if pot type pot limit raised amount mustn't be bigger than the amount that is in the pot
-            if (game.getPotType().equals("pot limit")) {
-                if (amount> pot.getAmount()){
-                    String baseErrorMessage = "As the Pot Type is pot limit, the raised amount mustn't be bigger than the amount that is in the pot";
-                    throw new ResponseStatusException(HttpStatus.CONFLICT, baseErrorMessage);
-                }
-            }
-
-            //if pot type split limit:  in rounds preflop and flop, raised amount mustn't be higher as Lower limit
-            //in other rounds raised amount mustn't be higher than high limit
-            //lower limit = bigblind
-            //higher limit = 2* bigblind
-            //per round it is not possible to raise more than three times
-            if (game.getPotType().equals("split limit")) {
-                int lowerLimit = bigBlind;
-                int higherLimit = 2 * bigBlind;
-
-                if (game.getGameRound() == GameRound.Preflop && game.getTimesRaisedPerPreflop() >= 3) {
-                    String baseErrorMessage = "As the Pot Type is fixed limit, it is not possible to raise more than three times per round!";
-                    throw new ResponseStatusException(HttpStatus.CONFLICT, String.format(baseErrorMessage));
-                }
-                else {
-                    int times = game.getTimesRaisedPerPreflop() + 1;
-                    game.setTimesRaisedPerPreflop(times);
-                }
-
-                if (game.getGameRound() == GameRound.Flop && game.getTimesRaisedPerFlop() >= 3) {
-                    String baseErrorMessage = "As the Pot Type is fixed limit, it is not possible to raise more than three times per round!";
-                    throw new ResponseStatusException(HttpStatus.CONFLICT, String.format(baseErrorMessage));
-                }
-                else {
-                    int times = game.getTimesRaisedPerFlop() + 1;
-                    game.setTimesRaisedPerPreflop(times);
-                }
-
-                if (game.getGameRound() == GameRound.TurnCard && game.getTimesRaisedTurnCard() >= 3) {
-                    String baseErrorMessage = "As the Pot Type is fixed limit, it is not possible to raise more than three times per round!";
-                    throw new ResponseStatusException(HttpStatus.CONFLICT, String.format(baseErrorMessage));
-                }
-                else {
-                    int times = game.getTimesRaisedTurnCard() + 1;
-                    game.setTimesRaisedPerPreflop(times);
-                }
-
-                if (game.getGameRound() == GameRound.RiverCard && game.getTimesRaisedRiverCard() >= 3) {
-                    String baseErrorMessage = "As the Pot Type is fixed limit, it is not possible to raise more than three times per round!";
-                    throw new ResponseStatusException(HttpStatus.CONFLICT, String.format(baseErrorMessage));
-                }
-                else {
-                    int times = game.getTimesRaisedRiverCard() + 1;
-                    game.setTimesRaisedPerPreflop(times);
-                }
-
-
-                if (game.getGameRound() == GameRound.Preflop || game.getGameRound() == GameRound.Flop) {
-                    if (amount > lowerLimit) {
-                        String baseErrorMessage = "As the Pot Type is split limit, the raised amount in the rounds Preflop and flop amount mustn't be higher as Lower limit %D!";
-                        throw new ResponseStatusException(HttpStatus.CONFLICT, String.format(baseErrorMessage, lowerLimit));
-                    }
-                }
-                else {
-                    if (amount > higherLimit) {
-                        String baseErrorMessage = "As the Pot Type is fixed limit, the raised amount in the rounds Turn Card and River Card mustn't be higher than high limit %D!";
-                        throw new ResponseStatusException(HttpStatus.CONFLICT, String.format(baseErrorMessage, higherLimit));
-                    }
-                }
-            }
-
-            //the raised amount + the called amount mustn't be bigger than the actual credit of the player
-            if (addedAmount > currentPlayer.getCredit()) {
-                String baseErrorMessage = "A call involves matching the amount already bet. The credit of the Player %s is too low!";
-                throw new ResponseStatusException(HttpStatus.CONFLICT, String.format(baseErrorMessage, currentPlayer.getPlayerName()));
-            }
-
-           /* //the raised amount must be bigger than the difference of the amount in the pot of previous player and next player
-            if (amount+ currentPlayer.getAmountInPot()< <= previousPlayer.getAmountInPot()-currentPlayer.getAmountInPot()){
-                String baseErrorMessage = "The specified amount is below the min.raise, raising below call amount (%d) is not allowed!";
-                throw new ResponseStatusException(HttpStatus.FORBIDDEN, String.format(baseErrorMessage, previousPlayer.getAmountInPot()-currentPlayer.getAmountInPot()));
-            }*/
-
-            //the raised amount must be bigger or equal than 1
-
+            int addedAmount = (getPlayerWithMostAmountInPot(game).getAmountInPot() - currentPlayer.getAmountInPot()) + amount;
 
             if (amount<=1){
                 String baseErrorMessage = "The Player %s tries to raise by an amount lower than 1!";
@@ -565,43 +384,16 @@ public class GameService {
             gameLog.setPotAmount(pot.getAmount());
             gameLog.setRoundOver(game.isRoundOver());
             gameLog.setGameOver(game.isGameOver());
-            gameLog.setAmountToCall(playerWithMostAmountInPot.getAmountInPot()-nextPlayer.getAmountInPot());
+            gameLog.setAmountToCall(getPlayerWithMostAmountInPot(game).getAmountInPot()-nextPlayer.getAmountInPot());
             gameLog.setThisPlayersTurn(currentPlayer.isThisPlayersTurn());
             gameLog.setNextPlayersTurn(nextPlayer.isThisPlayersTurn());
 
         }
 
         if(action == Action.CALL) {
-            int amountToCall = (playerWithMostAmountInPot.getAmountInPot() - currentPlayer.getAmountInPot());
-            /*
-
-
-
-            //the called amount mustn't be bigger than the actual credit of the player.
-            if (amount > currentPlayer.getCredit()) {
-                String baseErrorMessage = "A call involves matching the amount already bet. The credit of the Player %s is too low!";
-                throw new ResponseStatusException(HttpStatus.CONFLICT, String.format(baseErrorMessage, currentPlayer.getPlayerName()));
-            }
-
-
-            //currentPlayer is only allowed to call if he has less money in the pot as the Player with the most money in the pot.
-
-            if ((playerWithMostAmountInPot.getAmountInPot() <= currentPlayer.getAmountInPot())){
-                String baseErrorMessage = "The player &s is not allowed to call because he has more or the same amount of money in the pot as the other players, he has to bet, raise, fold or check!";
-                throw new ResponseStatusException(HttpStatus.CONFLICT, String.format(baseErrorMessage, currentPlayer.getPlayerName()));
-            }
-
-            //check if called amount is equal to the difference in the pot between the amounts of the current and the Player with the most money in the pot.
-            if (playerWithMostAmountInPot.getAmountInPot() - currentPlayer.getAmountInPot() != amount) {
-                String baseErrorMessage = "the amount to call does not match the difference between the amount of Player %s and Player %s in the pot";
-                throw new ResponseStatusException(HttpStatus.CONFLICT, String.format(baseErrorMessage, currentPlayer.getPlayerName(), playerWithMostAmountInPot.getPlayerName()));
-            }
-
-
-
-
-             */
-
+            log.info("hello");
+            int amountToCall = (getPlayerWithMostAmountInPot(game).getAmountInPot() - currentPlayer.getAmountInPot());
+            log.info("hello1");
                 currentPlayer.removeCredit(amountToCall);
                 currentPlayer.setAmountInPot(currentPlayer.getAmountInPot() + amountToCall);
                 pot.addAmount(amountToCall);
@@ -630,10 +422,9 @@ public class GameService {
             gameLog.setPotAmount(pot.getAmount());
             gameLog.setRoundOver(game.isRoundOver());
             gameLog.setGameOver(game.isGameOver());
-            gameLog.setAmountToCall(playerWithMostAmountInPot.getAmountInPot()-nextPlayer.getAmountInPot());
+            gameLog.setAmountToCall(getPlayerWithMostAmountInPot(game).getAmountInPot()-nextPlayer.getAmountInPot());
             gameLog.setThisPlayersTurn(currentPlayer.isThisPlayersTurn());
             gameLog.setNextPlayersTurn(nextPlayer.isThisPlayersTurn());
-
 
         }
 
@@ -734,6 +525,10 @@ public class GameService {
                 possibleActions.add(Action.FOLD);
             }
 
+            if (nextPlayer.getCredit() == 0){
+                possibleActions.clear();
+                possibleActions.add(Action.FOLD);
+            }
 
             if (gameLog.isGameOver()==true){
                 possibleActions.clear();
