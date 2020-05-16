@@ -41,11 +41,8 @@ public interface DTOMapper {
     @Mapping(source = "amount", target = "amount")
     UserPutDTO convertPutDTOtoEntity(UserPutDTO userPutDTO);
 
-//    @Mapping(source = "timeStamp", target = "timeStamp")
-//    @Mapping(source = "chatMode", target = "chatMode")
 //    @Mapping(source =  "message", target = "message")
-//    @Mapping(source = "username", target = "username")
-//    @Mapping(source = "gameId", target = "gameId")
+//    @Mapping(source = "userId", target = "userId")
 //    ChatPutDTO convertPutDTOtoEntity(ChatPutDTO chatPutDTO);
 //
 //    @Mapping(source = "gameId", target = "gameId")

@@ -6,26 +6,15 @@ import java.util.Date;
 
 public class ChatPutDTO {
 
-    private String username;
-    private String chatMode;
-    private String timeStamp;
+    private long userId;
     private String message;
-    private long gameId;
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUserId(long userId) {
+        this.userId = userId;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public void setTimeStamp(String timeStamp) {
-        this.timeStamp = timeStamp;
-    }
-
-    public String getTimeStamp() {
-        return timeStamp;
+    public long getUserId() {
+        return userId;
     }
 
     public void setMessage(String message) {
@@ -36,16 +25,4 @@ public class ChatPutDTO {
         return message;
     }
 
-    public void setChatMode(String chatMode) {
-        this.chatMode = chatMode;
-    }
-
-    public String getChatMode() {
-        return chatMode;
-    }
-
-    public ChatLog getChatLog(){
-        ChatLog chatLog = new ChatLog(this.timeStamp, this.username, this.message, this.chatMode);
-        return chatLog;
-    }
 }

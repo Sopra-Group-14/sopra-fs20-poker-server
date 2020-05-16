@@ -1,6 +1,5 @@
 package ch.uzh.ifi.seal.soprafs20.controller;
 
-import ch.uzh.ifi.seal.soprafs20.chat.Chat;
 import ch.uzh.ifi.seal.soprafs20.entity.ChatLog;
 import ch.uzh.ifi.seal.soprafs20.rest.dto.ChatPutDTO;
 import ch.uzh.ifi.seal.soprafs20.service.ChatService;
@@ -27,8 +26,11 @@ public class ChatController {
     public ChatLog sendPlayerMessage(@RequestBody ChatPutDTO chatPutDTO,
                                      @PathVariable long gameId,
                                      @RequestHeader (value = "Authorization") String token){
-        chatService.newMessage("players", gameId, chatPutDTO.getChatLog());
-        chatService.newMessage("spectators", gameId, chatPutDTO.getChatLog());
+        ChatLog chatLogPlayer = chatService.chatPutDTOtoChatLog(chatPutDTO, "player", "players");
+        ChatLog chatLogSpectator = chatService.chatPutDTOtoChatLog(chatPutDTO, "player", "spectators");
+
+        chatService.newMessage("players", gameId, chatLogPlayer);
+        chatService.newMessage("spectators", gameId, chatLogSpectator);
 
         List<ChatLog> playerChat = chatService.getHistory("players", gameId);
 
@@ -50,7 +52,10 @@ public class ChatController {
     public ChatLog sendSpectatorMessage(@RequestBody ChatPutDTO chatPutDTO,
                                         @PathVariable long gameId,
                                         @RequestHeader (value = "Authorization") String token){
-        chatService.newMessage("spectators", gameId, chatPutDTO.getChatLog());
+
+        ChatLog chatLog = chatService.chatPutDTOtoChatLog(chatPutDTO, "spectator", "spectators");
+
+        chatService.newMessage("spectators", gameId, chatLog);
 
         List<ChatLog> spectatorChat = chatService.getHistory("spectators", gameId);
 
