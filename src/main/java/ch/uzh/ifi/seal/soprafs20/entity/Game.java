@@ -387,6 +387,14 @@ Constructor
     }
 
     public void startNewRound(){
+
+        //for game split limit and fixed limit set raised per round equals zero
+        setTimesRaisedTurnCard(0);
+        setTimesRaisedRiverCard(0);
+        setTimesRaisedPerFlop(0);
+        setTimesRaisedPerPreflop(0);
+
+
         //enter folded players back into the list active players  at same position and make them unfolded
         activePlayers.clear();
         for (int i = 0; i< players.size(); i++){
