@@ -199,86 +199,6 @@ public class GameService {
 
         if (action == Action.BET){
 
-            /*
-
-            log.info("bei bet angekommen");
-            //betting is only possible if every active player has the same amount in the pot
-            for (Player activePlayer : activePlayers) {
-                if (currentPlayer.getAmountInPot() != activePlayer.getAmountInPot()){
-                    String baseErrorMessage = "The Player %s with Id %d can only call, rais or fold because not every active player has same amount in pot";
-                    throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, String.format(baseErrorMessage, currentPlayer.getPlayerName(),currentPlayer.getId()));
-                }
-            }
-
-            //if pot type no limit: maximum bet can be all the credit, player has left. (all in)
-            if (game.getPotType().equals("no limit")){
-                if (amount>currentPlayer.getCredit()){
-                    String baseErrorMessage = "The credit of the Player %s is too low!";
-                    throw new ResponseStatusException(HttpStatus.CONFLICT, String.format(baseErrorMessage, currentPlayer.getPlayerName()));
-                }
-            }
-            log.info("no limit gecheckt");
-            //if pot type fixed limit in rounds preflop and flop, betted amount must be Lower limit
-            //              in other rounds betted amount must be high limit
-            //            lower limit = bigblind
-            //            higher limit = 2* bigblind
-            if (game.getPotType().equals("fixed limit")) {
-                int lowerLimit = bigBlind;
-                int higherLimit = 2 * bigBlind;
-
-                if (game.getGameRound() == GameRound.Preflop || game.getGameRound() == GameRound.Flop) {
-                    if (amount != lowerLimit) {
-                        String baseErrorMessage = "As the Pot Type is fixed limit, the betted amount in the rounds Preflop and flop must be equal to the lower limit %D!";
-                        throw new ResponseStatusException(HttpStatus.CONFLICT, String.format(baseErrorMessage, lowerLimit));
-                    }
-                }
-                else {
-                    if (amount != higherLimit) {
-                        String baseErrorMessage = "As the Pot Type is fixed limit, the betted amount in the rounds Turn Card and River Card must be equal to the higher limit %D!";
-                        throw new ResponseStatusException(HttpStatus.CONFLICT, String.format(baseErrorMessage, higherLimit));
-                    }
-                }
-            }
-            log.info("fixed limit gecheckt");
-            //if pot type pot limit betted amount mustn't be bigger than the amount that is in the pot
-            if (game.getPotType().equals("pot limit")) {
-                if (amount> pot.getAmount()){
-                    String baseErrorMessage = "As the Pot Type is pot limit, the betted amount mustn't be bigger than the amount that is in the pot";
-                    throw new ResponseStatusException(HttpStatus.CONFLICT, baseErrorMessage);
-                }
-            }
-            log.info("pot limit gecheckt");
-            //if pot type split limit:  in rounds preflop and flop, betted amount mustn't be higher as Lower limit
-            //in other rounds betted amount mustn't be higher than high limit
-            //lower limit = bigblind
-            //higher limit = 2* bigblind
-            if (game.getPotType().equals("split limit")) {
-                int lowerLimit = bigBlind;
-                int higherLimit = 2 * bigBlind;
-
-                if (game.getGameRound() == GameRound.Preflop || game.getGameRound() == GameRound.Flop) {
-                    if (amount > lowerLimit) {
-                        String baseErrorMessage = "As the Pot Type is split limit, the betted amount in the rounds Preflop and flop amount mustn't be higher as Lower limit %D!";
-                        throw new ResponseStatusException(HttpStatus.CONFLICT, String.format(baseErrorMessage, lowerLimit));
-                    }
-                }
-                else {
-                    if (amount > higherLimit) {
-                        String baseErrorMessage = "As the Pot Type is fixed limit, the betted amount in the rounds Turn Card and River Card mustn't be higher than high limit %D!";
-                        throw new ResponseStatusException(HttpStatus.CONFLICT, String.format(baseErrorMessage, higherLimit));
-                    }
-                }
-            }
-            log.info("split limit gecheckt");
-            //the bet amount mustn't be bigger than the actual credit of the player
-            if (amount > currentPlayer.getCredit()) {
-                String baseErrorMessage = "A call involves matching the amount already bet. The credit of the Player %s is too low!";
-                throw new ResponseStatusException(HttpStatus.CONFLICT, String.format(baseErrorMessage, currentPlayer.getPlayerName()));
-            }
-            log.info("bet amount bigger than actual credit gecheckt");
-
-*/
-
             currentPlayer.removeCredit(amount);
             currentPlayer.setAmountInPot(currentPlayer.getAmountInPot() + amount);
             pot.addAmount(amount);
@@ -472,6 +392,15 @@ public class GameService {
         }
 
 
+//enter the possible amount to bet for the next player
+        int amountToRaiseSoCreditOfNextPlayerIsZero = nextPlayer.getCredit()-(getPlayerWithMostAmountInPot(game).getAmountInPot()-nextPlayer.getAmountInPot());
+        if (game.getPotType().equals("no limit")) {
+            gameLog.setPossibleRaiseAndBetAmount(amountToRaiseSoCreditOfNextPlayerIsZero);
+        }
+        if (game.getPotType().equals("pot limit")){
+            gameLog.setPossibleRaiseAndBetAmount(Math.min(amountToRaiseSoCreditOfNextPlayerIsZero, game.getPot().getAmount()));
+        }
+
 
 // enters the posssible actions for the next player into the gameLog
         List <Action> possibleActions = game.getPossibleActions();
@@ -488,7 +417,7 @@ public class GameService {
             possibleActions.add(Action.FOLD);
         }
 
-        else if(game.getPotType().equals("no limit")) {
+        else if(game.getPotType().equals("no limit") || game.getPotType().equals("pot limit")) {
             if (action == Action.BET) {
                 possibleActions.clear();
                 possibleActions.add(Action.RAISE);
