@@ -238,7 +238,6 @@ public class GameService {
         }
 
         if(action == Action.FOLD){
-            log.info("dumdum");
 
             for (int i = 0; i < activePlayers.size(); i++){
                 activePlayers.get(i).setThisPlayersTurn(false);
@@ -311,9 +310,7 @@ public class GameService {
         }
 
         if(action == Action.CALL) {
-            log.info("hello");
             int amountToCall = (getPlayerWithMostAmountInPot(game).getAmountInPot() - currentPlayer.getAmountInPot());
-            log.info("hello1");
                 currentPlayer.removeCredit(amountToCall);
                 currentPlayer.setAmountInPot(currentPlayer.getAmountInPot() + amountToCall);
                 pot.addAmount(amountToCall);
@@ -478,10 +475,10 @@ public class GameService {
         else if(game.getPotType().equals("fixed limit") || game.getPotType().equals("split limit")) {
             if (action == Action.BET) {
                 possibleActions.clear();
-                if    ((game.getGameRound()==GameRound.Preflop && game.getTimesRaisedPerPreflop() < 2)||
-                        (game.getGameRound()==GameRound.Flop && game.getTimesRaisedPerFlop() < 2)||
-                        (game.getGameRound()==GameRound.RiverCard && game.getTimesRaisedRiverCard() < 2)||
-                        (game.getGameRound()==GameRound.TurnCard && game.getTimesRaisedTurnCard() < 2)) {
+                if    ((game.getGameRound()==GameRound.Preflop && game.getTimesRaisedPerPreflop() <= 2)||
+                        (game.getGameRound()==GameRound.Flop && game.getTimesRaisedPerFlop() <= 2)||
+                        (game.getGameRound()==GameRound.RiverCard && game.getTimesRaisedRiverCard() <= 2)||
+                        (game.getGameRound()==GameRound.TurnCard && game.getTimesRaisedTurnCard() <= 2)) {
                     possibleActions.add(Action.RAISE);
                 }
                 possibleActions.add(Action.CALL);
@@ -498,10 +495,10 @@ public class GameService {
                 possibleActions.add(Action.FOLD);
 
                 //per round is it not possible to raise more than three times
-                if     ((game.getGameRound()==GameRound.Preflop && game.getTimesRaisedPerPreflop() >= 2)||
-                        (game.getGameRound()==GameRound.Flop && game.getTimesRaisedPerFlop() >= 2)||
-                        (game.getGameRound()==GameRound.RiverCard && game.getTimesRaisedRiverCard() >= 2)||
-                        (game.getGameRound()==GameRound.TurnCard && game.getTimesRaisedTurnCard() >= 2)) {
+                if     ((game.getGameRound()==GameRound.Preflop && game.getTimesRaisedPerPreflop() > 2)||
+                        (game.getGameRound()==GameRound.Flop && game.getTimesRaisedPerFlop() > 2)||
+                        (game.getGameRound()==GameRound.RiverCard && game.getTimesRaisedRiverCard() > 2)||
+                        (game.getGameRound()==GameRound.TurnCard && game.getTimesRaisedTurnCard() > 2)) {
                     possibleActions.clear();
                     possibleActions.add(Action.CALL);
                     possibleActions.add(Action.FOLD);
@@ -524,10 +521,10 @@ public class GameService {
                 if (game.getActionsAfterRaise() == 0) {
                     possibleActions.add(Action.BET);
                 }
-                else if    ((game.getGameRound()==GameRound.Preflop && game.getTimesRaisedPerPreflop() < 2)||
-                            (game.getGameRound()==GameRound.Flop && game.getTimesRaisedPerFlop() < 2)||
-                            (game.getGameRound()==GameRound.RiverCard && game.getTimesRaisedRiverCard() < 2)||
-                            (game.getGameRound()==GameRound.TurnCard && game.getTimesRaisedTurnCard() < 2)) {
+                else if    ((game.getGameRound()==GameRound.Preflop && game.getTimesRaisedPerPreflop() <= 2)||
+                            (game.getGameRound()==GameRound.Flop && game.getTimesRaisedPerFlop() <= 2)||
+                            (game.getGameRound()==GameRound.RiverCard && game.getTimesRaisedRiverCard() <= 2)||
+                            (game.getGameRound()==GameRound.TurnCard && game.getTimesRaisedTurnCard() <= 2)) {
                     possibleActions.add(Action.RAISE);
                 }
 
