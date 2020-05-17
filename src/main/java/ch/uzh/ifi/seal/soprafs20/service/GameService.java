@@ -534,6 +534,55 @@ public class GameService {
         }
 
 
+        // if only one player left with credit, next player can play than round is over and maybe game is over
+        int playersWithCredit = 0;
+        for (int i = 0;i < players.size();i++){
+            if (players.get(i).getCredit()>0){
+                playersWithCredit++;
+            }
+        }
+        if (playersWithCredit <2) {
+            gameLog.setPlayOneMoreRound(true);
+            game.setPlayerWithZeroCredit(currentPlayer);
+        }
+
+        if (game.isGameOver() == true){
+            game.setRoundOver(true);
+            gameLog.setRoundOver(true);
+            //calculate the winners
+            List<Player> winners;
+            WinnerCalculator winnerCalculator = new WinnerCalculator();
+            winners = winnerCalculator.isWinner(activePlayers, game.getTableCards());
+            gameLog.setWinners(winners);
+            //calculate the amount won by every winner
+            int wonAmount = pot.getAmount()/winners.size();
+            gameLog.setWonAmount(wonAmount);
+            //add won amount to the credit of the winnerPlayers
+            for (int i =0; i< winners.size(); i++){
+                winners.get(i).addCredit(wonAmount);
+            }
+            pot.removeAmount(pot.getAmount());
+            gameLog.setPotAmount(0);
+            gameLog.setPlayers(players);
+
+            playersWithCredit = 0;
+            for (int i = 0;i < players.size();i++){
+                if (players.get(i).getCredit()>0){
+                    playersWithCredit++;
+                }
+            }
+
+            //if now both reminding players have credit again, game goes on
+            if (playersWithCredit >=2){
+                game.setGameOver(false);
+                game.setRoundOver(true);
+                gameLog.setGameOver(false);
+                gameLog.setRoundOver(true);
+                //open new round again
+                game.startNewRound();
+            }
+        }
+
 
             //if next player has no more credit
 

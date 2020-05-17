@@ -1,18 +1,26 @@
 package ch.uzh.ifi.seal.soprafs20.entity;
+
 import ch.uzh.ifi.seal.soprafs20.cards.Card;
 import ch.uzh.ifi.seal.soprafs20.cards.Deck;
 import ch.uzh.ifi.seal.soprafs20.cards.WinnerCalculator;
-import ch.uzh.ifi.seal.soprafs20.chat.Chat;
-import ch.uzh.ifi.seal.soprafs20.chat.PlayerChat;
-import ch.uzh.ifi.seal.soprafs20.chat.SpectatorChat;
 import ch.uzh.ifi.seal.soprafs20.constant.Action;
 import ch.uzh.ifi.seal.soprafs20.constant.GameRound;
-import ch.uzh.ifi.seal.soprafs20.entity_in_game.*;
+import ch.uzh.ifi.seal.soprafs20.entity_in_game.GameLog;
+import ch.uzh.ifi.seal.soprafs20.entity_in_game.Player;
+import ch.uzh.ifi.seal.soprafs20.entity_in_game.Pot;
+import ch.uzh.ifi.seal.soprafs20.entity_in_game.Spectator;
 import ch.uzh.ifi.seal.soprafs20.exceptions.SopraServiceException;
+
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+
 
 /**
  * The game class is responsible for the information regarding the state of a specific game.
@@ -58,6 +66,7 @@ public class Game {
     private int roundCounter;
     private int actionsAfterRaise;
     private int checksPerRound;
+    private Player playerWithZeroCredit;
 
 
     //private List<GameLog> gameTracker = new LinkedList<>();
@@ -301,6 +310,21 @@ Constructor
 //        return this.gameTracker.get(gameTracker.size());
 //    }
 
+    public boolean playOneMoreRoundToGameOver(Player currentPlayer){
+        int i = activePlayers.indexOf(getPlayerWithZeroCredit())-1;
+        Player playerToSetTrue;
+        if (i<0){
+            playerToSetTrue = activePlayers.get(activePlayers.size()-1);
+        }else {
+            playerToSetTrue = activePlayers.get(activePlayers.indexOf(getPlayerWithZeroCredit()) - 1);
+        }
+        if (currentPlayer == playerToSetTrue){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
 
     public int getTimesRaisedPerPreflop() {
         return timesRaisedPerPreflop;
@@ -386,7 +410,14 @@ Constructor
         gameLog.setRevealedAPICards(tableCards);
     }
 
+
+
     public void startNewRound(){
+
+        //set roundOver to false
+        gameLog.setRoundOver(false);
+        setRoundOver(false);
+
 
         //for game split limit and fixed limit set raised per round equals zero
         setTimesRaisedTurnCard(0);
@@ -487,27 +518,27 @@ Constructor
             }
         }
         if (playersWithCredit <2){
-            gameLog.setGameOver(true);
-            setGameOver(true);
-        }
-
-        if (gameOver == true){
-            //calculate the winners
-            winners = winnerCalculator.isWinner(players, tableCards);
-            gameLog.setWinners(winners);
-            //calculate the amount won by every winner
-            int wonAmount = pot.getAmount()/winners.size();
-            gameLog.setWonAmount(wonAmount);
-            //add won amount to the credit of the winnerPlayers
-            for (int i =0; i< winners.size(); i++){
-                winners.get(i).addCredit(wonAmount);
+            if (playOneMoreRoundToGameOver(getCurrentPlayer(playerId))) {
+                if (getGameRound() == GameRound.Preflop){
+                    addTableCard();
+                    addTableCard();
+                    addTableCard();
+                    addTableCard();
+                    addTableCard();
+                }else if (getGameRound() == GameRound.Flop){
+                    addTableCard();
+                    addTableCard();
+                }else if (getGameRound() == GameRound.RiverCard) {
+                    addTableCard();
+                }
+                gameLog.setGameOver(true);
+                gameLog.setRevealedCards(getTableCards());
+                setGameOver(true);
+                return;
             }
-            gameLog.setPlayers(players);
         }
 
-        //set roundOver to false
-        gameLog.setRoundOver(false);
-        setRoundOver(false);
+
 
         if (action == Action.RAISE || action == Action.BET){
             setActionsAfterRaise(0);
@@ -556,7 +587,7 @@ Constructor
 
 
                 //calculate the winners
-                winners = winnerCalculator.isWinner(players, tableCards);
+                winners = winnerCalculator.isWinner(activePlayers, tableCards);
                 gameLog.setWinners(winners);
                 //calculate the amount won by every winner
                 int wonAmount = pot.getAmount()/winners.size();
@@ -634,6 +665,15 @@ Constructor
 
     public void setTableCards(List<Card> tableCards) {
         this.tableCards = tableCards;
+    }
+
+
+    public Player getPlayerWithZeroCredit() {
+        return playerWithZeroCredit;
+    }
+
+    public void setPlayerWithZeroCredit(Player playerWithZeroCredit) {
+        this.playerWithZeroCredit = playerWithZeroCredit;
     }
 }
 

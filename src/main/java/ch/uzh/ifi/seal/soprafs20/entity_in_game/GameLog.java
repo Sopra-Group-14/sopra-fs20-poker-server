@@ -42,6 +42,7 @@ public class GameLog {
     private Player bigBlind;
     private Player smallBlind;
     private int possibleRaiseAndBetAmount;
+    private boolean playOneMoreRound;
     API_Card api_card;
 
     //All the parameters are set in the constructor
@@ -277,5 +278,13 @@ public class GameLog {
 
     public void setPossibleRaiseAndBetAmount(int possibleRaiseAndBetAmount) {
         this.possibleRaiseAndBetAmount = possibleRaiseAndBetAmount;
+    }
+
+    public boolean isPlayOneMoreRound() {
+        return playOneMoreRound;
+    }
+
+    public void setPlayOneMoreRound(boolean playOneMoreRound) {
+        this.playOneMoreRound = playOneMoreRound;
     }
 }
