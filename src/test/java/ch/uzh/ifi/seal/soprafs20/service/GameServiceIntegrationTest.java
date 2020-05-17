@@ -77,23 +77,26 @@ public class GameServiceIntegrationTest {
         List<Player> players = new LinkedList<>();
 
         players.add(player1);
-        //players.add(player2);
+        players.add(player2);
         //players.add(player3);
 
         player1.addToHand(new Card(Suit.CLUBS, Rank.ACE));
         player1.addToHand(new Card(Suit.CLUBS, Rank.SEVEN));
 
+        player2.addToHand(new Card(Suit.DIAMONDS, Rank.KING));
+        player2.addToHand(new Card(Suit.DIAMONDS, Rank.QUEEN));
+
         List<Card> cards = new LinkedList<>();
-        cards.add(new Card(Suit.DIAMONDS, Rank.THREE));
+        cards.add(new Card(Suit.DIAMONDS, Rank.ACE));
         cards.add(new Card(Suit.SPADES, Rank.KING));
-        cards.add(new Card(Suit.DIAMONDS, Rank.TWO));
+        cards.add(new Card(Suit.DIAMONDS, Rank.JACK));
         cards.add(new Card(Suit.SPADES, Rank.SIX));
-        cards.add(new Card(Suit.CLUBS, Rank.NINE));
+        cards.add(new Card(Suit.DIAMONDS, Rank.TEN));
 
         List<Player> winners = winnerCalculator.isWinner(players, cards);
         Player winner = winners.get(0);
 
-        assertEquals(player1.getPlayerName(), winner.getPlayerName());
+        assertEquals(player2.getPlayerName(), winner.getPlayerName());
 
     }
 
