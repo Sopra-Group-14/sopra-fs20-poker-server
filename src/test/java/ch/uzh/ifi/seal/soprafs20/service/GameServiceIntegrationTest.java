@@ -43,7 +43,7 @@ public class GameServiceIntegrationTest {
 
     /*@BeforeEach
     public void setup() {
-        gameSelect.removeAllGames();
+
     }*/
 
 
@@ -105,6 +105,39 @@ public class GameServiceIntegrationTest {
         Player winner = winners.get(0);
 
         assertEquals(player2.getPlayerName(), winner.getPlayerName());
+
+    }
+
+    @Test
+    public void twoIdenticalHandsCanBeRanked(){
+
+        WinnerCalculator winnerCalculator = new WinnerCalculator();
+
+        Player player1 = new Player("One");
+        Player player2 = new Player("Two");
+        List<Player> players = new LinkedList<>();
+
+        players.add(player1);
+        players.add(player2);
+
+        player1.addToHand(new Card(Suit.SPADES, Rank.ACE));
+        player1.addToHand(new Card(Suit.CLUBS, Rank.KING));
+
+        player2.addToHand(new Card(Suit.HEARTS, Rank.TEN));
+        player2.addToHand(new Card(Suit.HEARTS, Rank.SIX));
+
+
+        List<Card> cards = new LinkedList<>();
+        cards.add(new Card(Suit.DIAMONDS, Rank.ACE));
+        cards.add(new Card(Suit.DIAMONDS, Rank.KING));
+        cards.add(new Card(Suit.DIAMONDS, Rank.JACK));
+        cards.add(new Card(Suit.SPADES, Rank.SIX));
+        cards.add(new Card(Suit.DIAMONDS, Rank.TEN));
+
+        List<Player> winners = winnerCalculator.isWinner(players, cards);
+        Player winner = winners.get(0);
+
+        assertEquals(player1.getPlayerName(), winner.getPlayerName());
 
     }
 
