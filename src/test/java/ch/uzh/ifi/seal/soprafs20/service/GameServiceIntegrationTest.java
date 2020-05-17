@@ -1,9 +1,14 @@
 package ch.uzh.ifi.seal.soprafs20.service;
 
+import ch.uzh.ifi.seal.soprafs20.cards.Card;
+import ch.uzh.ifi.seal.soprafs20.cards.WinnerCalculator;
+import ch.uzh.ifi.seal.soprafs20.constant.Rank;
+import ch.uzh.ifi.seal.soprafs20.constant.Suit;
 import ch.uzh.ifi.seal.soprafs20.constant.UserStatus;
 import ch.uzh.ifi.seal.soprafs20.entity.Game;
 import ch.uzh.ifi.seal.soprafs20.entity.GameSelect;
 import ch.uzh.ifi.seal.soprafs20.entity.User;
+import ch.uzh.ifi.seal.soprafs20.entity_in_game.Player;
 import ch.uzh.ifi.seal.soprafs20.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,6 +18,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.LinkedList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -55,6 +63,37 @@ public class GameServiceIntegrationTest {
         assertEquals(testGame.getGameName(), createdGame.getGameName());
         assertEquals(testGame.getGameHostID(), createdGame.getGameHostID());
         assertEquals(testGame.getPotType(), createdGame.getPotType());
+
+    }
+
+    @Test
+    public void calculateWinnerReturnsCorrectWinner(){
+
+        WinnerCalculator winnerCalculator = new WinnerCalculator();
+
+        Player player1 = new Player("One");
+        Player player2 = new Player("Two");
+        Player player3 = new Player("Three");
+        List<Player> players = new LinkedList<>();
+
+        players.add(player1);
+        //players.add(player2);
+        //players.add(player3);
+
+        player1.addToHand(new Card(Suit.CLUBS, Rank.ACE));
+        player1.addToHand(new Card(Suit.CLUBS, Rank.SEVEN));
+
+        List<Card> cards = new LinkedList<>();
+        cards.add(new Card(Suit.DIAMONDS, Rank.THREE));
+        cards.add(new Card(Suit.SPADES, Rank.KING));
+        cards.add(new Card(Suit.DIAMONDS, Rank.TWO));
+        cards.add(new Card(Suit.SPADES, Rank.SIX));
+        cards.add(new Card(Suit.CLUBS, Rank.NINE));
+
+        List<Player> winners = winnerCalculator.isWinner(players, cards);
+        Player winner = winners.get(0);
+
+        assertEquals(player1.getPlayerName(), winner.getPlayerName());
 
     }
 
