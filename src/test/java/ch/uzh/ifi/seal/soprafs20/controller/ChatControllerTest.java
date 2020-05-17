@@ -8,6 +8,7 @@ import ch.uzh.ifi.seal.soprafs20.chat.SpectatorChat;
 import ch.uzh.ifi.seal.soprafs20.constant.UserStatus;
 import ch.uzh.ifi.seal.soprafs20.entity.ChatLog;
 import ch.uzh.ifi.seal.soprafs20.entity.User;
+import ch.uzh.ifi.seal.soprafs20.rest.dto.ChatPutDTO;
 import ch.uzh.ifi.seal.soprafs20.rest.dto.UserPostDTO;
 import ch.uzh.ifi.seal.soprafs20.service.ChatService;
 import ch.uzh.ifi.seal.soprafs20.service.UserService;
@@ -62,9 +63,9 @@ public class ChatControllerTest {
         //history we want returned
         PlayerChat testPlayerChat = new PlayerChat();
         List<ChatLog> testHistory = new LinkedList<>();
-        testHistory.add(new ChatLog("11:11:11", "Player1", "First Message", "players"));
-        testHistory.add(new ChatLog("22:22:22", "Player2", "Second Message", "players"));
-        testHistory.add(new ChatLog("33:33:33", "Player3", "Third Message", "players"));
+        testHistory.add(new ChatLog("11:11:11", "Player1", "userId1", "First Message", "players"));
+        testHistory.add(new ChatLog("22:22:22", "Player2", "userId2","Second Message", "players"));
+        testHistory.add(new ChatLog("33:33:33", "Player3", "userId3","Third Message", "players"));
 
         long testGameId = 1L;
 
@@ -97,9 +98,9 @@ public class ChatControllerTest {
         //history we want returned
         SpectatorChat testSpectatorChat = new SpectatorChat();
         List<ChatLog> testHistory = new LinkedList<>();
-        testHistory.add(new ChatLog("11:11:11", "Player1", "First Message", "players"));
-        testHistory.add(new ChatLog("22:22:22", "Player2", "Second Message", "players"));
-        testHistory.add(new ChatLog("33:33:33", "Player3", "Third Message", "players"));
+        testHistory.add(new ChatLog("11:11:11", "Player1", "userId1", "First Message", "players"));
+        testHistory.add(new ChatLog("22:22:22", "Player2", "userId2","Second Message", "players"));
+        testHistory.add(new ChatLog("33:33:33", "Player3", "userId3","Third Message", "players"));
 
 
         long testGameId = 1L;
@@ -128,15 +129,19 @@ public class ChatControllerTest {
         //given
         //information we give over to the server
         long testGameId = 1L;
+
         //chatlog we want returned
-        ChatLog testChatLog = new ChatLog("11:11:11", "TestUsername", "TestMessage", "players");
+        ChatPutDTO requestBody = new ChatPutDTO();
+        requestBody.setUserId(1L);
+        requestBody.setMessage("TestMessage");
+        ChatLog testChatLog = new ChatLog("11:11:11", "TestUsername", "userId", "TestMessage", "players");
         List<ChatLog> testHistory = new ArrayList<>();
         testHistory.add(testChatLog);
         given(chatService.getHistory("players", testGameId)).willReturn(testHistory);
 
         //when
         MockHttpServletRequestBuilder putRequest = put("/games/1/chats/players")
-                .contentType(MediaType.APPLICATION_JSON).content(asJsonString(testChatLog))
+                .contentType(MediaType.APPLICATION_JSON).content(asJsonString(requestBody))
                 .header("Authorization", "TestToken");
 
         //then
@@ -158,14 +163,17 @@ public class ChatControllerTest {
         //information we give over to the server
         long testGameId = 1L;
         //chatlog we want returned
-        ChatLog testChatLog = new ChatLog("11:11:11", "TestUsername", "TestMessage", "spectators");
+        ChatPutDTO requestBody = new ChatPutDTO();
+        requestBody.setUserId(1L);
+        requestBody.setMessage("TestMessage");
+        ChatLog testChatLog = new ChatLog("11:11:11", "TestUsername","userId", "TestMessage", "spectators");
         List<ChatLog> testHistory = new ArrayList<>();
         testHistory.add(testChatLog);
         given(chatService.getHistory("spectators", testGameId)).willReturn(testHistory);
 
         //when
         MockHttpServletRequestBuilder putRequest = put("/games/1/chats/spectators")
-                .contentType(MediaType.APPLICATION_JSON).content(asJsonString(testChatLog))
+                .contentType(MediaType.APPLICATION_JSON).content(asJsonString(requestBody))
                 .header("Authorization", "TestToken");
 
         //then
