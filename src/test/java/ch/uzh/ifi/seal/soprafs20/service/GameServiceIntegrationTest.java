@@ -74,11 +74,13 @@ public class GameServiceIntegrationTest {
         Player player1 = new Player("One");
         Player player2 = new Player("Two");
         Player player3 = new Player("Three");
+        Player player4 = new Player("Three");
         List<Player> players = new LinkedList<>();
 
         players.add(player1);
         players.add(player2);
-        //players.add(player3);
+        players.add(player3);
+        players.add(player4);
 
         player1.addToHand(new Card(Suit.CLUBS, Rank.ACE));
         player1.addToHand(new Card(Suit.CLUBS, Rank.SEVEN));
@@ -86,9 +88,15 @@ public class GameServiceIntegrationTest {
         player2.addToHand(new Card(Suit.DIAMONDS, Rank.KING));
         player2.addToHand(new Card(Suit.DIAMONDS, Rank.QUEEN));
 
+        player3.addToHand(new Card(Suit.DIAMONDS, Rank.NINE));
+        player3.addToHand(new Card(Suit.DIAMONDS, Rank.QUEEN));
+
+        player4.addToHand(new Card(Suit.DIAMONDS, Rank.TWO));
+        player4.addToHand(new Card(Suit.DIAMONDS, Rank.THREE));
+
         List<Card> cards = new LinkedList<>();
         cards.add(new Card(Suit.DIAMONDS, Rank.ACE));
-        cards.add(new Card(Suit.SPADES, Rank.KING));
+        cards.add(new Card(Suit.DIAMONDS, Rank.KING));
         cards.add(new Card(Suit.DIAMONDS, Rank.JACK));
         cards.add(new Card(Suit.SPADES, Rank.SIX));
         cards.add(new Card(Suit.DIAMONDS, Rank.TEN));
