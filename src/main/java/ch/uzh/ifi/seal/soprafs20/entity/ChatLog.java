@@ -7,11 +7,12 @@ import java.util.ArrayList;
  */
 public class ChatLog {
 
-    private String time, username, message, chatMode;
+    private String time, username, message, chatMode, userId;
 
-    public ChatLog(String time, String username, String message, String chatMode){
+    public ChatLog(String time, String username, String userId, String message, String chatMode){
         this.time = time;
         this.username = username;
+        this.userId = userId;
         this.message = message;
         this.chatMode = chatMode;
     }
@@ -22,4 +23,7 @@ public class ChatLog {
 
     public String getMessage(){return message;}
 
+    public String getUserId() {
+        return userId;
+    }
 }

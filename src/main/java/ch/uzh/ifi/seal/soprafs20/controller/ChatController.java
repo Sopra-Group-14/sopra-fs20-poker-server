@@ -2,6 +2,7 @@ package ch.uzh.ifi.seal.soprafs20.controller;
 
 import ch.uzh.ifi.seal.soprafs20.entity.ChatLog;
 import ch.uzh.ifi.seal.soprafs20.rest.dto.ChatPutDTO;
+import ch.uzh.ifi.seal.soprafs20.rest.mapper.DTOMapper;
 import ch.uzh.ifi.seal.soprafs20.service.ChatService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -24,8 +25,8 @@ public class ChatController {
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
     public ChatLog sendPlayerMessage(@RequestBody ChatPutDTO chatPutDTO,
-                                     @PathVariable long gameId,
-                                     @RequestHeader (value = "Authorization") String token){
+                                        @PathVariable long gameId,
+                                        @RequestHeader (value = "Authorization") String token){
         ChatLog chatLogPlayer = chatService.chatPutDTOtoChatLog(chatPutDTO, "player", "players");
         ChatLog chatLogSpectator = chatService.chatPutDTOtoChatLog(chatPutDTO, "player", "spectators");
 

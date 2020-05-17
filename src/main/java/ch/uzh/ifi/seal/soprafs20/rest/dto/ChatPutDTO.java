@@ -24,5 +24,4 @@ public class ChatPutDTO {
     public String getMessage() {
         return message;
     }
-
 }

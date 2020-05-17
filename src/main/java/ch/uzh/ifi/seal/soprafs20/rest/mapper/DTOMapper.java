@@ -1,5 +1,6 @@
 package ch.uzh.ifi.seal.soprafs20.rest.mapper;
 
+import ch.uzh.ifi.seal.soprafs20.entity.ChatLog;
 import ch.uzh.ifi.seal.soprafs20.entity.Game;
 import ch.uzh.ifi.seal.soprafs20.entity.User;
 import ch.uzh.ifi.seal.soprafs20.rest.dto.*;
@@ -41,9 +42,13 @@ public interface DTOMapper {
     @Mapping(source = "amount", target = "amount")
     UserPutDTO convertPutDTOtoEntity(UserPutDTO userPutDTO);
 
-//    @Mapping(source =  "message", target = "message")
+//    @Mapping(source =  "time", target = "time")
+//    @Mapping(source = "username", target = "username")
 //    @Mapping(source = "userId", target = "userId")
-//    ChatPutDTO convertPutDTOtoEntity(ChatPutDTO chatPutDTO);
+//    @Mapping(source = "message", target = "message")
+//    ChatPutDTO convertEntityToChatLogPutDTO(ChatLog chatLog);
+
+
 //
 //    @Mapping(source = "gameId", target = "gameId")
 //    @Mapping(source = "chatMode", target = "chatMode")

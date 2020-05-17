@@ -47,26 +47,28 @@ public class ChatService {
     public ChatLog chatPutDTOtoChatLog(ChatPutDTO chatPutDTO, String source, String chatMode){
 
         String userName;
+        long userId = chatPutDTO.getUserId();
 
         if(source.equals("player")) {
 
-            userName = userService.getUserById(chatPutDTO.getUserId()).getUsername();
+            userName = userService.getUserById(userId).getUsername();
 
         }else{
-            userName = "Spectator" + chatPutDTO.getUserId();
+            userName = "Spectator" + userId;
 
         }
 
         String timeStamp = new SimpleDateFormat("HH:mm - dd.MM.YYYY").format(new Date());
         String message = chatPutDTO.getMessage();
-        return new ChatLog(timeStamp, userName, message, chatMode);
+        return new ChatLog(timeStamp, userName, Long.toString(userId), message, chatMode);
+
     }
 
     public ChatLog getLatestMessage(List<ChatLog> chatLogs){
         if(chatLogs != null) {
             return chatLogs.get(chatLogs.size() - 1);
         }else{
-            return new ChatLog(null, null, null, null);
+            return new ChatLog(null, null, null, null, null);
         }
     }
 
