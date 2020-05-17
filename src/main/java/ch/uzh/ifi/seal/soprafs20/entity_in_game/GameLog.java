@@ -41,6 +41,7 @@ public class GameLog {
     private boolean gameStarted;
     private Player bigBlind;
     private Player smallBlind;
+    private int possibleRaiseAndBetAmount;
     API_Card api_card;
 
     //All the parameters are set in the constructor
@@ -268,5 +269,13 @@ public class GameLog {
             api_card = new API_Card(revealedCards.get(i).getSuit(), revealedCards.get(i).getRank());
             this.revealedAPICards.add(api_card.getApiCard());
         }
+    }
+
+    public int getPossibleRaiseAndBetAmount() {
+        return possibleRaiseAndBetAmount;
+    }
+
+    public void setPossibleRaiseAndBetAmount(int possibleRaiseAndBetAmount) {
+        this.possibleRaiseAndBetAmount = possibleRaiseAndBetAmount;
     }
 }
