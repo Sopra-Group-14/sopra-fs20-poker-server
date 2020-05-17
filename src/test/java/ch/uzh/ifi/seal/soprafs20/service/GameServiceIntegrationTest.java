@@ -160,6 +160,99 @@ public class GameServiceIntegrationTest {
         PokerHand hand = cardAnalyser.getPokerHand(cards);
 
         assertEquals(hand.getComboValue(), 9);
+        assertEquals(hand.getRankList().get(0), Rank.KING);
+
+    }
+
+    @Test
+    public void isStraight7CardScenarioWorks(){
+
+        CardAnalyser cardAnalyser = new CardAnalyser();
+
+        List<Card> cards = new LinkedList<>();
+        cards.add(new Card(Suit.CLUBS, Rank.SEVEN));
+        cards.add(new Card(Suit.SPADES, Rank.KING));
+        cards.add(new Card(Suit.DIAMONDS, Rank.QUEEN));
+        cards.add(new Card(Suit.HEARTS, Rank.EIGHT));
+        cards.add(new Card(Suit.DIAMONDS, Rank.JACK));
+        cards.add(new Card(Suit.HEARTS, Rank.NINE));
+        cards.add(new Card(Suit.SPADES, Rank.TEN));
+
+        PokerHand hand = cardAnalyser.getPokerHand(cards);
+
+        assertEquals(hand.getComboValue(), 5);
+        assertEquals(hand.getRankList().get(0), Rank.KING);
+
+    }
+
+    @Test
+    public void isThreeOfAKindWorks(){
+
+        CardAnalyser cardAnalyser = new CardAnalyser();
+
+        List<Card> cards = new LinkedList<>();
+        cards.add(new Card(Suit.CLUBS, Rank.SEVEN));
+        cards.add(new Card(Suit.SPADES, Rank.KING));
+        cards.add(new Card(Suit.DIAMONDS, Rank.QUEEN));
+        cards.add(new Card(Suit.HEARTS, Rank.SIX));
+        cards.add(new Card(Suit.DIAMONDS, Rank.QUEEN));
+        cards.add(new Card(Suit.HEARTS, Rank.FIVE));
+        cards.add(new Card(Suit.SPADES, Rank.QUEEN));
+
+        PokerHand hand = cardAnalyser.getPokerHand(cards);
+
+        assertEquals(hand.getComboValue(), 4);
+        assertEquals(hand.getRankList().get(0), Rank.QUEEN);
+        assertEquals(hand.getRankList().get(1), Rank.KING);
+        assertEquals(hand.getRankList().get(2), Rank.SEVEN);
+
+    }
+
+    @Test
+    public void isTwoPairsThirdScenarioWorks(){
+
+        CardAnalyser cardAnalyser = new CardAnalyser();
+
+        List<Card> cards = new LinkedList<>();
+        cards.add(new Card(Suit.CLUBS, Rank.SEVEN));
+        cards.add(new Card(Suit.SPADES, Rank.KING));
+        cards.add(new Card(Suit.DIAMONDS, Rank.QUEEN));
+        cards.add(new Card(Suit.HEARTS, Rank.SIX));
+        cards.add(new Card(Suit.DIAMONDS, Rank.QUEEN));
+        cards.add(new Card(Suit.HEARTS, Rank.FIVE));
+        cards.add(new Card(Suit.SPADES, Rank.FIVE));
+
+        PokerHand hand = cardAnalyser.getPokerHand(cards);
+
+        assertEquals(hand.getComboValue(), 3);
+        assertEquals(hand.getRankList().get(0), Rank.QUEEN);
+        assertEquals(hand.getRankList().get(1), Rank.FIVE);
+        assertEquals(hand.getRankList().get(2), Rank.KING);
+
+    }
+
+    @Test
+    public void isHighCardWorks(){
+
+        CardAnalyser cardAnalyser = new CardAnalyser();
+
+        List<Card> cards = new LinkedList<>();
+        cards.add(new Card(Suit.CLUBS, Rank.SEVEN));
+        cards.add(new Card(Suit.SPADES, Rank.KING));
+        cards.add(new Card(Suit.DIAMONDS, Rank.ACE));
+        cards.add(new Card(Suit.HEARTS, Rank.SIX));
+        cards.add(new Card(Suit.DIAMONDS, Rank.QUEEN));
+        cards.add(new Card(Suit.HEARTS, Rank.TWO));
+        cards.add(new Card(Suit.SPADES, Rank.FIVE));
+
+        PokerHand hand = cardAnalyser.getPokerHand(cards);
+
+        assertEquals(hand.getComboValue(), 1);
+        assertEquals(hand.getRankList().get(0), Rank.ACE);
+        assertEquals(hand.getRankList().get(1), Rank.KING);
+        assertEquals(hand.getRankList().get(2), Rank.QUEEN);
+        assertEquals(hand.getRankList().get(3), Rank.SEVEN);
+        assertEquals(hand.getRankList().get(4), Rank.SIX);
 
     }
 
