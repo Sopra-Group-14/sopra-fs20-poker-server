@@ -1,6 +1,8 @@
 package ch.uzh.ifi.seal.soprafs20.service;
 
 import ch.uzh.ifi.seal.soprafs20.cards.Card;
+import ch.uzh.ifi.seal.soprafs20.cards.CardAnalyser;
+import ch.uzh.ifi.seal.soprafs20.cards.PokerHand;
 import ch.uzh.ifi.seal.soprafs20.cards.WinnerCalculator;
 import ch.uzh.ifi.seal.soprafs20.constant.Rank;
 import ch.uzh.ifi.seal.soprafs20.constant.Suit;
@@ -123,7 +125,7 @@ public class GameServiceIntegrationTest {
         player1.addToHand(new Card(Suit.SPADES, Rank.ACE));
         player1.addToHand(new Card(Suit.CLUBS, Rank.KING));
 
-        player2.addToHand(new Card(Suit.HEARTS, Rank.TEN));
+        player2.addToHand(new Card(Suit.HEARTS, Rank.ACE));
         player2.addToHand(new Card(Suit.HEARTS, Rank.SIX));
 
 
@@ -138,6 +140,26 @@ public class GameServiceIntegrationTest {
         Player winner = winners.get(0);
 
         assertEquals(player1.getPlayerName(), winner.getPlayerName());
+
+    }
+
+    @Test
+    public void isStraightFlush7CardScenarioWorks(){
+
+        CardAnalyser cardAnalyser = new CardAnalyser();
+
+        List<Card> cards = new LinkedList<>();
+        cards.add(new Card(Suit.DIAMONDS, Rank.SEVEN));
+        cards.add(new Card(Suit.DIAMONDS, Rank.KING));
+        cards.add(new Card(Suit.DIAMONDS, Rank.QUEEN));
+        cards.add(new Card(Suit.DIAMONDS, Rank.EIGHT));
+        cards.add(new Card(Suit.DIAMONDS, Rank.JACK));
+        cards.add(new Card(Suit.DIAMONDS, Rank.NINE));
+        cards.add(new Card(Suit.DIAMONDS, Rank.TEN));
+
+        PokerHand hand = cardAnalyser.getPokerHand(cards);
+
+        assertEquals(hand.getComboValue(), 9);
 
     }
 
