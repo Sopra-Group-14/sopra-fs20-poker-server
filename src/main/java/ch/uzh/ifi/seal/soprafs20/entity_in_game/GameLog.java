@@ -44,6 +44,7 @@ public class GameLog {
     private int possibleRaiseAndBetAmount;
     private boolean playOneMoreRound;
     API_Card api_card;
+    private String gameRules;
 
     //All the parameters are set in the constructor
 
@@ -286,5 +287,13 @@ public class GameLog {
 
     public void setPlayOneMoreRound(boolean playOneMoreRound) {
         this.playOneMoreRound = playOneMoreRound;
+    }
+
+    public String getGameRules() {
+        return gameRules;
+    }
+
+    public void setGameRules(String gameRules) {
+        this.gameRules = gameRules;
     }
 }

@@ -10,6 +10,7 @@ import ch.uzh.ifi.seal.soprafs20.entity_in_game.Player;
 import ch.uzh.ifi.seal.soprafs20.entity_in_game.Pot;
 import ch.uzh.ifi.seal.soprafs20.entity_in_game.Spectator;
 import ch.uzh.ifi.seal.soprafs20.exceptions.SopraServiceException;
+import org.mapstruct.Mapping;
 
 import java.io.IOException;
 import java.util.logging.Level;
@@ -377,6 +378,7 @@ Constructor
     }
 
     public void startGame(){
+        this.gameLog.setGameRules(this.potType);
 
         //hand out hand cards before round one
         //deck.shuffle();
