@@ -573,6 +573,7 @@ public class GameService {
             }
 
             //if now both reminding players have credit again, game goes on
+
             if (playersWithCredit >=2){
                 game.setGameOver(false);
                 game.setRoundOver(true);
@@ -581,21 +582,33 @@ public class GameService {
                 //open new round again
                 game.startNewRound();
             }
+
+
+        }
+
+//if next Player went all in he is not allowed to play
+
+        if (nextPlayer.getCredit() > 0) {
+            gameLog.setNextPlayerName(nextPlayer.getPlayerName());
+            gameLog.setNextPlayerId(nextPlayer.getId());
+        }else {
+            Player player = currentPlayer;
+            while (game.getNextPlayer(player).getCredit()<= 0) {
+                player = game.getNextPlayer(player);
+            }
+            gameLog.setNextPlayerName(game.getNextPlayer(player).getPlayerName());
+            gameLog.setNextPlayerId(game.getNextPlayer(player).getId());
         }
 
 
-            //if next player has no more credit
 
-            if (nextPlayer.getCredit() == 0){
-                possibleActions.clear();
-                possibleActions.add(Action.FOLD);
-            }
+        //if the game is over
+        if (game.isGameOver()==true){
+            possibleActions.clear();
+        }
 
-            //if the game is over
 
-            if (gameLog.isGameOver()==true){
-                possibleActions.clear();
-            }
+
 
 
         gameLog.setPossibleActions(possibleActions);

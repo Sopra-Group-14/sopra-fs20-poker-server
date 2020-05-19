@@ -317,7 +317,7 @@ Constructor
         if (i<0){
             playerToSetTrue = activePlayers.get(activePlayers.size()-1);
         }else {
-            playerToSetTrue = activePlayers.get(activePlayers.indexOf(getPlayerWithZeroCredit()) - 1);
+            playerToSetTrue = activePlayers.get(i);
         }
         if (currentPlayer == playerToSetTrue){
             return true;
