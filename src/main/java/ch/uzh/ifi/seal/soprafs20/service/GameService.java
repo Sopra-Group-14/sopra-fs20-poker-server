@@ -664,7 +664,7 @@ public class GameService {
         Game game = gameSelect.getGameById(gameId);
         Player player = game.getPlayerById(userId);
         userService.addBalanceOfPlayer(userId, player.getCredit());
-        game.removePlayer(player);
+        game.getActivePlayers().remove(player);
         return;
     }
 

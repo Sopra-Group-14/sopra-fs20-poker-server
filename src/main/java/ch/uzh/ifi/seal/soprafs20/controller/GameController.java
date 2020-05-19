@@ -133,8 +133,8 @@ public class GameController {
         if (gameService.checkAuthorizationGet(token, gameId) == false) {
             throw new TransactionSystemException("Authorization check error");
         }
-        gameService.executeAction(Action.FOLD, 0, gameId, playerId);
         gameService.removePlayer(gameId, playerId);
+        gameService.executeAction(Action.FOLD, 0, gameId, playerId);
     }
 
     /*@PutMapping("/games/{gameId}/players/{playerId}/actions")
