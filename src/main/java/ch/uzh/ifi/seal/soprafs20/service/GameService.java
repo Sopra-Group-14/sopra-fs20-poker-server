@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
+import ch.uzh.ifi.seal.soprafs20.repository.UserRepository;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -662,10 +663,9 @@ public class GameService {
     public void removePlayer(long gameId, long userId){
         Game game = gameSelect.getGameById(gameId);
         Player player = game.getPlayerById(userId);
-        User user = userService.getUserById(userId);
-        user.setBalance(player.getCredit());
+        userService.addBalanceOfPlayer(userId, player.getCredit());
         game.removePlayer(player);
-
+        return;
     }
 
     public List<Game> getAllGames(){return gameSelect.getAllGames();}

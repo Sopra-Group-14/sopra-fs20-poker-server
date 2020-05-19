@@ -153,8 +153,9 @@ Constructor
 
     public void removePlayer(Player player){
         this.players.remove(player);
-        removeActivePlayer(player);
+        this.activePlayers.remove(player);
         gameLog.setPlayers(players);
+        gameLog.setActivePlayers(activePlayers);
     }
 
     public List<Player> getPlayers(){return players;}
@@ -312,7 +313,7 @@ Constructor
 //    }
 
     public boolean playOneMoreRoundToGameOver(Player currentPlayer){
-        int i = activePlayers.indexOf(getPlayerWithZeroCredit())-1;
+        int i = activePlayers.indexOf(getPlayerWithZeroCredit())-2;
         Player playerToSetTrue;
         if (i<0){
             playerToSetTrue = activePlayers.get(activePlayers.size()-1);
