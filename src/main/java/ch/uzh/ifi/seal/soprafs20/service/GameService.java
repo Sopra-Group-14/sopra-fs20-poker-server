@@ -238,12 +238,22 @@ public class GameService {
         }
 
         if(action == Action.FOLD){
-
-            for (int i = 0; i < activePlayers.size(); i++){
-                activePlayers.get(i).setThisPlayersTurn(false);
-            }
-            nextPlayer.setThisPlayersTurn(true);
             game.playerFolds(currentPlayer);
+
+            if (game.getActivePlayers().size()<2){
+                game.setRoundOver(true);
+                game.getActivePlayers().get(0).addCredit(game.getPot().getAmount());
+                currentPlayer.setAmountInPot(0);
+                game.startNewRound();
+            }else{
+                for (int i = 0; i < activePlayers.size(); i++){
+                    activePlayers.get(i).setThisPlayersTurn(false);
+                }
+                nextPlayer.setThisPlayersTurn(true);
+
+                gameLog.setNextPlayerName(nextPlayer.getPlayerName());
+                gameLog.setNextPlayerId(nextPlayer.getId());
+            }
 
             gameLog.setTransactionNr(game.getTransactionNr());
             gameLog.setGameRound(game.getGameRound());
@@ -255,8 +265,6 @@ public class GameService {
             gameLog.setRaiseAmount(0);
             gameLog.setPlayerName(currentPlayer.getPlayerName());
             gameLog.setPlayerId(currentPlayer.getId());
-            gameLog.setNextPlayerName(nextPlayer.getPlayerName());
-            gameLog.setNextPlayerId(nextPlayer.getId());
             gameLog.setPlayerPot(currentPlayer.getAmountInPot());
             gameLog.setPotAmount(pot.getAmount());
             gameLog.setRoundOver(game.isRoundOver());
@@ -588,10 +596,7 @@ public class GameService {
 
 //if next Player went all in he is not allowed to play
 
-        if (nextPlayer.getCredit() > 0) {
-            gameLog.setNextPlayerName(nextPlayer.getPlayerName());
-            gameLog.setNextPlayerId(nextPlayer.getId());
-        }else {
+        if (game.getNextPlayer(currentPlayer).getCredit() <= 0) {
             Player player = currentPlayer;
             while (game.getNextPlayer(player).getCredit()<= 0) {
                 player = game.getNextPlayer(player);

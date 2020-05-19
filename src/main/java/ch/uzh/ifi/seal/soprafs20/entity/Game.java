@@ -419,6 +419,8 @@ Constructor
         //set roundOver to false
         gameLog.setRoundOver(false);
         setRoundOver(false);
+        gameLog.setGameOver(false);
+        setGameOver(false);
 
 
         //for game split limit and fixed limit set raised per round equals zero
@@ -434,7 +436,7 @@ Constructor
             activePlayers.add(i, players.get(i));
             activePlayers.get(i).setFolded(false);
         }
-
+        this.pot.removeAmount(this.pot.getAmount());
         gameLog.setPotAmount(0);
         gameLog.setPlayerPot(0);
 
@@ -453,6 +455,9 @@ Constructor
         setBigBlind(activePlayers.get(1));
         gameLog.setSmallBlind(activePlayers.get(0));
         setSmallBlind(activePlayers.get(0));
+
+        gameLog.setNextPlayerId(activePlayers.get(0).getId());
+        gameLog.setNextPlayerName(activePlayers.get(0).getPlayerName());
 
         // Important: setThisPlayerTurn for all players but nextPlayer to false
         for (Player player1 : activePlayers) {
@@ -473,6 +478,7 @@ Constructor
         newDeck.shuffle();
         int i,e;
         for(i=0;i<players.size();i++){
+            players.get(i).setAmountInPot(0);
             for(e=0;e<2;e++){
                 players.get(i).addToHand(newDeck.getTopCard());
             }
@@ -480,12 +486,10 @@ Constructor
         gameLog.setActivePlayers(activePlayers);
         gameLog.setPlayers(players);
 
-
-        List<Action> actionList = new LinkedList<>();
-        actionList.clear();
-        actionList.add(Action.BET);
-        actionList.add(Action.FOLD);
-        gameLog.setPossibleActions(actionList);
+        possibleActions.clear();
+        possibleActions.add(Action.BET);
+        possibleActions.add(Action.FOLD);
+        gameLog.setPossibleActions(possibleActions);
         gameLog.setGameStarted(true);
         gameLog.setGameOver(false);
         roundCounter = 0;
@@ -497,8 +501,7 @@ Constructor
         gameLog.setThisPlayersTurn(true);
         gameLog.setPlayerName(activePlayers.get(0).getPlayerName());
         gameLog.setPlayerId(activePlayers.get(0).getId());
-        gameLog.setNextPlayerId(activePlayers.get(0).getId());
-        gameLog.setNextPlayerName(activePlayers.get(0).getPlayerName());
+
 
     }
 
