@@ -43,6 +43,9 @@ public class GameServiceIntegrationTest {
     @Autowired
     private GameService gameService;
 
+    @Autowired
+    private UserService userService;
+
     /*@BeforeEach
     public void setup() {
 
@@ -253,6 +256,37 @@ public class GameServiceIntegrationTest {
         assertEquals(hand.getRankList().get(2), Rank.QUEEN);
         assertEquals(hand.getRankList().get(3), Rank.SEVEN);
         assertEquals(hand.getRankList().get(4), Rank.SIX);
+
+    }
+
+    @Test
+    public void AddHostAndAddJoiningUserAddsUsersToPlayersAndActivePlayersLists(){
+
+        User toCreateUser = new User();
+        toCreateUser.setName("Name");
+        toCreateUser.setPassword("Password");
+        toCreateUser.setUsername("Username");
+
+        User toCreateUser2 = new User();
+        toCreateUser2.setName("Name2");
+        toCreateUser2.setPassword("Password2");
+        toCreateUser2.setUsername("Username2");
+
+        User hostUser = userService.createUser(toCreateUser);
+        User joiningUser = userService.createUser(toCreateUser2);
+
+        Game game = gameService.createGame("Game", hostUser.getId(), "Fixed");
+
+        gameService.addHost(hostUser.getId(), game);
+        gameService.addJoiningPlayer(joiningUser.getId(), game.getGameId());
+
+        List<Player> players = gameService.getPlayers(game.getGameId());
+        List<Player> activePlayers = gameService.getGame(game.getGameId()).getActivePlayers();
+
+        assertEquals(hostUser.getUsername(), players.get(0).getPlayerName());
+        assertEquals(joiningUser.getUsername(), players.get(1).getPlayerName());
+        assertEquals(hostUser.getUsername(), activePlayers.get(0).getPlayerName());
+        assertEquals(joiningUser.getUsername(), activePlayers.get(1).getPlayerName());
 
     }
 
