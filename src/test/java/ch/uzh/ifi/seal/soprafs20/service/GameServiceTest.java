@@ -199,5 +199,73 @@ public class GameServiceTest {
 
     }
 
+    @Test
+    public void testRemovingSingleOrAllGamesFromGameSelect(){
+
+        User toCreateUser = new User();
+        toCreateUser.setName("Name");
+        toCreateUser.setPassword("Password");
+        toCreateUser.setUsername("Username");
+
+        User hostUser = userService.createUser(toCreateUser);
+
+        Game game = gameService.createGame("Game", hostUser.getId(), "None");
+        Game game2 = gameService.createGame("Game2", hostUser.getId(), "None");
+        Game game3 = gameService.createGame("Game3", hostUser.getId(), "None");
+
+        gameService.addHost(hostUser.getId(), game);
+        gameService.addHost(hostUser.getId(), game2);
+        gameService.addHost(hostUser.getId(), game3);
+
+        GameSelect gameSelect = new GameSelect();
+
+        gameSelect.addGame(game);
+        gameSelect.addGame(game2);
+        gameSelect.addGame(game3);
+
+        List<Game> games = gameSelect.getAllGames();
+
+        assertEquals(games.get(0), game);
+        assertEquals(games.get(1), game2);
+        assertEquals(games.get(2), game3);
+
+        gameSelect.removeGame(game2);
+
+        assertEquals(games.get(0), game);
+        assertEquals(games.get(1), game3);
+
+        gameSelect.removeAllGames();
+
+        Game game4 = gameService.createGame("Game4", hostUser.getId(), "None");
+        gameSelect.addGame(game4);
+
+        assertEquals(gameSelect.getAllGames().get(0), game4);
+
+    }
+
+    @Test
+    public void testGetGameByToken(){
+
+        User toCreateUser = new User();
+        toCreateUser.setName("Name");
+        toCreateUser.setPassword("Password");
+        toCreateUser.setUsername("Username");
+
+        User hostUser = userService.createUser(toCreateUser);
+
+        Game game = gameService.createGame("Game", hostUser.getId(), "None");
+
+        gameService.addHost(hostUser.getId(), game);
+
+        GameSelect gameSelect = new GameSelect();
+
+        gameSelect.addGame(game);
+
+        String token = game.getHostToken();
+
+        assertEquals(game, gameSelect.getGameByToken(token));
+
+    }
+
 }
 
