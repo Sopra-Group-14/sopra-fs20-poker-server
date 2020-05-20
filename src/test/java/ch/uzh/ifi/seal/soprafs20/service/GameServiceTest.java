@@ -1,11 +1,14 @@
 package ch.uzh.ifi.seal.soprafs20.service;
 
 
+import ch.uzh.ifi.seal.soprafs20.cards.Card;
+import ch.uzh.ifi.seal.soprafs20.chat.PlayerChat;
 import ch.uzh.ifi.seal.soprafs20.constant.Action;
 import ch.uzh.ifi.seal.soprafs20.constant.UserStatus;
 import ch.uzh.ifi.seal.soprafs20.entity.Game;
 import ch.uzh.ifi.seal.soprafs20.entity.GameSelect;
 import ch.uzh.ifi.seal.soprafs20.entity.User;
+import ch.uzh.ifi.seal.soprafs20.entity_in_game.GameLog;
 import ch.uzh.ifi.seal.soprafs20.entity_in_game.Player;
 import ch.uzh.ifi.seal.soprafs20.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,6 +23,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -148,6 +153,49 @@ public class GameServiceTest {
         assertEquals(game.getActivePlayers().get(0), join);
         game.removePlayer(join);
         assertEquals(game.getPlayers().get(0), host);
+
+    }
+
+    @Test
+    public void addTableCardsAddsATableCard(){
+
+        User toCreateUser = new User();
+        toCreateUser.setName("Name");
+        toCreateUser.setPassword("Password");
+        toCreateUser.setUsername("Username");
+
+        User hostUser = userService.createUser(toCreateUser);
+
+        Game game = gameService.createGame("Game", hostUser.getId(), "None");
+
+        gameService.addHost(hostUser.getId(), game);
+
+        game.addTableCard();
+
+        List<Card> tableCards = game.getTableCards();
+
+        assertNotNull(tableCards.get(0));
+
+    }
+
+    @Test
+    public void nullGameLogReturnsRightNullGameLog(){
+
+        User toCreateUser = new User();
+        toCreateUser.setName("Name");
+        toCreateUser.setPassword("Password");
+        toCreateUser.setUsername("Username");
+
+        User hostUser = userService.createUser(toCreateUser);
+
+        Game game = gameService.createGame("Game", hostUser.getId(), "None");
+
+        gameService.addHost(hostUser.getId(), game);
+
+        GameLog nullGameLog = game.nullGameLog();
+
+        assertEquals(nullGameLog.getAction(), Action.NONE);
+        assertEquals(nullGameLog.getGameName(), game.getGameName());
 
     }
 
