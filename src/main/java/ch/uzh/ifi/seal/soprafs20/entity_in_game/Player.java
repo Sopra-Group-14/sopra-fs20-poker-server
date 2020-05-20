@@ -13,7 +13,7 @@ public class Player{
     private List<Card> hand = new LinkedList<>();
     private List<String> apiHand = new LinkedList<>();
 
-    private static final int START_CREDIT = 1000;
+    //private static final int START_CREDIT = 1000;
 
     private int credit;
 
@@ -37,7 +37,7 @@ public class Player{
 
 
     public Player(User user){
-        this.credit = START_CREDIT;
+        this.credit = user.getBalance();
         this.id = user.getId();
         this.playerName = user.getUsername();
     }

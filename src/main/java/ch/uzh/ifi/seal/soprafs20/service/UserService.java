@@ -112,7 +112,7 @@ public class UserService {
         Date currTime = new Date(System.currentTimeMillis());
 
         if(hoursDifference(user.getLastToppedUp(), currTime) > COOLDOWN_TIME){
-            user.setBalance((long) amount);
+            user.setBalance((int) amount);
         }else{
             throw new SopraServiceException("Cannot top up account as user's accout has been topped up within the last "
                                             + COOLDOWN_TIME + " hours.");
@@ -125,7 +125,7 @@ public class UserService {
 
     public void addBalanceOfPlayer(long userId, long amount) {
         User user = userRepository.findById(userId);
-        user.setBalance((long) amount);
+        user.setBalance((int) amount);
         this.userRepository.save(user);
         this.userRepository.flush();
         return;

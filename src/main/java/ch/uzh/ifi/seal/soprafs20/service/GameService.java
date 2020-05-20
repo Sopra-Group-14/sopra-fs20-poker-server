@@ -661,11 +661,64 @@ public class GameService {
     }
 
     public void removePlayer(long gameId, long userId){
+        Game game = getGame(gameId);
+        Player player = game.getPlayerById(userId);
+        List<Player> players= game.getPlayers();
+        List<Player> activePlayers = game.getActivePlayers();
+        GameLog gameLog = game.getGameLog();
+
+        User user = userService.getUserById(userId);
+        user.setBalance2(player.getCredit());
+
+        player.setAmountInPot(0);
+
+        getGame(gameId).getPlayers().remove(getGame(gameId).getPlayerById(userId));
+        getGame(gameId).getGameLog().setPlayers(getGame(gameId).getPlayers());
+
+        if (userId == game.getGameLog().getNextPlayerId()) {
+            game.getGameLog().setNextPlayerId(game.getNextPlayer(player).getId());
+            game.getGameLog().setNextPlayerName(game.getNextPlayer(player).getPlayerName());
+
+            for (Player activePlayer : activePlayers) {
+                activePlayer.setThisPlayersTurn(false);
+            }
+            game.getNextPlayer(player).setThisPlayersTurn(true);
+        }
+
+        activePlayers.remove(player);
+
+        if (players.size()<2){
+            game.setGameOver();
+            gameLog.setGameOver(true);
+            game.setRoundOver();
+            gameLog.setRoundOver(true);
+            activePlayers.get(0).addCredit(game.getPot().getAmount());
+            User winner = userService.getUserById(activePlayers.get(0).getId());
+            winner.setBalance2(activePlayers.get(0).getCredit());
+            gameLog.setWinners(activePlayers);
+            gameLog.setActivePlayers(activePlayers);
+            List<Action> possibleActions = game.getPossibleActions();
+            possibleActions.clear();
+            gameLog.setPossibleActions(possibleActions);
+            game.getPot().removeAmount(game.getPot().getAmount());
+            gameLog.setPotAmount(game.getPot().getAmount());
+
+        }else if (activePlayers.size()<2){
+            game.setRoundOver();
+            gameLog.setRoundOver(true);
+            activePlayers.get(0).addCredit(game.getPot().getAmount());
+            gameLog.setActivePlayers(activePlayers);
+            game.getPot().removeAmount(game.getPot().getAmount());
+            gameLog.setPotAmount(game.getPot().getAmount());
+            game.startNewRound();
+        }
+
+        /*
         Game game = gameSelect.getGameById(gameId);
         Player player = game.getPlayerById(userId);
         userService.addBalanceOfPlayer(userId, player.getCredit());
         game.getActivePlayers().remove(player);
-        return;
+        */
     }
 
     public List<Game> getAllGames(){return gameSelect.getAllGames();}

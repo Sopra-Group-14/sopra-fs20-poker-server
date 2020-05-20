@@ -129,12 +129,18 @@ public class GameController {
     @PutMapping("/games/{gameId}/players/{playerId}/leave")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public void leave(@PathVariable long gameId, @PathVariable long playerId, @RequestHeader (value = "Authorization") String token){
-        if (gameService.checkAuthorizationGet(token, gameId) == false) {
+    public GameLog leave(@PathVariable long gameId, @PathVariable long playerId, @RequestHeader (value = "Authorization") String token){
+        /*if (gameService.checkAuthorizationGet(token, gameId) == false) {
             throw new TransactionSystemException("Authorization check error");
-        }
+        }*/
+
+        log.info("before gameService");
         gameService.removePlayer(gameId, playerId);
-        gameService.executeAction(Action.FOLD, 0, gameId, playerId);
+        /*if (playerId == gameService.getGame(gameId).getGameLog().getNextPlayerId()){
+            gameService.executeAction(Action.FOLD, 0, gameId, playerId);
+        }
+        */
+        return gameService.getGame(gameId).getGameLog();
     }
 
     /*@PutMapping("/games/{gameId}/players/{playerId}/actions")

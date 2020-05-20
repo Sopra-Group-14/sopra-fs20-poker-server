@@ -40,7 +40,7 @@ public class User implements Serializable {
     private UserStatus status;
 
     @Column(nullable = false)
-    private long balance;
+    private int balance;
 
     @Column(nullable = false)
     private Date lastToppedUp;
@@ -99,11 +99,15 @@ public class User implements Serializable {
         return lastToppedUp;
     }
 
-    public void setBalance(long balance) {
+    public void setBalance(int balance) {
         this.balance += balance;
     }
 
-    public long getBalance() {
+    public void setBalance2(int balance) {
+        this.balance = balance;
+    }
+
+    public int getBalance() {
         return balance;
     }
 
