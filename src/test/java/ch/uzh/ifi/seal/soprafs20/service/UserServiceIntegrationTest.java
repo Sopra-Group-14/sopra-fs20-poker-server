@@ -34,6 +34,23 @@ public class UserServiceIntegrationTest {
         userRepository.deleteAll();
     }
 
+    @Test
+    public void addBalanceOfPlayerAddsBalance() throws Exception{
+
+        User toCreateUser = new User();
+        toCreateUser.setName("Name");
+        toCreateUser.setPassword("Password");
+        toCreateUser.setUsername("Username");
+        toCreateUser.setToken("Token");
+
+        User user = userService.createUser(toCreateUser);
+
+        userService.addBalanceOfPlayer(user.getId(), 1000);
+
+        assertEquals(user.getBalance(), 1000);
+
+    }
+
     /*@Test
     public void createUser_validInputs_success() {
         // given
@@ -73,4 +90,5 @@ public class UserServiceIntegrationTest {
         // check that an error is thrown
         assertThrows(ResponseStatusException.class, () -> userService.createUser(testUser2));
     }*/
+
 }

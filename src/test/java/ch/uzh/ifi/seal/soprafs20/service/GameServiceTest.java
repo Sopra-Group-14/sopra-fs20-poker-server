@@ -117,5 +117,39 @@ public class GameServiceTest {
 
     }
 
+    @Test
+    public void testRemovePlayerAndRemoveActivePlayer(){
+
+        User toCreateUser = new User();
+        toCreateUser.setName("Name");
+        toCreateUser.setPassword("Password");
+        toCreateUser.setUsername("Username");
+
+        User toCreateUser2 = new User();
+        toCreateUser2.setName("Name2");
+        toCreateUser2.setPassword("Password2");
+        toCreateUser2.setUsername("Username2");
+
+        User hostUser = userService.createUser(toCreateUser);
+        User joiningUser = userService.createUser(toCreateUser2);
+
+        Game game = gameService.createGame("Game", hostUser.getId(), "None");
+
+        gameService.addHost(hostUser.getId(), game);
+        gameService.addJoiningPlayer(joiningUser.getId(), game.getGameId());
+
+        Long hostId = hostUser.getId();
+        Long joinId = joiningUser.getId();
+
+        Player host = game.getPlayerById(hostId);
+        Player join = game.getPlayerById(joinId);
+
+        game.removeActivePlayer(host);
+        assertEquals(game.getActivePlayers().get(0), join);
+        game.removePlayer(join);
+        assertEquals(game.getPlayers().get(0), host);
+
+    }
+
 }
 
