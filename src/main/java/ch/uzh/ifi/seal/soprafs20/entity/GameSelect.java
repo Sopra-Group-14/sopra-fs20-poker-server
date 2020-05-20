@@ -52,7 +52,7 @@ public class GameSelect {
         int i;
         Game returnGame = NULL_GAME;
         for(i=0;i<gameList.size();i++){
-            if(gameList.get(i).getHostToken() == token){
+            if(gameList.get(i).getHostToken().equals(token)){
                 returnGame = gameList.get(i);
                 break;
             }
