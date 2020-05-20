@@ -668,6 +668,18 @@ public class GameService {
         return;
     }
 
+    public void removeFromPlayers(long gameId, long userId){
+        Game game = gameSelect.getGameById(gameId);
+        Player player = game.getPlayerById(userId);
+        game.getActivePlayers().remove(player);
+    }
+
+    public void removeFromActivePlayers(long gameId, long userId){
+        Game game = gameSelect.getGameById(gameId);
+        Player player = game.getPlayerById(userId);
+        game.getPlayers().remove(player);
+    }
+
     public List<Game> getAllGames(){return gameSelect.getAllGames();}
 
     public boolean checkAuthorizationPut(long gameId, long playerId, String token){

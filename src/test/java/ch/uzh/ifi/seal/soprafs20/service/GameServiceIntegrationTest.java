@@ -311,7 +311,7 @@ public class GameServiceIntegrationTest {
         User hostUser = userService.createUser(toCreateUser);
         User joiningUser = userService.createUser(toCreateUser2);
 
-        Game game = gameService.createGame("Game", hostUser.getId(), "Fixed");
+        Game game = gameService.createGame("Game", hostUser.getId(), "None");
 
         gameService.addHost(hostUser.getId(), game);
         gameService.addJoiningPlayer(joiningUser.getId(), game.getGameId());
@@ -320,11 +320,144 @@ public class GameServiceIntegrationTest {
         Long joinId = joiningUser.getId();
         Long gameId = game.getGameId();
 
+        //Normal case
         GameLog gameLog = gameService.executeAction(Action.BET, 10, gameId, hostId);
+        //Player ID not in activePlayers
+        //gameService.removeFromActivePlayers(gameId, hostId);
+        //GameLog gameLog1 = gameService.executeAction(Action.BET, 10, gameId, hostId);
 
         assertEquals(gameLog.getAction(), Action.BET);
 
     }
 
+    @Test
+    public void testActionFold(){
+
+        User toCreateUser = new User();
+        toCreateUser.setName("Name");
+        toCreateUser.setPassword("Password");
+        toCreateUser.setUsername("Username");
+
+        User toCreateUser2 = new User();
+        toCreateUser2.setName("Name2");
+        toCreateUser2.setPassword("Password2");
+        toCreateUser2.setUsername("Username2");
+
+        User hostUser = userService.createUser(toCreateUser);
+        User joiningUser = userService.createUser(toCreateUser2);
+
+        Game game = gameService.createGame("Game", hostUser.getId(), "None");
+
+        gameService.addHost(hostUser.getId(), game);
+        gameService.addJoiningPlayer(joiningUser.getId(), game.getGameId());
+
+        Long hostId = hostUser.getId();
+        Long joinId = joiningUser.getId();
+        Long gameId = game.getGameId();
+
+        //Normal case
+        GameLog gameLog = gameService.executeAction(Action.FOLD, 0, gameId, hostId);
+
+        assertEquals(gameLog.getAction(), Action.FOLD);
+        assertEquals(game.getActivePlayers().get(0).getPlayerName(), joiningUser.getUsername());
+
+    }
+
+    @Test
+    public void testActionRaise() {
+
+        User toCreateUser = new User();
+        toCreateUser.setName("Name");
+        toCreateUser.setPassword("Password");
+        toCreateUser.setUsername("Username");
+
+        User toCreateUser2 = new User();
+        toCreateUser2.setName("Name2");
+        toCreateUser2.setPassword("Password2");
+        toCreateUser2.setUsername("Username2");
+
+        User hostUser = userService.createUser(toCreateUser);
+        User joiningUser = userService.createUser(toCreateUser2);
+
+        Game game = gameService.createGame("Game", hostUser.getId(), "None");
+
+        gameService.addHost(hostUser.getId(), game);
+        gameService.addJoiningPlayer(joiningUser.getId(), game.getGameId());
+
+        Long hostId = hostUser.getId();
+        Long joinId = joiningUser.getId();
+        Long gameId = game.getGameId();
+
+        //Normal case
+        GameLog gameLog = gameService.executeAction(Action.RAISE, 10, gameId, hostId);
+
+        assertEquals(gameLog.getAction(), Action.RAISE);
+        assertEquals(gameLog.getRaiseAmount(), 10);
+
+    }
+
+    @Test
+    public void testActionCall() {
+
+        User toCreateUser = new User();
+        toCreateUser.setName("Name");
+        toCreateUser.setPassword("Password");
+        toCreateUser.setUsername("Username");
+
+        User toCreateUser2 = new User();
+        toCreateUser2.setName("Name2");
+        toCreateUser2.setPassword("Password2");
+        toCreateUser2.setUsername("Username2");
+
+        User hostUser = userService.createUser(toCreateUser);
+        User joiningUser = userService.createUser(toCreateUser2);
+
+        Game game = gameService.createGame("Game", hostUser.getId(), "None");
+
+        gameService.addHost(hostUser.getId(), game);
+        gameService.addJoiningPlayer(joiningUser.getId(), game.getGameId());
+
+        Long hostId = hostUser.getId();
+        Long joinId = joiningUser.getId();
+        Long gameId = game.getGameId();
+
+        //Normal case
+        GameLog gameLog = gameService.executeAction(Action.CALL, 0, gameId, hostId);
+
+        assertEquals(gameLog.getAction(), Action.CALL);
+
+    }
+
+    @Test
+    public void testActionCheck() {
+
+        User toCreateUser = new User();
+        toCreateUser.setName("Name");
+        toCreateUser.setPassword("Password");
+        toCreateUser.setUsername("Username");
+
+        User toCreateUser2 = new User();
+        toCreateUser2.setName("Name2");
+        toCreateUser2.setPassword("Password2");
+        toCreateUser2.setUsername("Username2");
+
+        User hostUser = userService.createUser(toCreateUser);
+        User joiningUser = userService.createUser(toCreateUser2);
+
+        Game game = gameService.createGame("Game", hostUser.getId(), "None");
+
+        gameService.addHost(hostUser.getId(), game);
+        gameService.addJoiningPlayer(joiningUser.getId(), game.getGameId());
+
+        Long hostId = hostUser.getId();
+        Long joinId = joiningUser.getId();
+        Long gameId = game.getGameId();
+
+        //Normal case
+        GameLog gameLog = gameService.executeAction(Action.CHECK, 0, gameId, hostId);
+
+        assertEquals(gameLog.getAction(), Action.CHECK);
+
+    }
 
 }
