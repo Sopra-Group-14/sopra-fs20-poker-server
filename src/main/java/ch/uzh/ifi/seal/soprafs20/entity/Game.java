@@ -519,6 +519,7 @@ Constructor
             setGameOver(true);
             return;
         }
+        /*
         //if only one player in the game has credit, than game is over
         int playersWithCredit = 0;
         for (int i = 0;i < players.size();i++){
@@ -526,26 +527,8 @@ Constructor
                 playersWithCredit++;
             }
         }
-        if (playersWithCredit <2){
-            if (playOneMoreRoundToGameOver(getCurrentPlayer(playerId))) {
-                if (getGameRound() == GameRound.Preflop){
-                    addTableCard();
-                    addTableCard();
-                    addTableCard();
-                    addTableCard();
-                    addTableCard();
-                }else if (getGameRound() == GameRound.Flop){
-                    addTableCard();
-                    addTableCard();
-                }else if (getGameRound() == GameRound.RiverCard) {
-                    addTableCard();
-                }
-                gameLog.setGameOver(true);
-                gameLog.setRevealedCards(getTableCards());
-                setGameOver(true);
-                return;
-            }
-        }
+
+         */
 
 
 

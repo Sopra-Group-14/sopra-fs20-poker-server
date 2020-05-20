@@ -429,6 +429,12 @@ public class GameService {
 
 // enters the posssible actions for the next player into the gameLog
         List <Action> possibleActions = game.getPossibleActions();
+
+      int nextPlayerAmountToCall = (getPlayerWithMostAmountInPot(game).getAmountInPot() - nextPlayer.getAmountInPot());
+        boolean callPossible;
+        callPossible = nextPlayerAmountToCall <= nextPlayer.getCredit();
+
+
         //second player of first round has to raise
         if (action == Action.BET && pot.getAmount() == smallBlind && game.getGameRound() == GameRound.Preflop && currentPlayer == activePlayers.get(0)) {
             possibleActions.clear();
@@ -448,13 +454,17 @@ public class GameService {
             if (action == Action.BET) {
                 possibleActions.clear();
                 possibleActions.add(Action.RAISE);
-                possibleActions.add(Action.CALL);
+                if (callPossible) {
+                    possibleActions.add(Action.CALL);
+                }
                 possibleActions.add(Action.FOLD);
             }
             else if (action == Action.RAISE) {
                 possibleActions.clear();
                 possibleActions.add(Action.RAISE);
-                possibleActions.add(Action.CALL);
+                if (callPossible) {
+                    possibleActions.add(Action.CALL);
+                 }
                 possibleActions.add(Action.FOLD);
                 possibleActions.add(Action.FOLD);
             }
@@ -493,7 +503,9 @@ public class GameService {
                         (game.getGameRound()==GameRound.TurnCard && game.getTimesRaisedTurnCard() <= 2)) {
                     possibleActions.add(Action.RAISE);
                 }
-                possibleActions.add(Action.CALL);
+                if (callPossible) {
+                    possibleActions.add(Action.CALL);
+                }
                 possibleActions.add(Action.FOLD);
             }
             else if (action == Action.RAISE) {
@@ -503,7 +515,9 @@ public class GameService {
                 if (game.getGameRound()==GameRound.TurnCard){game.setTimesRaisedTurnCard(game.getTimesRaisedTurnCard()+1);}
                 possibleActions.clear();
                 possibleActions.add(Action.RAISE);
-                possibleActions.add(Action.CALL);
+                if (callPossible) {
+                    possibleActions.add(Action.CALL);
+                }
                 possibleActions.add(Action.FOLD);
 
                 //per round is it not possible to raise more than three times
@@ -512,7 +526,9 @@ public class GameService {
                         (game.getGameRound()==GameRound.RiverCard && game.getTimesRaisedRiverCard() > 2)||
                         (game.getGameRound()==GameRound.TurnCard && game.getTimesRaisedTurnCard() > 2)) {
                     possibleActions.clear();
-                    possibleActions.add(Action.CALL);
+                    if (callPossible) {
+                        possibleActions.add(Action.CALL);
+                    }
                     possibleActions.add(Action.FOLD);
                 }
             }
@@ -545,8 +561,38 @@ public class GameService {
             }
         }
 
+/*
+       for (int i = 0; i<activePlayers.size();i++){
+           if (activePlayers.get(i).getCredit() <= 0){
+               gameLog.setPlayOneMoreRound(true);
+               game.setPlayerWithZeroCredit(currentPlayer);
+               possibleActions.clear();
+               possibleActions.add(Action.CALL);
+               break;
+           }
+       }
 
-        // if only one player left with credit, next player can play than round is over and maybe game is over
+       if (game.playOneMoreRoundToGameOver(currentPlayer)) {
+                if (game.getGameRound() == GameRound.Preflop){
+                    game.addTableCard();
+                    game.addTableCard();
+                    game.addTableCard();
+                    game.addTableCard();
+                    game.addTableCard();
+                }else if (game.getGameRound() == GameRound.Flop){
+                    game.addTableCard();
+                    game.addTableCard();
+                }else if (game.getGameRound() == GameRound.RiverCard) {
+                    game.addTableCard();
+                }
+                gameLog.setGameOver(true);
+                gameLog.setRevealedCards(game.getTableCards());
+                game.setGameOver(true);
+       }
+
+*/
+
+        /*
         int playersWithCredit = 0;
         for (int i = 0;i < players.size();i++){
             if (players.get(i).getCredit()>0){
@@ -557,9 +603,11 @@ public class GameService {
             gameLog.setPlayOneMoreRound(true);
             game.setPlayerWithZeroCredit(currentPlayer);
         }
+        */
 
 
 
+/*
         if (game.isGameOver() == true){
             game.setRoundOver(true);
             gameLog.setRoundOver(true);
@@ -579,7 +627,7 @@ public class GameService {
             gameLog.setPotAmount(0);
             gameLog.setPlayers(players);
 
-            playersWithCredit = 0;
+            int playersWithCredit = 0;
             for (int i = 0;i < players.size();i++){
                 if (players.get(i).getCredit()>0){
                     playersWithCredit++;
@@ -599,7 +647,7 @@ public class GameService {
 
 
         }
-
+*/
 //if next Player went all in he is not allowed to play
 
         if (game.getNextPlayer(currentPlayer).getCredit() <= 0) {
