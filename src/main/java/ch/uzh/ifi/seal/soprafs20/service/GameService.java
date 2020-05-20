@@ -241,10 +241,13 @@ public class GameService {
         if(action == Action.FOLD){
             game.playerFolds(currentPlayer);
 
-            if (game.getActivePlayers().size()<2){
-                game.setRoundOver(true);
-                game.getActivePlayers().get(0).addCredit(game.getPot().getAmount());
-                currentPlayer.setAmountInPot(0);
+            if (activePlayers.size()<2){
+                game.setRoundOver();
+                gameLog.setRoundOver(true);
+                activePlayers.get(0).addCredit(game.getPot().getAmount());
+                gameLog.setActivePlayers(activePlayers);
+                game.getPot().removeAmount(game.getPot().getAmount());
+                gameLog.setPotAmount(game.getPot().getAmount());
                 game.startNewRound();
             }else{
                 for (int i = 0; i < activePlayers.size(); i++){
@@ -554,6 +557,8 @@ public class GameService {
             gameLog.setPlayOneMoreRound(true);
             game.setPlayerWithZeroCredit(currentPlayer);
         }
+
+
 
         if (game.isGameOver() == true){
             game.setRoundOver(true);

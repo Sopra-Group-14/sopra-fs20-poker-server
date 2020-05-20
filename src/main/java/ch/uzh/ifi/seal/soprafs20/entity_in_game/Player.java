@@ -31,6 +31,8 @@ public class Player{
 
     private boolean checked= false;
 
+    private boolean markedAsZeroCredit = false;
+
     API_Card api_card;
 
     private PlayerReadyStatus readyStatus = PlayerReadyStatus.UNREADY;
@@ -122,5 +124,13 @@ public class Player{
             api_card = new API_Card(hand.get(i).getSuit(), hand.get(i).getRank());
             this.apiHand.add(api_card.getApiCard());
         }
+    }
+
+    public boolean isMarkedAsZeroCredit() {
+        return markedAsZeroCredit;
+    }
+
+    public void setMarkedAsZeroCredit(boolean markedAsZeroCredit) {
+        this.markedAsZeroCredit = markedAsZeroCredit;
     }
 }

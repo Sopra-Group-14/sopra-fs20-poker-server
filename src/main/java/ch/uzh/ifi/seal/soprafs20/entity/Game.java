@@ -313,14 +313,14 @@ Constructor
 //    }
 
     public boolean playOneMoreRoundToGameOver(Player currentPlayer){
-        int i = activePlayers.indexOf(getPlayerWithZeroCredit())-2;
-        Player playerToSetTrue;
-        if (i<0){
-            playerToSetTrue = activePlayers.get(activePlayers.size()-1);
-        }else {
-            playerToSetTrue = activePlayers.get(i);
+        Player player = activePlayers.get(0);
+        int a = 0;
+        while (getNextPlayer(player).isMarkedAsZeroCredit() != true){
+            a++;
+            player = activePlayers.get(a);
         }
-        if (currentPlayer == playerToSetTrue){
+
+        if (currentPlayer == player){
             return true;
         }else{
             return false;
@@ -683,6 +683,7 @@ Constructor
 
     public void setPlayerWithZeroCredit(Player playerWithZeroCredit) {
         this.playerWithZeroCredit = playerWithZeroCredit;
+        playerWithZeroCredit.setMarkedAsZeroCredit(true);
     }
 }
 
