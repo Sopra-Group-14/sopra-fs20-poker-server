@@ -35,4 +35,14 @@ public class Deck {
             return new Card(topCard.getSuit(), topCard.getRank());
         }
 
+        public void refill(){
+        this.cards.clear();
+            for (Suit s: Suit.values()){
+                for (Rank r: Rank.values()){
+                    Card c = new Card(s, r);
+                    cards.add(c);
+                }
+            }
+        }
+
 }

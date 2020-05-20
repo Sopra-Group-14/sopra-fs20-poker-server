@@ -417,6 +417,9 @@ Constructor
 
     public void startNewRound(){
 
+        //refill deck
+        deck.refill();
+
         //set roundOver to false
         gameLog.setRoundOver(false);
         setRoundOver(false);
@@ -475,13 +478,13 @@ Constructor
         for (int i=0;i<players.size();i++){
             players.get(i).getHand().clear();
         }
-        Deck newDeck = new Deck();
-        newDeck.shuffle();
+
+        deck.shuffle();
         int i,e;
         for(i=0;i<players.size();i++){
             players.get(i).setAmountInPot(0);
             for(e=0;e<2;e++){
-                players.get(i).addToHand(newDeck.getTopCard());
+                players.get(i).addToHand(deck.getTopCard());
             }
         }
         gameLog.setActivePlayers(activePlayers);
