@@ -4,12 +4,14 @@ import ch.uzh.ifi.seal.soprafs20.cards.Card;
 import ch.uzh.ifi.seal.soprafs20.cards.CardAnalyser;
 import ch.uzh.ifi.seal.soprafs20.cards.PokerHand;
 import ch.uzh.ifi.seal.soprafs20.cards.WinnerCalculator;
+import ch.uzh.ifi.seal.soprafs20.constant.Action;
 import ch.uzh.ifi.seal.soprafs20.constant.Rank;
 import ch.uzh.ifi.seal.soprafs20.constant.Suit;
 import ch.uzh.ifi.seal.soprafs20.constant.UserStatus;
 import ch.uzh.ifi.seal.soprafs20.entity.Game;
 import ch.uzh.ifi.seal.soprafs20.entity.GameSelect;
 import ch.uzh.ifi.seal.soprafs20.entity.User;
+import ch.uzh.ifi.seal.soprafs20.entity_in_game.GameLog;
 import ch.uzh.ifi.seal.soprafs20.entity_in_game.Player;
 import ch.uzh.ifi.seal.soprafs20.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,14 +45,17 @@ public class GameServiceIntegrationTest {
     @Autowired
     private GameService gameService;
 
+    @Qualifier("userRepository")
+    @Autowired
+    private UserRepository userRepository;
+
     @Autowired
     private UserService userService;
 
-    /*@BeforeEach
+    @BeforeEach
     public void setup() {
-
-    }*/
-
+        userRepository.deleteAll();
+    }
 
     @Test
     public void createGameIsSuccessfulOnValidInput(){
@@ -287,6 +292,37 @@ public class GameServiceIntegrationTest {
         assertEquals(joiningUser.getUsername(), players.get(1).getPlayerName());
         assertEquals(hostUser.getUsername(), activePlayers.get(0).getPlayerName());
         assertEquals(joiningUser.getUsername(), activePlayers.get(1).getPlayerName());
+
+    }
+
+    @Test
+    public void testActionBet(){
+
+        User toCreateUser = new User();
+        toCreateUser.setName("Name");
+        toCreateUser.setPassword("Password");
+        toCreateUser.setUsername("Username");
+
+        User toCreateUser2 = new User();
+        toCreateUser2.setName("Name2");
+        toCreateUser2.setPassword("Password2");
+        toCreateUser2.setUsername("Username2");
+
+        User hostUser = userService.createUser(toCreateUser);
+        User joiningUser = userService.createUser(toCreateUser2);
+
+        Game game = gameService.createGame("Game", hostUser.getId(), "Fixed");
+
+        gameService.addHost(hostUser.getId(), game);
+        gameService.addJoiningPlayer(joiningUser.getId(), game.getGameId());
+
+        Long hostId = hostUser.getId();
+        Long joinId = joiningUser.getId();
+        Long gameId = game.getGameId();
+
+        GameLog gameLog = gameService.executeAction(Action.BET, 10, gameId, hostId);
+
+        assertEquals(gameLog.getAction(), Action.BET);
 
     }
 
