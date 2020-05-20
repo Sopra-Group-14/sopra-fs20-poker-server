@@ -4,10 +4,7 @@ import ch.uzh.ifi.seal.soprafs20.cards.Card;
 import ch.uzh.ifi.seal.soprafs20.cards.CardAnalyser;
 import ch.uzh.ifi.seal.soprafs20.cards.PokerHand;
 import ch.uzh.ifi.seal.soprafs20.cards.WinnerCalculator;
-import ch.uzh.ifi.seal.soprafs20.constant.Action;
-import ch.uzh.ifi.seal.soprafs20.constant.Rank;
-import ch.uzh.ifi.seal.soprafs20.constant.Suit;
-import ch.uzh.ifi.seal.soprafs20.constant.UserStatus;
+import ch.uzh.ifi.seal.soprafs20.constant.*;
 import ch.uzh.ifi.seal.soprafs20.entity.Game;
 import ch.uzh.ifi.seal.soprafs20.entity.GameSelect;
 import ch.uzh.ifi.seal.soprafs20.entity.User;
@@ -564,5 +561,36 @@ public class GameServiceIntegrationTest {
         assertEquals(game4.getActivePlayers().get(0).getPlayerName(), joiningUser.getUsername());
 
     }
+
+    @Test
+    public void testRoundStart(){
+
+        User toCreateUser = new User();
+        toCreateUser.setName("Name");
+        toCreateUser.setPassword("Password");
+        toCreateUser.setUsername("Username");
+
+        User toCreateUser2 = new User();
+        toCreateUser2.setName("Name2");
+        toCreateUser2.setPassword("Password2");
+        toCreateUser2.setUsername("Username2");
+
+        User hostUser = userService.createUser(toCreateUser);
+        User joiningUser = userService.createUser(toCreateUser2);
+
+        Game game = gameService.createGame("Game", hostUser.getId(), "None");
+
+        gameService.addHost(hostUser.getId(), game);
+        gameService.addJoiningPlayer(joiningUser.getId(), game.getGameId());
+
+        GameLog gameLog = gameService.roundStart(game);
+
+        assertEquals(gameLog.getGameRound(), GameRound.Preflop);
+        assertEquals(gameLog.getAction(), Action.BET);
+        assertFalse(gameLog.getThisPlayersTurn());
+        assertTrue(gameLog.getNextPlayersTurn());
+
+    }
+
 
 }
