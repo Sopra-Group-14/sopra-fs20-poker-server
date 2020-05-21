@@ -11,6 +11,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Date;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -37,13 +39,16 @@ public class UserServiceIntegrationTest {
     @Test
     public void addBalanceOfPlayerAddsBalance() throws Exception{
 
-        User toCreateUser = new User();
-        toCreateUser.setName("Name");
-        toCreateUser.setPassword("Password");
-        toCreateUser.setUsername("Username");
-        toCreateUser.setToken("Token");
+        User testUser = new User();
+        testUser.setName("testName");
+        testUser.setUsername("testUsername");
+        testUser.setPassword("testPassword");
+        testUser.setLastToppedUp(new Date(System.currentTimeMillis()));
+        testUser.setToken("testToken");
+        testUser.setStatus(UserStatus.ONLINE);
+        testUser.setBalance(0);
 
-        User user = userService.createUser(toCreateUser);
+        User user = userService.createUser(testUser);
 
         userService.addBalanceOfPlayer(user.getId(), 1000);
 
@@ -51,7 +56,7 @@ public class UserServiceIntegrationTest {
 
     }
 
-    /*@Test
+    @Test
     public void createUser_validInputs_success() {
         // given
         assertNull(userRepository.findByUsername("testUsername"));
@@ -59,6 +64,7 @@ public class UserServiceIntegrationTest {
         User testUser = new User();
         testUser.setName("testName");
         testUser.setUsername("testUsername");
+        testUser.setPassword("testPassword");
 
         // when
         User createdUser = userService.createUser(testUser);
@@ -69,15 +75,17 @@ public class UserServiceIntegrationTest {
         assertEquals(testUser.getUsername(), createdUser.getUsername());
         assertNotNull(createdUser.getToken());
         assertEquals(UserStatus.ONLINE, createdUser.getStatus());
-    }/*
+    }
 
-    /*@Test
+    @Test
     public void createUser_duplicateUsername_throwsException() {
         assertNull(userRepository.findByUsername("testUsername"));
 
         User testUser = new User();
         testUser.setName("testName");
         testUser.setUsername("testUsername");
+        testUser.setPassword("testPassword");
+
         User createdUser = userService.createUser(testUser);
 
         // attempt to create second user with same username
@@ -89,6 +97,6 @@ public class UserServiceIntegrationTest {
 
         // check that an error is thrown
         assertThrows(ResponseStatusException.class, () -> userService.createUser(testUser2));
-    }*/
+    }
 
 }
