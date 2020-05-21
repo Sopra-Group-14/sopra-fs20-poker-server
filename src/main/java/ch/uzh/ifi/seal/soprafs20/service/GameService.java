@@ -566,9 +566,11 @@ public class GameService {
         //special case:
         //if one player bets bigger amount than other players have as credit:
         //it is played only one more round
-        //the other players must call the whole amount they have as credit or fold
-        // if one of the other players wins they get from each of the players, the amount he himself has in the pot or if one player has betted less his whole credit
-        //the rest amount in the pot is given back to the not winner players, each gets the difference = notWinnerPlayer.amountInPot-WinnerPlayer.amount in pot
+        //the players who have less credit than the hasRaisedBig player has in the pot must call the whole amount they have as credit or fold
+        //the other players can make a normal call
+        //if one of the hasRaisedBig players wins, he gets the whole amount in the pot
+        // if one of the other players win they get from each of the players, the amount he himself has in the pot or if one player has betted less his whole credit
+        //the rest amount in the pot is given back to the not winner players, each gets the difference = max (notWinnerPlayer.amountInPot-WinnerPlayer.amount in pot or, 0)
         //at end start new round or set gameOver
         //return so rest of this method is not visited
 
