@@ -510,7 +510,7 @@ Constructor
         gameLog.setPlayerName(activePlayers.get(0).getPlayerName());
         gameLog.setPlayerId(activePlayers.get(0).getId());
 
-        setPlayerWentAllIN(true);
+        setPlayerWentAllIN(false);
         setActionsAfterAllIN(0);
     }
 
@@ -590,6 +590,7 @@ Constructor
                 int wonAmount = pot.getAmount()/winners.size();
                 gameLog.setWonAmount(wonAmount);
                 //add won amount to the credit of the winnerPlayers
+
                 for (int i =0; i< winners.size(); i++){
                     winners.get(i).addCredit(wonAmount);
                 }
