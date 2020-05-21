@@ -68,6 +68,8 @@ public class Game {
     private int actionsAfterRaise;
     private int checksPerRound;
     private Player playerWithZeroCredit;
+    private boolean playerWentAllIN;
+    private int actionsAfterAllIN;
 
 
     //private List<GameLog> gameTracker = new LinkedList<>();
@@ -411,6 +413,8 @@ Constructor
         gameLog.setNextPlayerName(activePlayers.get(0).getPlayerName());
         gameLog.setRevealedCards(tableCards);
         gameLog.setRevealedAPICards(tableCards);
+        setPlayerWentAllIN(false);
+        setActionsAfterAllIN(0);
     }
 
 
@@ -506,7 +510,8 @@ Constructor
         gameLog.setPlayerName(activePlayers.get(0).getPlayerName());
         gameLog.setPlayerId(activePlayers.get(0).getId());
 
-
+        setPlayerWentAllIN(true);
+        setActionsAfterAllIN(0);
     }
 
     public void playGame(Action action, long playerId) {
@@ -667,6 +672,22 @@ Constructor
     public void setPlayerWithZeroCredit(Player playerWithZeroCredit) {
         this.playerWithZeroCredit = playerWithZeroCredit;
         playerWithZeroCredit.setMarkedAsZeroCredit(true);
+    }
+
+    public boolean isPlayerWentAllIN() {
+        return playerWentAllIN;
+    }
+
+    public void setPlayerWentAllIN(boolean playerWentAllIN) {
+        this.playerWentAllIN = playerWentAllIN;
+    }
+
+    public int getActionsAfterAllIN() {
+        return actionsAfterAllIN;
+    }
+
+    public void setActionsAfterAllIN(int actionsAfterAllIN) {
+        this.actionsAfterAllIN = actionsAfterAllIN;
     }
 }
 

@@ -561,16 +561,89 @@ public class GameService {
             }
         }
 
-/*
+
+
+//if one player goes all in, all other players can only call or fold until the players turn again
+//when players turn again, this gameround is over
+//all remining card are shown and the winner is calculated, money is given to the winner
+//start the new round
+
+
+
+
        for (int i = 0; i<activePlayers.size();i++){
            if (activePlayers.get(i).getCredit() <= 0){
-               gameLog.setPlayOneMoreRound(true);
-               game.setPlayerWithZeroCredit(currentPlayer);
+               game.setPlayerWentAllIN(true);
                possibleActions.clear();
-               possibleActions.add(Action.CALL);
-               break;
+               if (callPossible) {
+                   possibleActions.add(Action.CALL);
+               }
+               possibleActions.add(Action.FOLD);
+               gameLog.setPossibleActions(possibleActions);
            }
        }
+
+
+
+       if (game.isPlayerWentAllIN() && (action == Action.CALL)){
+           game.setActionsAfterAllIN(game.getActionsAfterAllIN()+1);
+       }
+       if (game.getActionsAfterAllIN() == activePlayers.size()-1){
+           game.setRoundOver(true);
+
+
+           if (game.getGameRound() == GameRound.Preflop){
+               game.addTableCard();
+               game.addTableCard();
+               game.addTableCard();
+               game.addTableCard();
+               game.addTableCard();
+           }else if (game.getGameRound() == GameRound.Flop){
+               game.addTableCard();
+               game.addTableCard();
+           }else if (game.getGameRound() == GameRound.RiverCard) {
+               game.addTableCard();
+           }
+           gameLog.setRevealedCards(game.getTableCards());
+
+
+           //calculate the winners
+           List<Player> winners;
+           WinnerCalculator winnerCalculator = new WinnerCalculator();
+           winners = winnerCalculator.isWinner(activePlayers, game.getTableCards());
+           gameLog.setWinners(winners);
+           //calculate the amount won by every winner
+           int wonAmount = pot.getAmount()/winners.size();
+           gameLog.setWonAmount(wonAmount);
+           //add won amount to the credit of the winnerPlayers
+           for (int i =0; i< winners.size(); i++){
+               winners.get(i).addCredit(wonAmount);
+           }
+           pot.removeAmount(pot.getAmount());
+           gameLog.setPotAmount(0);
+           gameLog.setPlayers(players);
+
+
+           int playersWithCredit = 0;
+           for (int i = 0;i < players.size();i++){
+               if (players.get(i).getCredit()>0){
+                   playersWithCredit++;
+               }
+           }
+           if (playersWithCredit <2) {
+               game.setGameOver(true);
+               gameLog.setGameOver(true);
+               possibleActions.clear();
+               gameLog.setPossibleActions(possibleActions);
+           }else{
+               game.startNewRound();
+           }
+       }
+
+/*
+
+
+       //check if game is over
 
        if (game.playOneMoreRoundToGameOver(currentPlayer)) {
                 if (game.getGameRound() == GameRound.Preflop){
