@@ -35,7 +35,7 @@ public class UserRepositoryIntegrationTest {
         user.setStatus(UserStatus.OFFLINE);
         user.setToken("1");
         user.setPassword("1234");
-        user.setBalance(1000L);
+        user.setBalance(1000);
         user.setLastToppedUp(new Date(System.currentTimeMillis()));
 
         entityManager.persist(user);

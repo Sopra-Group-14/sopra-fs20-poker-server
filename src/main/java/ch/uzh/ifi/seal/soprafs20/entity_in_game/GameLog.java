@@ -45,7 +45,6 @@ public class GameLog {
     private boolean playOneMoreRound;
     API_Card api_card;
     private String gameRules;
-    private List<Card> roundWonWithHand;
 
     //All the parameters are set in the constructor
 
@@ -296,13 +295,5 @@ public class GameLog {
 
     public void setGameRules(String gameRules) {
         this.gameRules = gameRules;
-    }
-
-    public List<Card> getRoundWonWithHand() {
-        return roundWonWithHand;
-    }
-
-    public void setRoundWonWithHand(List<Card> roundWonWithHand) {
-        this.roundWonWithHand = roundWonWithHand;
     }
 }
