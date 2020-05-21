@@ -115,15 +115,17 @@ public class GameController {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public List<String> getPlayers(@PathVariable long gameId, @RequestHeader (value = "Authorization") String token) {
-        if (gameService.checkAuthorizationGet(token, gameId) == false) {
-            throw new TransactionSystemException("error");
+        if (gameService.checkAuthorizationGet(token, gameId)) {
+            List<Player> players = gameService.getPlayers(gameId);
+            List<String> playerNames = new ArrayList<>();
+            for (int i = 0; i < players.size(); i++) {
+                playerNames.add(players.get(i).getPlayerName());
+            }
+            return playerNames;
         }
-        List<Player> players = gameService.getPlayers(gameId);
-        List<String> playerNames = new ArrayList<>();
-        for (int i = 0; i < players.size(); i++) {
-            playerNames.add(players.get(i).getPlayerName());
+        else {
+            throw new TransactionSystemException("Error: Authorization token does not match with Player tokens");
         }
-        return playerNames;
     }
 
     @PutMapping("/games/{gameId}/players/{playerId}/leave")

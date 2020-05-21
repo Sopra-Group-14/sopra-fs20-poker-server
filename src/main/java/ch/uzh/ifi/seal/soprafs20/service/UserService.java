@@ -136,6 +136,8 @@ public class UserService {
         final int MILLI_TO_HOUR = 1000 * 60 * 60;
         return (int) (lastDate.getTime() - currDate.getTime())/MILLI_TO_HOUR;
     }
+
+
     public void updateUserMode(long userId, String mode){
 
         User currentUser = userRepository.findById(userId);

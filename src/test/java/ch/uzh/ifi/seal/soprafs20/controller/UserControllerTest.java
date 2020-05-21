@@ -5,6 +5,7 @@ import ch.uzh.ifi.seal.soprafs20.entity.User;
 import ch.uzh.ifi.seal.soprafs20.rest.dto.LoginPutDTO;
 import ch.uzh.ifi.seal.soprafs20.rest.dto.UserGetDTO;
 import ch.uzh.ifi.seal.soprafs20.rest.dto.UserPostDTO;
+import ch.uzh.ifi.seal.soprafs20.rest.dto.UserPutDTO;
 import ch.uzh.ifi.seal.soprafs20.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -29,15 +30,15 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNull.notNullValue;
-import static org.mockito.BDDMockito.given;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.BDDMockito.will;
+import static org.mockito.BDDMockito.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.log;
@@ -189,6 +190,37 @@ public class UserControllerTest {
 
     }
 
+
+    @Test
+    public void addBalanceTest() throws Exception {
+
+        User testUser = new User();
+
+        testUser.setLastToppedUp(new Date(System.currentTimeMillis() - 24*60*60*1000));
+        testUser.setPassword("testPassword");
+        testUser.setId(1L);
+        testUser.setStatus(UserStatus.ONLINE);
+        testUser.setToken("testToken");
+        testUser.setBalance(1000);
+
+        UserPutDTO userPutDTO = new UserPutDTO();
+        userPutDTO.setAmount(1000L);
+
+
+        //given
+        given(userService.addBalance(1L, 1000L)).willReturn((long) testUser.getBalance());
+
+        //when
+        MockHttpServletRequestBuilder addBalanceRequest = put("/users/1/balance")
+                                                                .header("Authorization", "testToken")
+                                                                .contentType(MediaType.APPLICATION_JSON)
+                                                                .content(asJsonString(userPutDTO));
+
+        //then
+        mockMvc.perform(addBalanceRequest).andExpect(status().isOk());
+
+        assertEquals(testUser.getBalance(), userService.addBalance(1L, 1000));
+    }
 
 
     /**
