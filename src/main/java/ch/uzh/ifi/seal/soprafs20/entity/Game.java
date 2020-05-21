@@ -69,7 +69,9 @@ public class Game {
     private int checksPerRound;
     private Player playerWithZeroCredit;
     private boolean playerWentAllIN;
+    private boolean aPlayerHasNullCredit;
     private int actionsAfterAllIN;
+    private int actionsAfterNullCredit;
 
 
     //private List<GameLog> gameTracker = new LinkedList<>();
@@ -414,7 +416,9 @@ Constructor
         gameLog.setRevealedCards(tableCards);
         gameLog.setRevealedAPICards(tableCards);
         setPlayerWentAllIN(false);
+        setaPlayerHasNullCredit(false);
         setActionsAfterAllIN(0);
+        setActionsAfterNullCredit(0);
     }
 
 
@@ -441,8 +445,12 @@ Constructor
         //enter folded players back into the list active players  at same position and make them unfolded
         activePlayers.clear();
         for (int i = 0; i< players.size(); i++){
-            activePlayers.add(i, players.get(i));
-            activePlayers.get(i).setFolded(false);
+            if (players.get(i).getCredit() == 0){
+                players.remove(players.get(i));
+            }else {
+                activePlayers.add(i, players.get(i));
+                activePlayers.get(i).setFolded(false);
+            }
         }
         this.pot.removeAmount(this.pot.getAmount());
         gameLog.setPotAmount(0);
@@ -511,7 +519,9 @@ Constructor
         gameLog.setPlayerId(activePlayers.get(0).getId());
 
         setPlayerWentAllIN(false);
+        setaPlayerHasNullCredit(false);
         setActionsAfterAllIN(0);
+        setActionsAfterNullCredit(0);
     }
 
     public void playGame(Action action, long playerId) {
@@ -681,6 +691,22 @@ Constructor
 
     public void setActionsAfterAllIN(int actionsAfterAllIN) {
         this.actionsAfterAllIN = actionsAfterAllIN;
+    }
+
+    public boolean isaPlayerHasNullCredit() {
+        return aPlayerHasNullCredit;
+    }
+
+    public void setaPlayerHasNullCredit(boolean aPlayerHasNullCredit) {
+        this.aPlayerHasNullCredit = aPlayerHasNullCredit;
+    }
+
+    public int getActionsAfterNullCredit() {
+        return actionsAfterNullCredit;
+    }
+
+    public void setActionsAfterNullCredit(int actionsAfterNullCredit) {
+        this.actionsAfterNullCredit = actionsAfterNullCredit;
     }
 }
 
