@@ -1,6 +1,7 @@
 package ch.uzh.ifi.seal.soprafs20.entity;
 
 import ch.uzh.ifi.seal.soprafs20.cards.Card;
+import ch.uzh.ifi.seal.soprafs20.cards.CardAnalyser;
 import ch.uzh.ifi.seal.soprafs20.cards.Deck;
 import ch.uzh.ifi.seal.soprafs20.cards.WinnerCalculator;
 import ch.uzh.ifi.seal.soprafs20.constant.Action;
@@ -48,6 +49,7 @@ public class Game {
     private Pot pot = new Pot();
     private Deck deck = new Deck();
     private WinnerCalculator winnerCalculator = new WinnerCalculator();
+    private CardAnalyser cardAnalyser = new CardAnalyser();
 
     //Create lists for spectators, players and the active players
     private List<Player> players = new LinkedList<>();
@@ -586,11 +588,26 @@ Constructor
                 //calculate the winners
                 winners = winnerCalculator.isWinner(activePlayers, tableCards);
                 gameLog.setWinners(winners);
+
+                //Set the winners' combo name
+                List<Card> winnerCards = new LinkedList<>();
+                int i;
+                for(i=0;i<tableCards.size();i++){
+                    winnerCards.add(tableCards.get(i));
+                }
+                for(i=0;i<winners.get(0).getHand().size();i++){
+                    winnerCards.add(winners.get(0).getHand().get(i));
+                }
+                int winnerComboValueInt = cardAnalyser.getPokerHand(winnerCards).getComboValue();
+
+                String[] winnerComboValueStrings = {"Placeholder", "High Card", "One Pair", "Two Pairs", "Three of a Kind", "Straight", "Flush", "Full House", "Four of a Kind", "Straight Flush", "Royal Flush"};
+                gameLog.setWinnerComboValue(winnerComboValueStrings[winnerComboValueInt]);
+
                 //calculate the amount won by every winner
                 int wonAmount = pot.getAmount()/winners.size();
                 gameLog.setWonAmount(wonAmount);
                 //add won amount to the credit of the winnerPlayers
-                for (int i =0; i< winners.size(); i++){
+                for (i =0; i< winners.size(); i++){
                     winners.get(i).addCredit(wonAmount);
                 }
                 gameLog.setPlayers(players);

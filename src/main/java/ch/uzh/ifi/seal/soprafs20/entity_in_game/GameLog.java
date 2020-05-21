@@ -25,6 +25,7 @@ public class GameLog {
     private List<Player> players;
     private List<Player> activePlayers;
     private List<Player> winners;
+    private String winnerComboValue;
     private int wonAmount;
     private List<Card> revealedCards;
     private List<String> revealedAPICards;
@@ -295,5 +296,13 @@ public class GameLog {
 
     public void setGameRules(String gameRules) {
         this.gameRules = gameRules;
+    }
+
+    public String getWinnerComboValue() {
+        return winnerComboValue;
+    }
+
+    public void setWinnerComboValue(String winnerComboValue) {
+        this.winnerComboValue = winnerComboValue;
     }
 }
