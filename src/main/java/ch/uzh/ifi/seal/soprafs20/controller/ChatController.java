@@ -31,7 +31,11 @@ public class ChatController {
         ChatLog chatLogSpectator = chatService.chatPutDTOtoChatLog(chatPutDTO, "player", "spectators");
 
         chatService.newMessage("players", gameId, chatLogPlayer);
+        /*
+        uncomment this line of code if the spectator chat should include all the player messages as well
         chatService.newMessage("spectators", gameId, chatLogSpectator);
+
+         */
 
         List<ChatLog> playerChat = chatService.getHistory("players", gameId);
 
