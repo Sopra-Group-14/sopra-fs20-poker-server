@@ -37,8 +37,7 @@ import java.util.Random;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -99,13 +98,17 @@ public class GameControllerTest {
 
         Game game = new Game();
         game.setGameLog(new GameLog());
+        game.setHostToken("Token");
         game.addPlayer(player1);
         game.addPlayer(player2);
         game.addPlayer(player3);
 
+        gameService.addHost(1L, game);
+
         given(gameService.getPlayers(Mockito.anyLong())).willReturn(playerList);
 
-        MockHttpServletRequestBuilder getRequest = get("/games/1/players").header("Authorization", "Token");
+        MockHttpServletRequestBuilder getRequest = get("/games/1/players")
+                                                    .header("Authorization", "Token");
 
         mockMvc.perform(getRequest).andExpect(status().isOk());
 
@@ -118,7 +121,7 @@ public class GameControllerTest {
     }
 
    @Test
-   @Disabled
+//   @Disabled
     public void getTableCardsReturnsRightCards() throws Exception{
 
         //given
@@ -139,19 +142,22 @@ public class GameControllerTest {
         testTableCardList2.add(testCard11);
         testTableCardList2.add(testCard21);
         testTableCardList2.add(testCard31);
+        
+        String testToken = "token";
 
         long testGameId = 1L;
 
-        //given(gameService.getTableCards(Mockito.anyLong())).willReturn(testTableCardList);
+        given(gameService.getTableCards(testToken)).willReturn(testTableCardList);
 
         //when
-        MockHttpServletRequestBuilder getRequest = get("/games/1/table");
+        MockHttpServletRequestBuilder getRequest = get("/games/1/dealers/cards").header("Authorization", testToken);
 
         //then
+
         mockMvc.perform(getRequest).andExpect(status().isOk());
 
         //returned card list
-        /*List<Card> returnedCardList = gameService.getTableCards(testGameId);
+        List<Card> returnedCardList = gameService.getTableCards(testToken);
 
         //assertions
         assertEquals(testTableCardList2.get(0).getSuit(), returnedCardList.get(0).getSuit());
@@ -159,7 +165,7 @@ public class GameControllerTest {
         assertEquals(testTableCardList2.get(1).getSuit(), returnedCardList.get(1).getSuit());
         assertEquals(testTableCardList2.get(1).getRank(), returnedCardList.get(1).getRank());
         assertEquals(testTableCardList2.get(2).getSuit(), returnedCardList.get(2).getSuit());
-        assertEquals(testTableCardList2.get(2).getRank(), returnedCardList.get(2).getRank());*/
+        assertEquals(testTableCardList2.get(2).getRank(), returnedCardList.get(2).getRank());
 
     }
 
