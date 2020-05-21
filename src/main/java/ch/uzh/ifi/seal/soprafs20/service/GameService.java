@@ -229,7 +229,7 @@ public class GameService {
             gameLog.setPotAmount(pot.getAmount());
             gameLog.setRoundOver(game.isRoundOver());
             gameLog.setGameOver(game.isGameOver());
-            gameLog.setAmountToCall(amount);
+            gameLog.setAmountToCall(Math.min(amount, nextPlayer.getCredit()));
             gameLog.setThisPlayersTurn(currentPlayer.isThisPlayersTurn());
             gameLog.setNextPlayersTurn(nextPlayer.isThisPlayersTurn());
 
@@ -273,7 +273,7 @@ public class GameService {
             gameLog.setPotAmount(pot.getAmount());
             gameLog.setRoundOver(game.isRoundOver());
             gameLog.setGameOver(game.isGameOver());
-            gameLog.setAmountToCall(getPlayerWithMostAmountInPot(game).getAmountInPot()-nextPlayer.getAmountInPot());
+            gameLog.setAmountToCall(Math.min(getPlayerWithMostAmountInPot(game).getAmountInPot()-nextPlayer.getAmountInPot(), nextPlayer.getCredit()));
             gameLog.setThisPlayersTurn(currentPlayer.isThisPlayersTurn());
             gameLog.setNextPlayersTurn(nextPlayer.isThisPlayersTurn());
 
@@ -315,7 +315,7 @@ public class GameService {
             gameLog.setPotAmount(pot.getAmount());
             gameLog.setRoundOver(game.isRoundOver());
             gameLog.setGameOver(game.isGameOver());
-            gameLog.setAmountToCall(getPlayerWithMostAmountInPot(game).getAmountInPot()-nextPlayer.getAmountInPot());
+            gameLog.setAmountToCall(Math.min(getPlayerWithMostAmountInPot(game).getAmountInPot()-nextPlayer.getAmountInPot(), nextPlayer.getCredit()));
             gameLog.setThisPlayersTurn(currentPlayer.isThisPlayersTurn());
             gameLog.setNextPlayersTurn(nextPlayer.isThisPlayersTurn());
 
@@ -351,7 +351,7 @@ public class GameService {
             gameLog.setPotAmount(pot.getAmount());
             gameLog.setRoundOver(game.isRoundOver());
             gameLog.setGameOver(game.isGameOver());
-            gameLog.setAmountToCall(getPlayerWithMostAmountInPot(game).getAmountInPot()-nextPlayer.getAmountInPot());
+            gameLog.setAmountToCall(Math.min(getPlayerWithMostAmountInPot(game).getAmountInPot()-nextPlayer.getAmountInPot(), nextPlayer.getCredit()));
             gameLog.setThisPlayersTurn(currentPlayer.isThisPlayersTurn());
             gameLog.setNextPlayersTurn(nextPlayer.isThisPlayersTurn());
 
@@ -430,11 +430,6 @@ public class GameService {
 // enters the posssible actions for the next player into the gameLog
         List <Action> possibleActions = game.getPossibleActions();
 
-      int nextPlayerAmountToCall = (getPlayerWithMostAmountInPot(game).getAmountInPot() - nextPlayer.getAmountInPot());
-        boolean callPossible;
-        callPossible = nextPlayerAmountToCall <= nextPlayer.getCredit();
-
-
         //second player of first round has to raise
         if (action == Action.BET && pot.getAmount() == smallBlind && game.getGameRound() == GameRound.Preflop && currentPlayer == activePlayers.get(0)) {
             possibleActions.clear();
@@ -454,17 +449,13 @@ public class GameService {
             if (action == Action.BET) {
                 possibleActions.clear();
                 possibleActions.add(Action.RAISE);
-                if (callPossible) {
                     possibleActions.add(Action.CALL);
-                }
                 possibleActions.add(Action.FOLD);
             }
             else if (action == Action.RAISE) {
                 possibleActions.clear();
                 possibleActions.add(Action.RAISE);
-                if (callPossible) {
                     possibleActions.add(Action.CALL);
-                 }
                 possibleActions.add(Action.FOLD);
                 possibleActions.add(Action.FOLD);
             }
@@ -503,9 +494,7 @@ public class GameService {
                         (game.getGameRound()==GameRound.TurnCard && game.getTimesRaisedTurnCard() <= 2)) {
                     possibleActions.add(Action.RAISE);
                 }
-                if (callPossible) {
                     possibleActions.add(Action.CALL);
-                }
                 possibleActions.add(Action.FOLD);
             }
             else if (action == Action.RAISE) {
@@ -515,9 +504,7 @@ public class GameService {
                 if (game.getGameRound()==GameRound.TurnCard){game.setTimesRaisedTurnCard(game.getTimesRaisedTurnCard()+1);}
                 possibleActions.clear();
                 possibleActions.add(Action.RAISE);
-                if (callPossible) {
                     possibleActions.add(Action.CALL);
-                }
                 possibleActions.add(Action.FOLD);
 
                 //per round is it not possible to raise more than three times
@@ -526,9 +513,7 @@ public class GameService {
                         (game.getGameRound()==GameRound.RiverCard && game.getTimesRaisedRiverCard() > 2)||
                         (game.getGameRound()==GameRound.TurnCard && game.getTimesRaisedTurnCard() > 2)) {
                     possibleActions.clear();
-                    if (callPossible) {
                         possibleActions.add(Action.CALL);
-                    }
                     possibleActions.add(Action.FOLD);
                 }
             }
@@ -595,9 +580,7 @@ public class GameService {
            if (activePlayers.get(i).getCredit() <= 0){
                game.setPlayerWentAllIN(true);
                possibleActions.clear();
-               if (callPossible) {
                    possibleActions.add(Action.CALL);
-               }
                possibleActions.add(Action.FOLD);
                gameLog.setPossibleActions(possibleActions);
            }
@@ -632,7 +615,7 @@ public class GameService {
            WinnerCalculator winnerCalculator = new WinnerCalculator();
            winners = winnerCalculator.isWinner(activePlayers, game.getTableCards());
            gameLog.setWinners(winners);
-           //calculate the amount won by every winner
+           //calculate the amount won by every winner if every player has same amount in pot
            int wonAmount = pot.getAmount()/winners.size();
            gameLog.setWonAmount(wonAmount);
            //add won amount to the credit of the winnerPlayers
@@ -642,6 +625,11 @@ public class GameService {
            pot.removeAmount(pot.getAmount());
            gameLog.setPotAmount(0);
            gameLog.setPlayers(players);
+           //calculate the amount won by every winner if not every player has the same amount in pot
+
+
+
+
 
 
            int playersWithCredit = 0;
