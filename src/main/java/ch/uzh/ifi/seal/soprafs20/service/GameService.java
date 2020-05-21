@@ -161,7 +161,7 @@ public class GameService {
 
 
         //The player tries to take an action when it is not their turn
-        if (!activePlayers.contains(currentPlayer) |  !currentPlayer.isThisPlayersTurn()){
+        if (!activePlayers.contains(currentPlayer) ||  !currentPlayer.isThisPlayersTurn()){
             log.info("player tries to take action, when not his turn");
             String baseErrorMessage = "Not Player %s turn!";
             throw new SopraServiceException(String.format(baseErrorMessage, currentPlayer.getPlayerName()));
@@ -174,7 +174,7 @@ public class GameService {
         }
 
         //The user has already folded
-        if (!activePlayers.contains(currentPlayer) | currentPlayer.hasFolded()){
+        if (!activePlayers.contains(currentPlayer) || currentPlayer.hasFolded()){
             String baseErrorMessage = "The Player %s with Id %d has already folded and does not participate in the current round anymore!";
             throw new SopraServiceException(String.format(baseErrorMessage, currentPlayer.getPlayerName(),currentPlayer.getId()));
         }
