@@ -563,13 +563,28 @@ public class GameService {
 
 
 
+        //special case:
+        //if one player bets bigger amount than other players have as credit:
+        //the other players must be able to call the whole amount they have as credit or fold
+        // if one of the other players wins they get from each of the players, the amount he himself has in the pot or if one player has betted less his whole credit
+        //the rest amount in the pot is given back to the not winner players, each gets the difference = notWinnerPlayer.amountInPot-WinnerPlayer.amount in pot
+
+
+
+
+
+
+
+
+
+
+
+
+
 //if one player goes all in, all other players can only call or fold until the players turn again
 //when players turn again, this gameround is over
 //all remining card are shown and the winner is calculated, money is given to the winner
 //start the new round
-
-
-
 
        for (int i = 0; i<activePlayers.size();i++){
            if (activePlayers.get(i).getCredit() <= 0){
