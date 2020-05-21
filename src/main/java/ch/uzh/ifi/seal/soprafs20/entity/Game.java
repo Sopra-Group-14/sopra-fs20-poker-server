@@ -510,7 +510,7 @@ Constructor
         gameLog.setPlayerName(activePlayers.get(0).getPlayerName());
         gameLog.setPlayerId(activePlayers.get(0).getId());
 
-        setPlayerWentAllIN(true);
+        setPlayerWentAllIN(false);
         setActionsAfterAllIN(0);
     }
 
@@ -665,14 +665,7 @@ Constructor
     }
 
 
-    public Player getPlayerWithZeroCredit() {
-        return playerWithZeroCredit;
-    }
 
-    public void setPlayerWithZeroCredit(Player playerWithZeroCredit) {
-        this.playerWithZeroCredit = playerWithZeroCredit;
-        playerWithZeroCredit.setMarkedAsZeroCredit(true);
-    }
 
     public boolean isPlayerWentAllIN() {
         return playerWentAllIN;
