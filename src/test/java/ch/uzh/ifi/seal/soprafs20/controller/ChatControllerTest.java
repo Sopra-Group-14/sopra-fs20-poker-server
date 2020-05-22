@@ -3,30 +3,20 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import ch.uzh.ifi.seal.soprafs20.chat.Chat;
-import ch.uzh.ifi.seal.soprafs20.chat.PlayerChat;
-import ch.uzh.ifi.seal.soprafs20.chat.SpectatorChat;
-import ch.uzh.ifi.seal.soprafs20.constant.UserStatus;
 import ch.uzh.ifi.seal.soprafs20.entity.ChatLog;
-import ch.uzh.ifi.seal.soprafs20.entity.User;
 import ch.uzh.ifi.seal.soprafs20.rest.dto.ChatPutDTO;
-import ch.uzh.ifi.seal.soprafs20.rest.dto.UserPostDTO;
 import ch.uzh.ifi.seal.soprafs20.service.ChatService;
-import ch.uzh.ifi.seal.soprafs20.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -34,7 +24,6 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -61,7 +50,7 @@ public class ChatControllerTest {
 
         //given
         //history we want returned
-        PlayerChat testPlayerChat = new PlayerChat();
+        Chat testPlayerChat = new Chat();
         List<ChatLog> testHistory = new LinkedList<>();
         testHistory.add(new ChatLog("11:11:11", "Player1", "userId1", "First Message", "players"));
         testHistory.add(new ChatLog("22:22:22", "Player2", "userId2","Second Message", "players"));
@@ -96,7 +85,7 @@ public class ChatControllerTest {
 
         //given
         //history we want returned
-        SpectatorChat testSpectatorChat = new SpectatorChat();
+        Chat testSpectatorChat = new Chat();
         List<ChatLog> testHistory = new LinkedList<>();
         testHistory.add(new ChatLog("11:11:11", "Player1", "userId1", "First Message", "players"));
         testHistory.add(new ChatLog("22:22:22", "Player2", "userId2","Second Message", "players"));
