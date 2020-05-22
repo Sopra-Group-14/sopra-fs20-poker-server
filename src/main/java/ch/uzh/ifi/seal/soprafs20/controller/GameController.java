@@ -67,17 +67,30 @@ public class GameController {
     @PutMapping("/games/{gameId}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public GameLog joinGame(@RequestBody JoinGameDTO joinGameDTO, @RequestHeader (value = "Authorization") String token, @PathVariable long gameId){
+    public GameLog joinGame(@RequestBody JoinGameDTO joinGameDTO, @PathVariable long gameId){
 
-        if(joinGameDTO.getUserMode().equals("player")){
+            gameService.addJoiningPlayer(joinGameDTO.getUserId(), gameId);
+
+      /*  if(joinGameDTO.getUserMode().equals("player")){
             gameService.addJoiningPlayer(joinGameDTO.getUserId(), gameId);
         }else if(joinGameDTO.getUserMode().equals("spectator")){
             gameService.addSpectator(gameId);
-        }
+        }*/
 
         return gameService.getGameLog(gameId);
 
     }
+
+    @PutMapping("/games/{gameId}/spectator")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public GameLog joinGame( @PathVariable long gameId){
+
+            gameService.addSpectator(gameId);
+
+            return gameService.getGameLog(gameId);
+
+        }
 
     @GetMapping("/games/{gameId}")
     @ResponseStatus(HttpStatus.OK)
