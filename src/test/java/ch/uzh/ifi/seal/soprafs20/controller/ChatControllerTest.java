@@ -80,7 +80,7 @@ public class ChatControllerTest {
      * Check if the spectator chat history can be correctly retrieved.
      * @throws Exception
      */
-    /*@Test
+    @Test
     public void getSpectatorChatMessagesGetsCorrectMessages() throws Exception{
 
         //given
@@ -110,7 +110,7 @@ public class ChatControllerTest {
         assertEquals(testHistory.get(1), returnedHistory.get(1));
         assertEquals(testHistory.get(2), returnedHistory.get(2));
 
-    }*/
+    }
 
     @Test
     public void sendPlayerChatMessageReturnsCorrectChatlog() throws Exception{
@@ -145,7 +145,7 @@ public class ChatControllerTest {
 
     }
 
-    /*@Test
+    @Test
     public void sendSpectatorChatMessageReturnsCorrectChatlog() throws Exception{
 
         //given
@@ -175,7 +175,7 @@ public class ChatControllerTest {
         assertEquals(returnedChatLog.get(0).getTime(), testChatLog.getTime());
         assertEquals(returnedChatLog.get(0).getUsername(), testChatLog.getUsername());
 
-    }*/
+    }
 
     //Test to check whether all messages from player chat occur in spectator chat
 
