@@ -1,5 +1,3 @@
-# SoPra FS20 - Client Template
-
 ## Introduction
 
 This is the server of a poker game implemented for the SOPRA FS20.
