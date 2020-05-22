@@ -10,6 +10,7 @@ import ch.uzh.ifi.seal.soprafs20.entity.User;
 import ch.uzh.ifi.seal.soprafs20.entity_in_game.GameLog;
 import ch.uzh.ifi.seal.soprafs20.entity_in_game.Player;
 import ch.uzh.ifi.seal.soprafs20.entity_in_game.Pot;
+import ch.uzh.ifi.seal.soprafs20.entity_in_game.Spectator;
 import ch.uzh.ifi.seal.soprafs20.exceptions.SopraServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -124,6 +125,16 @@ public class GameService {
         game.addActivePlayer(joiningPlayer);
         game.getGameLog().setBigBlind(game.getActivePlayers().get(1));
         game.getGameLog().setSmallBlind(game.getActivePlayers().get(0));
+    }
+
+    public void addSpectator(Long gameId){
+
+        Spectator spectator = new Spectator();
+        Game game = gameSelect.getGameById(gameId);
+        Long id = game.getNextSpectatorId();
+        spectator.setId(id);
+        game.addSpectator(spectator);
+
     }
 
     public void togglePlayerReadyStatus(long gameid, long playerid){

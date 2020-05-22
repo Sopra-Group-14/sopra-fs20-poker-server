@@ -44,6 +44,7 @@ public class Game {
     private int transactionNr;
     private Player smallBlind;
     private Player bigBlind;
+    private Long nextSpectatorId = 0L;
 
     private Pot pot = new Pot();
     private Deck deck = new Deck();
@@ -230,6 +231,7 @@ Constructor
 
     public void addSpectator(Spectator spectator){
         this.spectators.add(spectator);
+        gameLog.setCreatedSpectatorId(spectator.getId());
     }
 
     public void removeSpectator(Spectator spectator){
@@ -708,6 +710,12 @@ Constructor
     public void setActionsAfterNullCredit(int actionsAfterNullCredit) {
         this.actionsAfterNullCredit = actionsAfterNullCredit;
     }
+
+    public Long getNextSpectatorId(){
+        nextSpectatorId += 1;
+        return nextSpectatorId;
+    }
+
 }
 
 

@@ -45,6 +45,7 @@ public class GameLog {
     private boolean playOneMoreRound;
     API_Card api_card;
     private String gameRules;
+    private Long createdSpectatorId;
 
     //All the parameters are set in the constructor
 
@@ -295,5 +296,13 @@ public class GameLog {
 
     public void setGameRules(String gameRules) {
         this.gameRules = gameRules;
+    }
+
+    public Long getCreatedSpectatorId() {
+        return createdSpectatorId;
+    }
+
+    public void setCreatedSpectatorId(Long createdSpectatorId) {
+        this.createdSpectatorId = createdSpectatorId;
     }
 }

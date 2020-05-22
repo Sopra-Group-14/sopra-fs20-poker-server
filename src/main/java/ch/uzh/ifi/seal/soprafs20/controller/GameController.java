@@ -69,7 +69,12 @@ public class GameController {
     @ResponseBody
     public GameLog joinGame(@RequestBody JoinGameDTO joinGameDTO, @RequestHeader (value = "Authorization") String token, @PathVariable long gameId){
 
-        gameService.addJoiningPlayer(joinGameDTO.getUserId(), gameId);
+        if(joinGameDTO.getUserMode().equals("player")){
+            gameService.addJoiningPlayer(joinGameDTO.getUserId(), gameId);
+        }else if(joinGameDTO.getUserMode().equals("spectator")){
+            gameService.addSpectator(gameId);
+        }
+
         return gameService.getGameLog(gameId);
 
     }
