@@ -582,6 +582,7 @@ public class GameService {
         //if all player folded, there is no winner
        if (activePlayers.size() == 1){
            List<Player> winners = gameLog.getWinners();
+           winners.clear();
            winners.add(activePlayers.get(0));
            gameLog.setWinnerComboValue("Everyone else Folded or left");
            activePlayers.get(0).addCredit(game.getPot().getAmount());
