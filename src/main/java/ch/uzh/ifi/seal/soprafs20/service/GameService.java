@@ -584,6 +584,7 @@ public class GameService {
            List<Player> winners = gameLog.getWinners();
            winners.clear();
            winners.add(activePlayers.get(0));
+           gameLog.setWinners(winners);
            gameLog.setWinnerComboValue("Everyone else Folded or left");
            activePlayers.get(0).addCredit(game.getPot().getAmount());
            game.getPot().removeAmount(game.getPot().getAmount());
