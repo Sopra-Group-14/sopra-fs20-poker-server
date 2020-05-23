@@ -59,7 +59,7 @@ public class UserController {
             return DTOMapper.INSTANCE.convertEntityToUserGetDTO(createdUser);
         }
         catch (Exception ex){
-                throw new SopraServiceException("error");
+                throw new SopraServiceException("A user with this username already exists, please choose an other username");
         }
 
     }
