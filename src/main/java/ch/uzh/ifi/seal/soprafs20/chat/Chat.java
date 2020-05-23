@@ -11,7 +11,7 @@ public class Chat {
     private List<String> history;
 
 
-    public void newMessage(String message){
+    /*public void newMessage(String message){
         history.add(message);
     }
 
@@ -23,6 +23,6 @@ public class Chat {
         return history.get(history.size()-1);
     }
 
-    private void chatLogToString(ChatLog chatLog){}
+    private void chatLogToString(ChatLog chatLog){}*/
 
 }
