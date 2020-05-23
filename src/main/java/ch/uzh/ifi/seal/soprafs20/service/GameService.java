@@ -1032,25 +1032,25 @@ public class GameService {
         /*FOR TESTING PURPOSES*/
         GameLog gameLog = game.getGameLog();
 
-        User user1 = new User();
-        user1.setUsername("MOCKUSER1");
-        user1.setPassword("password");
-        user1.setToken("token");
-        user1.setId((long) 2);
-
-        User user2 = new User();
-        user2.setUsername("MOCKUSER2");
-        user2.setPassword("password2");
-        user2.setToken("token2");
-        user2.setId((long) 3);
-
-        Player player1 = new Player(user1);
-        Player player2 = new Player(user2);
-
-        game.addPlayer(player1);
-        game.addPlayer(player2);
-        game.addActivePlayer(player1);
-        game.addActivePlayer(player2);
+//        User user1 = new User();
+//        user1.setUsername("MOCKUSER1");
+//        user1.setPassword("password");
+//        user1.setToken("token");
+//        user1.setId((long) 2);
+//
+//        User user2 = new User();
+//        user2.setUsername("MOCKUSER2");
+//        user2.setPassword("password2");
+//        user2.setToken("token2");
+//        user2.setId((long) 3);
+//
+//        Player player1 = new Player(user1);
+//        Player player2 = new Player(user2);
+//
+//        game.addPlayer(player1);
+//        game.addPlayer(player2);
+//        game.addActivePlayer(player1);
+//        game.addActivePlayer(player2);
 
         /*END TESTING PURPOSES*/
 

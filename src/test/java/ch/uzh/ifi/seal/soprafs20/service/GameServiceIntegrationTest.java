@@ -592,4 +592,40 @@ public class GameServiceIntegrationTest {
 
     }
 
+    @Test
+    public void removePlayerTest(){
+
+        User toCreateUser = new User();
+        toCreateUser.setName("Name");
+        toCreateUser.setPassword("Password");
+        toCreateUser.setUsername("host");
+
+        User toCreateUser2 = new User();
+        toCreateUser2.setName("Name2");
+        toCreateUser2.setPassword("Password2");
+        toCreateUser2.setUsername("join1");
+
+        User toCreateUser3 = new User();
+        toCreateUser3.setName("Name3");
+        toCreateUser3.setPassword("Password3");
+        toCreateUser3.setUsername("join2");
+
+        User hostUser = userService.createUser(toCreateUser);
+        User joiningUser = userService.createUser(toCreateUser2);
+        User joiningUser2 = userService.createUser(toCreateUser3);
+
+        Game game = gameService.createGame("Game", hostUser.getId(), "None");
+
+        gameService.addHost(hostUser.getId(), game);
+        gameService.addJoiningPlayer(joiningUser.getId(), game.getGameId());
+        gameService.addJoiningPlayer(joiningUser2.getId(), game.getGameId());
+
+        GameLog gameLog = gameService.roundStart(game);
+
+        gameService.removePlayer(game.getGameId(), joiningUser2.getId());
+
+        assertEquals(gameLog.getActivePlayers().size(), 2);
+        assertEquals(gameLog.getPlayers().size(), 2);
+    }
+
 }
