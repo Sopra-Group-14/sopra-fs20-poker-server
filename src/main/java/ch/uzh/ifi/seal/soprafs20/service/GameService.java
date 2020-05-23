@@ -579,6 +579,18 @@ public class GameService {
         }
 
 
+        //if all player folded, there is no winner
+       if (activePlayers.size() == 1){
+           List<Player> winners = gameLog.getWinners();
+           winners.add(activePlayers.get(0));
+           gameLog.setWinnerComboValue("Everyone else Folded or left");
+           activePlayers.get(0).addCredit(game.getPot().getAmount());
+           game.getPot().removeAmount(game.getPot().getAmount());
+           game.startNewRound();
+
+       }
+
+
 
         //special case:
         //if one player bets bigger amount than other players have as credit:

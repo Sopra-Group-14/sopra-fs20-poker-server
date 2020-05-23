@@ -48,6 +48,7 @@ public class GameLog {
     private String gameRules;
     private Long createdSpectatorId;
 
+
     //All the parameters are set in the constructor
 
 
