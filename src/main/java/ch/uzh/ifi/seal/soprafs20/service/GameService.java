@@ -252,7 +252,7 @@ public class GameService {
         if(action == Action.FOLD){
             game.playerFolds(currentPlayer);
 
-            if (activePlayers.size()<2){
+            if (activePlayers.size()==1){
                 game.setRoundOver();
                 gameLog.setRoundOver(true);
                 activePlayers.get(0).addCredit(game.getPot().getAmount());
@@ -261,6 +261,13 @@ public class GameService {
                 winners.add(activePlayers.get(0));
                 gameLog.setWinners(winners);
                 gameLog.setWinnerComboValue("Everyone else Folded or left");*/
+
+                Player newWinner = activePlayers.get(0);
+                List<Player> newWinners = new LinkedList<>();
+                newWinners.add(newWinner);
+                gameLog.setWinners(newWinners);
+                gameLog.setWinnerComboValue("Last remaining Player.");
+
                 gameLog.setActivePlayers(activePlayers);
                 game.getPot().removeAmount(game.getPot().getAmount());
                 gameLog.setPotAmount(game.getPot().getAmount());
