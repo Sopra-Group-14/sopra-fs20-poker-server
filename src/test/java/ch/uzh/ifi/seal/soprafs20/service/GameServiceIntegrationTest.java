@@ -628,4 +628,35 @@ public class GameServiceIntegrationTest {
         assertEquals(gameLog.getPlayers().size(), 2);
     }
 
+
+    @Test
+    public void playerLeaves_onePlayerLeft(){
+
+        User toCreateUser = new User();
+        toCreateUser.setName("Name");
+        toCreateUser.setPassword("Password");
+        toCreateUser.setUsername("host");
+
+        User toCreateUser2 = new User();
+        toCreateUser2.setName("Name2");
+        toCreateUser2.setPassword("Password2");
+        toCreateUser2.setUsername("join1");
+
+        User hostUser = userService.createUser(toCreateUser);
+        User joiningUser = userService.createUser(toCreateUser2);
+
+        Game game = gameService.createGame("Game", hostUser.getId(), "None");
+
+        gameService.addHost(hostUser.getId(), game);
+        gameService.addJoiningPlayer(joiningUser.getId(), game.getGameId());
+
+        GameLog gameLog = gameService.roundStart(game);
+
+        gameService.removePlayer(game.getGameId(), joiningUser.getId());
+
+        //TODO add more assertions
+        assertEquals(gameLog.isGameOver(), true);
+
+    }
+
 }
