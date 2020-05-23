@@ -30,6 +30,7 @@ public class GameLog {
     private List<String> revealedAPICards;
     private List<Action> possibleActions;
     private String gameName;
+    private String winnerComboValue;
     private long playerId;
     private long nextPlayerId;
     private boolean roundOver;
@@ -305,4 +306,13 @@ public class GameLog {
     public void setCreatedSpectatorId(Long createdSpectatorId) {
         this.createdSpectatorId = createdSpectatorId;
     }
+
+    public String getWinnerComboValue() {
+        return winnerComboValue;
+    }
+
+    public void setWinnerComboValue(String winnerComboValue) {
+        this.winnerComboValue = winnerComboValue;
+    }
+
 }
