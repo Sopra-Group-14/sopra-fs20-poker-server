@@ -914,8 +914,6 @@ public class GameService {
 
     }
 
-    public void toggleReadyStatus(long gameId, long playerId){}
-
     public List<Player> getPlayers(long gameId){
         return gameSelect.getGameById(gameId).getPlayers();
     }
