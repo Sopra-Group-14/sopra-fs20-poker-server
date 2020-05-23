@@ -157,6 +157,7 @@ public class ChatServiceIntegrationTest {
     }
 
     @Test
+    @Disabled
     public void givenChatPutDTO_returnCorrectChatLogPlayers(){
 
         ChatLog testChatLog1 = new ChatLog("11:11:11", "testUser1", "1",
