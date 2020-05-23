@@ -667,10 +667,83 @@ public class GameService {
            //calculate the amount won by every winner if not every player has the same amount in pot
 
 
+/*
+            Player playerWithMostAmountInPot = players.get(0);
+            for (int i = 1; i < players.size(); i++) {
+                if (players.get(i).getAmountInPot() > playerWithMostAmountInPot.getAmountInPot()) {
+                    playerWithMostAmountInPot = players.get(i);
+                }
+            }
+
+            boolean allWinnersHaveMostAmountInPot = true;
+            for (int a = 0; a < winners.size(); a++) {
+                //if a winner has not most amount in pot
+                if (winners.get(a).getAmountInPot() != playerWithMostAmountInPot.getAmountInPot()) {
+                    allWinnersHaveMostAmountInPot = false;
+                    break;
+                }
+            }
+
+            boolean winnersHaveSameAmountInPot = true;
+            for (int i = 0; i < winners.size(); i++) {
+                if (winners.get(i).getAmountInPot() != winners.get(0).getAmountInPot()) {
+                    winnersHaveSameAmountInPot = false;
+                    break;
+                }
+            }
+
+            //if all winners have most amount in pot
+            if (allWinnersHaveMostAmountInPot && winnersHaveSameAmountInPot) {
+                int wonAmount = pot.getAmount() / winners.size();
+                gameLog.setWonAmount(wonAmount);
+                //add won amount to the credit of the winnerPlayers
+                for (int i = 0; i < winners.size(); i++) {
+                    winners.get(i).addCredit(wonAmount);
+                }
+                for (int a = 0; a < players.size(); a++) {
+                    players.get(a).setAmountInPot(0);
+                }
+
+                pot.removeAmount(pot.getAmount());
+                gameLog.setPotAmount(0);
+                gameLog.setPlayers(players);
+            }
+            else if (winnersHaveSameAmountInPot) {
+                //if not all winners have not most amount in pot
+                //if  winners have same amount in pot but less than other players, they get what they have betted in relation and all other players get amount back
+                int winnerAmount = 0;
+                for (Player player : players) {
+                    if (player.getAmountInPot() > winners.get(0).getAmountInPot()) {
+                        winnerAmount = winnerAmount + winners.get(0).getAmountInPot();
+                        player.setAmountInPot(player.getAmountInPot() - winners.get(0).getAmountInPot());
+                        game.getPot().removeAmount(winners.get(0).getAmountInPot());
 
 
+                    }
+                    else {
+                        winnerAmount = winnerAmount + player.getAmountInPot();
+                        game.getPot().removeAmount(player.getAmountInPot());
+
+                    }
+                    player.addCredit(player.getAmountInPot());
+                    game.getPot().removeAmount(player.getAmountInPot());
+                    player.setAmountInPot(0);
+                }
+                winnerAmount = winnerAmount / winners.size();
+                winnerAmount = winnerAmount + winners.get(0).getAmountInPot();
+                for (int i = 0; i < winners.size(); i++) {
+                    winners.get(i).addCredit(winnerAmount);
+                    game.getPot().removeAmount(winners.get(i).getAmountInPot());
+                }
+            }
+            else {
+                //winners have not same Amount in pot and
+                //if there are winners with most amount in pot and winners with not most amount in pot, they split in ralation amountin pot
 
 
+            }
+
+*/
            int playersWithCredit = 0;
            for (int i = 0;i < players.size();i++){
                if (players.get(i).getCredit()>0){
