@@ -256,6 +256,11 @@ public class GameService {
                 game.setRoundOver();
                 gameLog.setRoundOver(true);
                 activePlayers.get(0).addCredit(game.getPot().getAmount());
+             /*   List<Player> winners = gameLog.getWinners();
+                winners.clear();
+                winners.add(activePlayers.get(0));
+                gameLog.setWinners(winners);
+                gameLog.setWinnerComboValue("Everyone else Folded or left");*/
                 gameLog.setActivePlayers(activePlayers);
                 game.getPot().removeAmount(game.getPot().getAmount());
                 gameLog.setPotAmount(game.getPot().getAmount());
@@ -579,18 +584,6 @@ public class GameService {
         }
 
 
-        //if all player folded, there is no winner
-       if (activePlayers.size() == 1){
-           List<Player> winners = gameLog.getWinners();
-           winners.clear();
-           winners.add(activePlayers.get(0));
-           gameLog.setWinners(winners);
-           gameLog.setWinnerComboValue("Everyone else Folded or left");
-           activePlayers.get(0).addCredit(game.getPot().getAmount());
-           game.getPot().removeAmount(game.getPot().getAmount());
-           game.startNewRound();
-
-       }
 
 
 
