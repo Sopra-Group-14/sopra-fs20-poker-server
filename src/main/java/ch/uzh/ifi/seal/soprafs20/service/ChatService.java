@@ -54,7 +54,7 @@ public class ChatService {
 
         }
 
-        String timeStamp = new SimpleDateFormat("HH:mm - dd.MM.YYYY").format(new Date());
+        String timeStamp = new SimpleDateFormat("HH:mm").format(new Date());
         String message = chatPutDTO.getMessage();
         return new ChatLog(timeStamp, userName, Long.toString(userId), message, chatMode);
 
