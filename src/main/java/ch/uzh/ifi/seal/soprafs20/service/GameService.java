@@ -860,7 +860,7 @@ public class GameService {
         }
 */
 //if next Player went all in he is not allowed to play
-
+/*
         if (game.getNextPlayer(currentPlayer).getCredit() <= 0) {
             Player player = currentPlayer;
             while (game.getNextPlayer(player).getCredit()<= 0) {
@@ -869,6 +869,8 @@ public class GameService {
             gameLog.setNextPlayerName(game.getNextPlayer(player).getPlayerName());
             gameLog.setNextPlayerId(game.getNextPlayer(player).getId());
         }
+
+ */
 
 
 
