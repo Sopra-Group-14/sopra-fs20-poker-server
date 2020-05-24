@@ -20,7 +20,7 @@ Heroku - Deployment
 ## High-level components: 
 Controllers (GameController, UserController, ChatController) - These interact with the frontend using a REST-Interface
 
-Services (GameService, UserService, ChatService) - These command the specific object of these types (Game, User, Chat) The most important one is the GameController: [#1](src/main/java/ch/uzh/ifi/seal/soprafs20/service/GameService.java)
+Services (GameService, UserService, ChatService) - These command the specific object of these types (Game, User, Chat) The most important one is the [GameService](src/main/java/ch/uzh/ifi/seal/soprafs20/service/GameService.java)
 
 Game - The main gameflow is in the Game class
 
