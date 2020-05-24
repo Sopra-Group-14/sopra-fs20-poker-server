@@ -2,31 +2,47 @@
 
 ## Introduction
 
-This is the server of a poker game implemented for the SOPRA FS20.
-In this game the user can play poker with four different limits as well as watch other games live. He can also chat with other players and spectators. 
+This is the server of a poker game implemented for SOPRA FS20 at UZH.
+In this game users can play Poker with four different limits (none, fixed, split, pot) as well as watch other games live. They can also chat with other players and spectators. 
 
 ## Technologies
-gradle
-java
+Java - The programming language of the backend
+
+Gradle - Used for building and wrapping
+
+SpringBoot - Used for running the server
+
+SonarCube - Code Analysis
+
+Heroku - Deployment
+
 
 ## High-level components: 
+Controllers ([GameController](src/main/java/ch/uzh/ifi/seal/soprafs20/controller/GameController.java), [UserController](src/main/java/ch/uzh/ifi/seal/soprafs20/controller/UserController.java), [ChatController](src/main/java/ch/uzh/ifi/seal/soprafs20/controller/ChatController.java)) - These interact with the frontend using a REST-Interface
+
+Services ([GameService](src/main/java/ch/uzh/ifi/seal/soprafs20/service/GameService.java), [UserService](src/main/java/ch/uzh/ifi/seal/soprafs20/service/UserService.java), [ChatService](src/main/java/ch/uzh/ifi/seal/soprafs20/service/ChatService.java)) - These command the specific object of these types (Game, User, Chat)
+
+[Game](src/main/java/ch/uzh/ifi/seal/soprafs20/entity/Game.java) - The main gameflow is in the Game class
+
+[CardAnalyser](src/main/java/ch/uzh/ifi/seal/soprafs20/cards/CardAnalyser.java)/[WinnerCalculator](src/main/java/ch/uzh/ifi/seal/soprafs20/cards/WinnerCalculator.java) - These are used to check the players' cards and determine who has won a round
 
 
 ## Launch and Deployment.
-to launch this project install: <br/>
+To launch this project locally:
+Go into the sopra-fs20-group-14-server folder in your directory and open two command windows. In the first one, run "gradlew.bat build" to build the project; add the "--continuous" keyword in the end if you want it to recompile every time you make a change or the "--xtest" keyword if you don't want to execute any tests. In the second one, run "gradlew.bat bootRun" to start the local server.
 
-To deploy the project use: <br/>
-
-## Illustrations
-To play poker the user needs to register or log in. Then he can create or join a pokergame. The user has an account where he can top up his credit once every 24h. As a not logged in (as well as a logged in) user it is possible to join a game as a spectator and see the hand cards of the different Players as well as some winning odds. 
-
+To deploy the project:
+The project automatically depoys onto Heroku (https://dashboard.heroku.com/apps/sopra-fs20-group-14-server) once pushed to Github.
 
 ## Roadmap
-We could imagine adding sound effects, card animations as well as a
-friend list or private messages to stay in contact with people you liked to play with. 
+A friends list and an out-of-game chat could be implemented so that people can easily find and talk to other players they enjoyed playing with.
+
+Different rulesets of Poker could be added. 
+
+Paid topping up of an account outside of the 24-hour cooldown could be implemented.
 
 ## Authors and acknowledgment
-Csanad Erdei-Griff, Kevin Kindler, Konstantin Moser, Lara Fried, Andy Aidoo
+Csanad Erdei-Griff, Kevin Kindler, Konstantin Moser, Lara Fried, Andy Aidoo, Dimitri Kohler (Coach)
 
 ## License
 MIT License

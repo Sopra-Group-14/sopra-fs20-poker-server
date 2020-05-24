@@ -42,12 +42,6 @@ public class GameController {
     @ResponseBody
     public List<Game> getAllGames(){return gameService.getAllGames();}
 
-    /*
-    @GetMapping("/games/{gameId}")
-    @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
-    public Game getGame(){return gameService.getGame();}
-*/
     @PostMapping("/games")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
@@ -69,14 +63,7 @@ public class GameController {
     @ResponseBody
     public GameLog joinGame(@RequestBody JoinGameDTO joinGameDTO, @PathVariable long gameId){
 
-            gameService.addJoiningPlayer(joinGameDTO.getUserId(), gameId);
-
-      /*  if(joinGameDTO.getUserMode().equals("player")){
-            gameService.addJoiningPlayer(joinGameDTO.getUserId(), gameId);
-        }else if(joinGameDTO.getUserMode().equals("spectator")){
-            gameService.addSpectator(gameId);
-        }*/
-
+        gameService.addJoiningPlayer(joinGameDTO.getUserId(), gameId);
         return gameService.getGameLog(gameId);
 
     }
@@ -150,23 +137,11 @@ public class GameController {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public GameLog leave(@PathVariable long gameId, @PathVariable long playerId, @RequestHeader (value = "Authorization") String token){
-        /*if (gameService.checkAuthorizationGet(token, gameId) == false) {
-            throw new TransactionSystemException("Authorization check error");
-        }*/
 
         log.info("before gameService");
         gameService.removePlayer(gameId, playerId);
-        /*if (playerId == gameService.getGame(gameId).getGameLog().getNextPlayerId()){
-            gameService.executeAction(Action.FOLD, 0, gameId, playerId);
-        }
-        */
         return gameService.getGame(gameId).getGameLog();
     }
-
-    /*@PutMapping("/games/{gameId}/players/{playerId}/actions")
-    @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
-    public GameLog takeAction(@RequestBody Action action, @PathVariable long gameId, @PathVariable long playerId, @RequestHeader (value = "Authorization") String token){return null;}*/
 
     //Overloaded method for calls that use an "amount"
     @PutMapping("/games/{gameId}/players/{playerId}/actions")

@@ -32,10 +32,6 @@ public class ChatService {
         return game.getMessages(chatMode);
     }
 
-    /*public void newMessage(Chat chat, String message){
-        chat.newMessage(message);
-    }*/
-
     public void newMessage(String chatMode, long gameId, ChatLog chatLog){
 
         Game game = gameService.getGame(gameId);
@@ -65,10 +61,11 @@ public class ChatService {
     }
 
     public ChatLog getLatestMessage(List<ChatLog> chatLogs){
-        if(chatLogs != null && chatLogs.size() != 0) {
-            return chatLogs.get(chatLogs.size() - 1);
-        }else{
+        if (chatLogs == null || chatLogs.isEmpty()) {
             return new ChatLog(null, null, null, null, null);
+        }
+        else {
+            return chatLogs.get(chatLogs.size() - 1);
         }
     }
 

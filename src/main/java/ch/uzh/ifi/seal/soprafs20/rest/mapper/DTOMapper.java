@@ -38,20 +38,7 @@ public interface DTOMapper {
     @Mapping(source = "potType", target = "potType")
     Game convertGamePostDTOtoEntity(GamePostDTO gamePostDTO);
 
-//    @Mapping(source = "userId", target = "userId")
     @Mapping(source = "amount", target = "amount")
     UserPutDTO convertPutDTOtoEntity(UserPutDTO userPutDTO);
-
-//    @Mapping(source =  "time", target = "time")
-//    @Mapping(source = "username", target = "username")
-//    @Mapping(source = "userId", target = "userId")
-//    @Mapping(source = "message", target = "message")
-//    ChatPutDTO convertEntityToChatLogPutDTO(ChatLog chatLog);
-
-
-//
-//    @Mapping(source = "gameId", target = "gameId")
-//    @Mapping(source = "chatMode", target = "chatMode")
-//    ChatGetDTO convertEntityToGetDTO(ChatGetDTO chatGetDTO);
 
 }

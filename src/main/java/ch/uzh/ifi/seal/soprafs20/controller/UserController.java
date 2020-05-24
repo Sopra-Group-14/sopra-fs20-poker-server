@@ -94,7 +94,6 @@ public class UserController {
 
         UserPutDTO userInput = DTOMapper.INSTANCE.convertPutDTOtoEntity(userPutDTO);
 
-        //long userId = userInput.getUserId();
         long amount = userInput.getAmount();
         return userService.addBalance(userId, amount);
     }

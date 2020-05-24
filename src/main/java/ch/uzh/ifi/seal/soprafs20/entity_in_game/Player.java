@@ -13,8 +13,6 @@ public class Player{
     private List<Card> hand = new LinkedList<>();
     private List<String> apiHand = new LinkedList<>();
 
-    //private static final int START_CREDIT = 1000;
-
     private int credit;
 
     private long id;

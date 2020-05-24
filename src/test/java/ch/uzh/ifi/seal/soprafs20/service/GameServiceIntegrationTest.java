@@ -52,13 +52,13 @@ public class GameServiceIntegrationTest {
     @BeforeEach
     public void setup() {
         userRepository.deleteAll();
-        while(gameService.getAllGames().size() > 0){
+        while (gameService.getAllGames().size() > 0) {
             gameService.getAllGames().remove(0);
         }
     }
 
     @Test
-    public void createGameIsSuccessfulOnValidInput(){
+    public void createGameIsSuccessfulOnValidInput() {
 
         //given
         Game testGame = new Game();
@@ -77,7 +77,7 @@ public class GameServiceIntegrationTest {
     }
 
     @Test
-    public void calculateWinnerReturnsCorrectWinner(){
+    public void calculateWinnerReturnsCorrectWinner() {
 
         WinnerCalculator winnerCalculator = new WinnerCalculator();
 
@@ -119,7 +119,7 @@ public class GameServiceIntegrationTest {
     }
 
     @Test
-    public void twoIdenticalHandsCanBeRanked(){
+    public void twoIdenticalHandsCanBeRanked() {
 
         WinnerCalculator winnerCalculator = new WinnerCalculator();
 
@@ -152,7 +152,7 @@ public class GameServiceIntegrationTest {
     }
 
     @Test
-    public void isStraightFlush7CardScenarioWorks(){
+    public void isStraightFlush7CardScenarioWorks() {
 
         CardAnalyser cardAnalyser = new CardAnalyser();
 
@@ -173,7 +173,7 @@ public class GameServiceIntegrationTest {
     }
 
     @Test
-    public void isStraight7CardScenarioWorks(){
+    public void isStraight7CardScenarioWorks() {
 
         CardAnalyser cardAnalyser = new CardAnalyser();
 
@@ -194,7 +194,7 @@ public class GameServiceIntegrationTest {
     }
 
     @Test
-    public void isThreeOfAKindWorks(){
+    public void isThreeOfAKindWorks() {
 
         CardAnalyser cardAnalyser = new CardAnalyser();
 
@@ -217,7 +217,7 @@ public class GameServiceIntegrationTest {
     }
 
     @Test
-    public void isTwoPairsThirdScenarioWorks(){
+    public void isTwoPairsThirdScenarioWorks() {
 
         CardAnalyser cardAnalyser = new CardAnalyser();
 
@@ -240,7 +240,7 @@ public class GameServiceIntegrationTest {
     }
 
     @Test
-    public void isHighCardWorks(){
+    public void isHighCardWorks() {
 
         CardAnalyser cardAnalyser = new CardAnalyser();
 
@@ -265,7 +265,7 @@ public class GameServiceIntegrationTest {
     }
 
     @Test
-    public void AddHostAndAddJoiningUserAddsUsersToPlayersAndActivePlayersLists(){
+    public void AddHostAndAddJoiningUserAddsUsersToPlayersAndActivePlayersLists() {
 
         User toCreateUser = new User();
         toCreateUser.setName("Name");
@@ -296,7 +296,7 @@ public class GameServiceIntegrationTest {
     }
 
     @Test
-    public void testActionBet(){
+    public void testActionBet() {
 
         User toCreateUser = new User();
         toCreateUser.setName("Name");
@@ -328,7 +328,7 @@ public class GameServiceIntegrationTest {
     }
 
     @Test
-    public void testActionFold(){
+    public void testActionFold() {
 
         User toCreateUser = new User();
         toCreateUser.setName("Name");
@@ -458,7 +458,7 @@ public class GameServiceIntegrationTest {
     }
 
     @Test
-    public void testDifferentPotTypes(){
+    public void testDifferentPotTypes() {
 
         User toCreateUser = new User();
         toCreateUser.setName("Name");
@@ -563,7 +563,7 @@ public class GameServiceIntegrationTest {
     }
 
     @Test
-    public void testRoundStart(){
+    public void testRoundStart() {
 
         User toCreateUser = new User();
         toCreateUser.setName("Name");
@@ -593,7 +593,7 @@ public class GameServiceIntegrationTest {
     }
 
     @Test
-    public void removePlayerTest(){
+    public void removePlayerTest() {
 
         User toCreateUser = new User();
         toCreateUser.setName("Name");
@@ -624,13 +624,13 @@ public class GameServiceIntegrationTest {
 
         gameService.removePlayer(game.getGameId(), joiningUser2.getId());
 
-        assertEquals(gameLog.getActivePlayers().size(), 2);
-        assertEquals(gameLog.getPlayers().size(), 2);
+        assertEquals(2, gameLog.getActivePlayers().size());
+        assertEquals(2, gameLog.getPlayers().size());
     }
 
 
     @Test
-    public void playerLeaves_onePlayerLeft(){
+    public void playerLeaves_onePlayerLeftInGame() {
 
         User toCreateUser = new User();
         toCreateUser.setName("Name");
@@ -654,8 +654,54 @@ public class GameServiceIntegrationTest {
 
         gameService.removePlayer(game.getGameId(), joiningUser.getId());
 
-        //TODO add more assertions
-        assertEquals(gameLog.isGameOver(), true);
+        assertEquals(true, game.getGameLog().getGameOver());
+        assertEquals(true, game.getGameLog().getRoundOver());
+
+    }
+
+    @Test
+    public void playerLeaves_onePlayerLeftInRound() {
+
+        User toCreateUser = new User();
+        toCreateUser.setName("Name");
+        toCreateUser.setPassword("Password");
+        toCreateUser.setUsername("host");
+
+        User toCreateUser2 = new User();
+        toCreateUser2.setName("Name2");
+        toCreateUser2.setPassword("Password2");
+        toCreateUser2.setUsername("join1");
+
+        User toCreateUser3 = new User();
+        toCreateUser3.setName("Name3");
+        toCreateUser3.setPassword("Password3");
+        toCreateUser3.setUsername("join2");
+
+        User hostUser = userService.createUser(toCreateUser);
+        User joiningUser = userService.createUser(toCreateUser2);
+        User joiningUser2 = userService.createUser(toCreateUser3);
+
+        Game game = gameService.createGame("Game", hostUser.getId(), "None");
+
+        gameService.addHost(hostUser.getId(), game);
+        gameService.addJoiningPlayer(joiningUser.getId(), game.getGameId());
+        gameService.addJoiningPlayer(joiningUser2.getId(), game.getGameId());
+
+        game.removeActivePlayer(game.getPlayerById(2L));
+
+        gameService.removePlayer(game.getGameId(), joiningUser2.getId());
+
+
+        /*
+
+        both assertion expect false as the method game.removePlayer starts a new round if there is only one active player
+        left once it has been called
+
+         */
+
+        assertEquals(false, game.getGameLog().getGameOver());
+        assertEquals(false, game.getGameLog().getRoundOver());
+        assertEquals(2, game.getPlayers().size());
 
     }
 
