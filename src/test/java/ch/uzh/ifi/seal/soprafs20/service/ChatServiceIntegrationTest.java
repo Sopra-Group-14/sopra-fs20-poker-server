@@ -157,17 +157,11 @@ public class ChatServiceIntegrationTest {
     }
 
     @Test
-    @Disabled
     public void givenChatPutDTO_returnCorrectChatLogPlayers(){
 
         ChatLog testChatLog1 = new ChatLog("11:11:11", "testUser1", "1",
                 "testMessage", "players");
         chat.add(testChatLog1);
-
-        Game testGame = new Game();
-        testGame.setGameName("TestGame");
-        testGame.setGameHostID(1L);
-        testGame.setPotType("Fixed");
 
         User testUser = new User();
         testUser.setUsername("testUser");
@@ -177,8 +171,6 @@ public class ChatServiceIntegrationTest {
         ChatPutDTO chatPutDTO = new ChatPutDTO();
         chatPutDTO.setUserId(testUser.getId());
         chatPutDTO.setMessage("testMessage");
-
-        Game createdGame = gameService.createGame(testGame.getGameName(), testGame.getGameHostID(), testGame.getPotType());
 
         ChatLog returnedChatLog = chatService.chatPutDTOtoChatLog(chatPutDTO, "player", "players");
 
@@ -195,16 +187,9 @@ public class ChatServiceIntegrationTest {
                 "testMessage", "spectators");
         chat.add(testChatLog1);
 
-        Game testGame = new Game();
-        testGame.setGameName("TestGame");
-        testGame.setGameHostID(-1L);
-        testGame.setPotType("Fixed");
-
         ChatPutDTO chatPutDTO = new ChatPutDTO();
         chatPutDTO.setUserId(1L);
         chatPutDTO.setMessage("testMessage");
-
-        Game createdGame = gameService.createGame(testGame.getGameName(), testGame.getGameHostID(), testGame.getPotType());
 
         ChatLog returnedChatLog = chatService.chatPutDTOtoChatLog(chatPutDTO, "spectator", "spectators");
 
@@ -216,6 +201,7 @@ public class ChatServiceIntegrationTest {
 
     @Test
     public void givenChatLogs_returnLatestMessage(){
+
         ChatLog testChatLog1 = new ChatLog("11:11:11", "testUser1", "1",
                 "testMessage", "players");
         ChatLog testChatLog2 = new ChatLog("22:22:22", "testUser2", "2",
