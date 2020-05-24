@@ -24,7 +24,7 @@ Services ([GameService](src/main/java/ch/uzh/ifi/seal/soprafs20/service/GameServ
 
 [Game](src/main/java/ch/uzh/ifi/seal/soprafs20/entity/Game.java) - The main gameflow is in the Game class
 
-CardAnalyser/WinnerCalculator - These are used to check the players' cards and determine who has won a round
+[CardAnalyser](src/main/java/ch/uzh/ifi/seal/soprafs20/cards/CardAnalyser.java)/[WinnerCalculator](src/main/java/ch/uzh/ifi/seal/soprafs20/cards/WinnerCalculator.java) - These are used to check the players' cards and determine who has won a round
 
 
 ## Launch and Deployment.
