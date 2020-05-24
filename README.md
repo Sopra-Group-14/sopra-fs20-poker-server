@@ -7,16 +7,25 @@ In this game users can play Poker with four different limits (none, fixed, split
 
 ## Technologies
 Java - The programming language of the backend
+
 Gradle - Used for building and wrapping
+
 SpringBoot - Used for running the server
+
 SonarCube - Code Analysis
+
 Heroku - Deployment
+
 
 ## High-level components: 
 Controllers (GameController, UserController, ChatController) - These interact with the frontend using a REST-Interface
+
 Services (GameService, UserService, ChatService) - These command the specific object of these types (Game, User, Chat)
+
 Game - The main gameflow is in the Game class
+
 CardAnalyser/WinnerCalculator - These are used to check the players' cards and determine who has won a round
+
 
 ## Launch and Deployment.
 To launch this project locally:
