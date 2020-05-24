@@ -173,6 +173,7 @@ public class Game {
         if (activePlayers.get(activePlayers.size() - 1).getId() == currentPlayer.getId()) {
             return activePlayers.get(0);
         }
+
         else {
             for (int i = 0; i < activePlayers.size() - 1; i++) {
                 if (activePlayers.get(i).getId() == currentPlayer.getId()) {
