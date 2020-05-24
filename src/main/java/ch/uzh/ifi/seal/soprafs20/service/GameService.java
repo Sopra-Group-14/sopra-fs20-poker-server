@@ -769,6 +769,10 @@ public class GameService {
                gameLog.setGameOver(true);
                possibleActions.clear();
                gameLog.setPossibleActions(possibleActions);
+               for (Player player: players) {
+                   User user = userService.getUserById(player.getId());
+                   user.setBalance2(player.getCredit());
+               }
            }else{
                game.startNewRound();
            }
