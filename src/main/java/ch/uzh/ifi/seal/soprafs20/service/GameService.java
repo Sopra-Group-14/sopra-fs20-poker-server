@@ -623,7 +623,7 @@ public class GameService {
 //start the new round
 
        for (int i = 0; i<activePlayers.size();i++){
-           if (activePlayers.get(i).getCredit() <= 0){
+           if (activePlayers.get(i).getCredit() <= 10){
                if (action == Action.CALL && game.isPlayerWentAllIN() == false){
                    game.setaPlayerHasNullCredit(true);
                }
@@ -760,7 +760,7 @@ public class GameService {
 */
            int playersWithCredit = 0;
            for (int i = 0;i < players.size();i++){
-               if (players.get(i).getCredit()>0){
+               if (players.get(i).getCredit()>10){
                    playersWithCredit++;
                }
            }
