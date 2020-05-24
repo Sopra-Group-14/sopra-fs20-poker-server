@@ -22,7 +22,7 @@ Controllers ([GameController](src/main/java/ch/uzh/ifi/seal/soprafs20/controller
 
 Services ([GameService](src/main/java/ch/uzh/ifi/seal/soprafs20/service/GameService.java), [UserService](src/main/java/ch/uzh/ifi/seal/soprafs20/service/UserService.java), [ChatService](src/main/java/ch/uzh/ifi/seal/soprafs20/service/ChatService.java)) - These command the specific object of these types (Game, User, Chat)
 
-Game - The main gameflow is in the Game class
+[Game](src/main/java/ch/uzh/ifi/seal/soprafs20/entity/Game.java) - The main gameflow is in the Game class
 
 CardAnalyser/WinnerCalculator - These are used to check the players' cards and determine who has won a round
 
