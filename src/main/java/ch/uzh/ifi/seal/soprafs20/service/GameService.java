@@ -955,4 +955,9 @@ public class GameService {
         return gameLog;
     }
 
+    public User userForGame(Player player){
+        User user = userService.getUserById(player.getId());
+        return user;
+    }
+
 }

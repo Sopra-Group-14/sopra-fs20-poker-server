@@ -6,11 +6,13 @@ import ch.uzh.ifi.seal.soprafs20.cards.Deck;
 import ch.uzh.ifi.seal.soprafs20.cards.WinnerCalculator;
 import ch.uzh.ifi.seal.soprafs20.constant.Action;
 import ch.uzh.ifi.seal.soprafs20.constant.GameRound;
+import ch.uzh.ifi.seal.soprafs20.controller.GameController;
 import ch.uzh.ifi.seal.soprafs20.entity_in_game.GameLog;
 import ch.uzh.ifi.seal.soprafs20.entity_in_game.Player;
 import ch.uzh.ifi.seal.soprafs20.entity_in_game.Pot;
 import ch.uzh.ifi.seal.soprafs20.entity_in_game.Spectator;
 import ch.uzh.ifi.seal.soprafs20.exceptions.SopraServiceException;
+import ch.uzh.ifi.seal.soprafs20.service.UserService;
 import org.mapstruct.Mapping;
 
 import java.io.IOException;
@@ -75,6 +77,7 @@ public class Game {
     private boolean aPlayerHasNullCredit;
     private int actionsAfterAllIN;
     private int actionsAfterNullCredit;
+
 
 
 
@@ -387,14 +390,18 @@ public class Game {
 
         //enter folded players back into the list active players  at same position and make them unfolded
         activePlayers.clear();
+
         for (int i = 0; i< players.size(); i++){
-            if (players.get(i).getCredit() == 0){
+           /* if (players.get(i).getCredit() < 10){
+                User user = gameService
+                user.setBalance2(players.get(i).getCredit());
                 players.remove(players.get(i));
-            }else {
+            }else {*/
                 activePlayers.add(i, players.get(i));
                 activePlayers.get(i).setFolded(false);
-            }
+           // }
         }
+
         this.pot.removeAmount(this.pot.getAmount());
         gameLog.setPotAmount(0);
         gameLog.setPlayerPot(0);
