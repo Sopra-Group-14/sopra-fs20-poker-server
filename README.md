@@ -2,20 +2,28 @@
 
 ## Introduction
 
-This is the server of a poker game implemented for the SOPRA FS20.
-In this game the user can play poker with four different limits as well as watch other games live. He can also chat with other players and spectators. 
+This is the server of a poker game implemented for SOPRA FS20 at UZH.
+In this game users can play Poker with four different limits (none, fixed, split, pot) as well as watch other games live. They can also chat with other players and spectators. 
 
 ## Technologies
-gradle
-java
+Java - The programming language of the backend
+Gradle - Used for building and wrapping
+SpringBoot - Used for running the server
+SonarCube - Code Analysis
+Heroku - Deployment
 
 ## High-level components: 
-
+Controllers (GameController, UserController, ChatController) - These interact with the frontend using a REST-Interface
+Services (GameService, UserService, ChatService) - These command the specific object of these types (Game, User, Chat)
+Game - The main gameflow is in the Game class
+CardAnalyser/WinnerCalculator - These are used to check the players' cards and determine who has won a round
 
 ## Launch and Deployment.
-to launch this project install: <br/>
+To launch this project locally:
+Go into the sopra-fs20-group-14-server folder in your directory and open two command windows. In the first one, run "gradlew.bat build" to build the project; add the "--continuous" keyword in the end if you want it to recompile every time you make a change or the "--xtest" keyword if you don't want to execute any tests. In the second one, run "gradlew.bat bootRun" to start the local server.
 
-To deploy the project use: <br/>
+To deploy the project:
+The project automatically depoys onto Heroku (https://dashboard.heroku.com/apps/sopra-fs20-group-14-server) once pushed to Github.
 
 ## Illustrations
 To play poker the user needs to register or log in. Then he can create or join a pokergame. The user has an account where he can top up his credit once every 24h. As a not logged in (as well as a logged in) user it is possible to join a game as a spectator and see the hand cards of the different Players as well as some winning odds. 
