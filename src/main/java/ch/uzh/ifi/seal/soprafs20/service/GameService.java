@@ -255,8 +255,10 @@ public class GameService {
                 Player newWinner = activePlayers.get(0);
                 List<Player> newWinners = new LinkedList<>();
                 newWinners.add(newWinner);
+                int wonAmount = game.getPot().getAmount()/newWinners.size();
                 gameLog.setWinners(newWinners);
                 gameLog.setWinnerComboValue("Last remaining Player.");
+                gameLog.setWonAmount(wonAmount);
 
                 gameLog.setActivePlayers(activePlayers);
                 game.getPot().removeAmount(game.getPot().getAmount());
