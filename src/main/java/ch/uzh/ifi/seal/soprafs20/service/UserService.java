@@ -73,18 +73,13 @@ public class UserService {
      */
     private void checkIfUserExists(User userToBeCreated) {
         User userByUsername = userRepository.findByUsername(userToBeCreated.getUsername());
-        //User userByName = userRepository.findByName(userToBeCreated.getName());
 
         String baseErrorMessage = "The %s provided %s not unique. Therefore, the user could not be created!";
-        //if (userByUsername != null && userByName != null) {
-            //throw new ResponseStatusException(HttpStatus.UNAUTHORIZED/*BAD_REQUEST*/, String.format(baseErrorMessage, "username and the name", "are"));
-        //}
-        /*else*/if (userByUsername != null) {
+
+        if (userByUsername != null) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, String.format(baseErrorMessage, "username", "is"));
         }
-        /*else if (userByName != null) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, String.format(baseErrorMessage, "name", "is"));
-        }*/
+
     }
 
     public void logoutUser(String token){
@@ -96,8 +91,8 @@ public class UserService {
         }
         else
             {
-            /* throw new SopraServiceExeption("no user found"); */
-                throw new SopraServiceException("no user found");
+
+            throw new SopraServiceException("no user found");
         }
     }
 
@@ -190,19 +185,5 @@ public class UserService {
         }
         return user;
     }
-/*
-    public void logoutUser(String token){
-        User user = userRepository.findByToken(token);
-        if (user != null){
-            user.setStatus(UserStatus.OFFLINE);
-            //user.setToken("");
-            log.warn("try to logout for User: {}", user.getName());
-            this.userRepository.save(user);
-            this.userRepository.flush();
-        }
-        else{
-            throw new SopraServiceException("logout failed");
-        }
-    }
-*/
+
 }

@@ -32,7 +32,6 @@ import java.util.List;
 public class GameService {
 
     private final UserService userService;
-    //private final Logger gameLog = LoggerFactory.getLogger(GameService.class);
     private final Logger log = LoggerFactory.getLogger(GameController.class);
     //The GameSelect is essentially just a list that holds all games. The games can then be accessed through it.
     private final GameSelect gameSelect = new GameSelect();
@@ -63,7 +62,7 @@ public class GameService {
 
          */
 
-        //TODO resolve null pointer exception if user that does not exist creates a game
+        //resolve null pointer exception if user that does not exist creates a game
         //--> To avoid this, set the hostID to -1; it will work for testing purposes.
         String hostName, hostToken;
 
@@ -92,10 +91,7 @@ public class GameService {
         newGame.setGameHostName(hostName);
         newGame.setHostToken(hostToken);
 
-//        GameLog nullGameLog = newGame.nullGameLog();
-
         gameSelect.addGame(newGame);
-//        newGame.addGameLog(nullGameLog);
 
         return newGame;
 
@@ -256,12 +252,6 @@ public class GameService {
                 game.setRoundOver();
                 gameLog.setRoundOver(true);
                 activePlayers.get(0).addCredit(game.getPot().getAmount());
-             /*   List<Player> winners = gameLog.getWinners();
-                winners.clear();
-                winners.add(activePlayers.get(0));
-                gameLog.setWinners(winners);
-                gameLog.setWinnerComboValue("Everyone else Folded or left");*/
-
                 Player newWinner = activePlayers.get(0);
                 List<Player> newWinners = new LinkedList<>();
                 newWinners.add(newWinner);
@@ -680,84 +670,6 @@ public class GameService {
            gameLog.setPlayers(players);
            //calculate the amount won by every winner if not every player has the same amount in pot
 
-
-/*
-            Player playerWithMostAmountInPot = players.get(0);
-            for (int i = 1; i < players.size(); i++) {
-                if (players.get(i).getAmountInPot() > playerWithMostAmountInPot.getAmountInPot()) {
-                    playerWithMostAmountInPot = players.get(i);
-                }
-            }
-
-            boolean allWinnersHaveMostAmountInPot = true;
-            for (int a = 0; a < winners.size(); a++) {
-                //if a winner has not most amount in pot
-                if (winners.get(a).getAmountInPot() != playerWithMostAmountInPot.getAmountInPot()) {
-                    allWinnersHaveMostAmountInPot = false;
-                    break;
-                }
-            }
-
-            boolean winnersHaveSameAmountInPot = true;
-            for (int i = 0; i < winners.size(); i++) {
-                if (winners.get(i).getAmountInPot() != winners.get(0).getAmountInPot()) {
-                    winnersHaveSameAmountInPot = false;
-                    break;
-                }
-            }
-
-            //if all winners have most amount in pot
-            if (allWinnersHaveMostAmountInPot && winnersHaveSameAmountInPot) {
-                int wonAmount = pot.getAmount() / winners.size();
-                gameLog.setWonAmount(wonAmount);
-                //add won amount to the credit of the winnerPlayers
-                for (int i = 0; i < winners.size(); i++) {
-                    winners.get(i).addCredit(wonAmount);
-                }
-                for (int a = 0; a < players.size(); a++) {
-                    players.get(a).setAmountInPot(0);
-                }
-
-                pot.removeAmount(pot.getAmount());
-                gameLog.setPotAmount(0);
-                gameLog.setPlayers(players);
-            }
-            else if (winnersHaveSameAmountInPot) {
-                //if not all winners have not most amount in pot
-                //if  winners have same amount in pot but less than other players, they get what they have betted in relation and all other players get amount back
-                int winnerAmount = 0;
-                for (Player player : players) {
-                    if (player.getAmountInPot() > winners.get(0).getAmountInPot()) {
-                        winnerAmount = winnerAmount + winners.get(0).getAmountInPot();
-                        player.setAmountInPot(player.getAmountInPot() - winners.get(0).getAmountInPot());
-                        game.getPot().removeAmount(winners.get(0).getAmountInPot());
-
-
-                    }
-                    else {
-                        winnerAmount = winnerAmount + player.getAmountInPot();
-                        game.getPot().removeAmount(player.getAmountInPot());
-
-                    }
-                    player.addCredit(player.getAmountInPot());
-                    game.getPot().removeAmount(player.getAmountInPot());
-                    player.setAmountInPot(0);
-                }
-                winnerAmount = winnerAmount / winners.size();
-                winnerAmount = winnerAmount + winners.get(0).getAmountInPot();
-                for (int i = 0; i < winners.size(); i++) {
-                    winners.get(i).addCredit(winnerAmount);
-                    game.getPot().removeAmount(winners.get(i).getAmountInPot());
-                }
-            }
-            else {
-                //winners have not same Amount in pot and
-                //if there are winners with most amount in pot and winners with not most amount in pot, they split in ralation amountin pot
-
-
-            }
-
-*/
            int playersWithCredit = 0;
            for (int i = 0;i < players.size();i++){
                if (players.get(i).getCredit()>0){
@@ -899,27 +811,6 @@ public class GameService {
         return currentId;
     }
 
-    public void updateBlinds(Game game){
-
-        /*
-        input is the game that needs to update blinds
-        -the small blind of the previous round becomes a "NO Blind"
-        -the big blind of the previous round becomes the small blind
-         -the player after the previous big blind becomes the new big blind
-         */
-
-        /*List<Player> players = game.getPlayers();
-
-
-        Player player = players.get(0);
-        players.remove(0);
-        players.add(players.size()+1, player);
-
-        game.setSmallBlind(players.get(0));
-        game.setBigBlind(players.get(1));*/
-
-    }
-
     public List<Player> getPlayers(long gameId){
         return gameSelect.getGameById(gameId).getPlayers();
     }
@@ -976,13 +867,6 @@ public class GameService {
             gameLog.setPotAmount(game.getPot().getAmount());
             game.startNewRound();
         }
-
-        /*
-        Game game = gameSelect.getGameById(gameId);
-        Player player = game.getPlayerById(userId);
-        userService.addBalanceOfPlayer(userId, player.getCredit());
-        game.getActivePlayers().remove(player);
-        */
     }
 
     public List<Game> getAllGames(){return gameSelect.getAllGames();}
@@ -1035,34 +919,10 @@ public class GameService {
 
     public GameLog roundStart(Game game){
 
-        /*FOR TESTING PURPOSES*/
         GameLog gameLog = game.getGameLog();
-
-//        User user1 = new User();
-//        user1.setUsername("MOCKUSER1");
-//        user1.setPassword("password");
-//        user1.setToken("token");
-//        user1.setId((long) 2);
-//
-//        User user2 = new User();
-//        user2.setUsername("MOCKUSER2");
-//        user2.setPassword("password2");
-//        user2.setToken("token2");
-//        user2.setId((long) 3);
-//
-//        Player player1 = new Player(user1);
-//        Player player2 = new Player(user2);
-//
-//        game.addPlayer(player1);
-//        game.addPlayer(player2);
-//        game.addActivePlayer(player1);
-//        game.addActivePlayer(player2);
-
-        /*END TESTING PURPOSES*/
 
         //all players with a credit > Small_blind remain in the game
         updateActiveUsers(game);
-        updateBlinds(game);
 
         List<Action> possibleActions = new ArrayList<>();
         possibleActions.add(Action.BET);

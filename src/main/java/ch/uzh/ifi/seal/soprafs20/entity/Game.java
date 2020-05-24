@@ -31,7 +31,7 @@ import java.util.List;
 public class Game {
 
     //Define the objects
-    //private final GameService gameService;
+
     private final List<ChatLog> playerChat = new ArrayList<>();
     private final List<ChatLog> spectatorChat = new ArrayList<>();
     private long gameId;
@@ -77,11 +77,10 @@ public class Game {
     private int actionsAfterNullCredit;
 
 
-    //private List<GameLog> gameTracker = new LinkedList<>();
+
 
     public Game(String gameName) {
         this.gameLog = new GameLog();
-        //this.gameLog=new GameLog(0,null,null,null,null,null,"TestName",0,null,1L,null,2L,0,0,false,false,0,true,false,null);
         gameLog.setGameName(gameName);
         gameLog.setGameStarted(false);
 
@@ -89,21 +88,6 @@ public class Game {
 
     public Game(){}
 
-    /*
-Constructor
-    public Game(String gameName, String hostName, String potType /*, int maxPlayers, GameService gameService* /){
-        this.gameName = gameName;
-        this.gameHostName = hostName;
-        this.potType = potType;
-        //this.maxPlayers = maxPlayers;
-        /*this.gameService = gameService;
-        this.id = assignId();* /
-    }
-*/
-
-    /*private long assignId(){
-        return gameService.getNextId();
-    }*/
 
     public void setPotType(String potType) {
         this.potType = potType;
@@ -131,9 +115,6 @@ Constructor
         this.gameHostName = gameHostName;
     }
 
-    public String getGameHostName(){
-        return this.gameHostName;
-    }
 
     public void addPlayer(Player player){
 
@@ -146,17 +127,11 @@ Constructor
         this.bigBlind = bigBlind;
     }
 
-    public Player getBigBlind() {
-        return bigBlind;
-    }
 
     public void setSmallBlind(Player smallBlind) {
         this.smallBlind = smallBlind;
     }
 
-    public Player getSmallBlind() {
-        return smallBlind;
-    }
 
     public void removePlayer(Player player){
         this.players.remove(player);
@@ -264,11 +239,6 @@ Constructor
         this.setRoundOver(true);}
     public boolean isRoundOver(){return this.roundOver;}
 
-    public int getMaxPlayers(){return maxPlayers;}
-
-    public void updateBlinds(){}
-
-
     public GameRound getGameRound() {
         return gameRound;
     }
@@ -285,14 +255,11 @@ Constructor
         if (tableCards.size()>4){
             throw new SopraServiceException("There are already five cards on the table in the game");
         }
-        //deck.shuffle();
         tableCards.add(deck.getTopCard());
         gameLog.setRevealedCards(tableCards);
     }
 
-    public void removeTableCards(){
-        tableCards = new LinkedList<>();
-    }
+
 
 
     public GameLog nullGameLog(){
@@ -307,33 +274,6 @@ Constructor
         return getGameLog();
     }
 
-//    public void removeGameLog(){
-//        this.gameTracker = new ArrayList<>();
-//    }
-//
-//    public void addGameLog(GameLog gameLog){
-//        gameTracker.add(gameLog);
-//    }
-//
-//
-//    public GameLog getGameLog(){
-//        return this.gameTracker.get(gameTracker.size());
-//    }
-
-    public boolean playOneMoreRoundToGameOver(Player currentPlayer){
-        Player player = activePlayers.get(0);
-        int a = 0;
-        while (getNextPlayer(player).isMarkedAsZeroCredit() != true){
-            a++;
-            player = activePlayers.get(a);
-        }
-
-        if (currentPlayer == player){
-            return true;
-        }else{
-            return false;
-        }
-    }
 
 
     public int getTimesRaisedPerPreflop() {
@@ -390,7 +330,6 @@ Constructor
         this.gameLog.setGameRules(this.potType);
 
         //hand out hand cards before round one
-        //deck.shuffle();
         int i,e;
         for(i=0;i<players.size();i++){
             for(e=0;e<2;e++){
@@ -460,7 +399,7 @@ Constructor
         gameLog.setPotAmount(0);
         gameLog.setPlayerPot(0);
 
-//shift active players and players to the right so that BigBlind and SmallBlind is shifted one player
+        //shift active players and players to the right so that BigBlind and SmallBlind is shifted one player
         Player player = players.get(players.size()-1);
         Player activePlayer = activePlayers.get(players.size()-1);
 
@@ -538,18 +477,6 @@ Constructor
             setGameOver(true);
             return;
         }
-        /*
-        //if only one player in the game has credit, than game is over
-        int playersWithCredit = 0;
-        for (int i = 0;i < players.size();i++){
-            if (players.get(i).getCredit()>0){
-                playersWithCredit++;
-            }
-        }
-
-         */
-
-
 
         if (action == Action.RAISE || action == Action.BET){
             setActionsAfterRaise(0);
@@ -661,10 +588,6 @@ Constructor
         return pot;
     }
 
-    public void setPot(Pot pot) {
-        this.pot = pot;
-    }
-
     public int getActionsAfterRaise() {
         return actionsAfterRaise;
     }
@@ -688,13 +611,6 @@ Constructor
     public void setGameOver(boolean gameOver) {
         this.gameOver = gameOver;
     }
-
-    public void setTableCards(List<Card> tableCards) {
-        this.tableCards = tableCards;
-    }
-
-
-
 
     public boolean isPlayerWentAllIN() {
         return playerWentAllIN;
@@ -734,6 +650,3 @@ Constructor
     }
 
 }
-
-
-

@@ -125,12 +125,10 @@ public class ChatServiceIntegrationTest {
 
 
         Game createdGame = gameService.createGame(testGame.getGameName(), testGame.getGameHostID(), testGame.getPotType());
-//        createdGame.addMessage("players", testChatLog1);
-//        createdGame.addMessage("players", testChatLog2);
 
         chatService.newMessage("players", 1L, testChatLog1);
 
-        assertEquals(createdGame.getMessages("players"), chat);
+        assertEquals(chat, createdGame.getMessages("players"));
 
     }
 
@@ -147,12 +145,10 @@ public class ChatServiceIntegrationTest {
         testGame.setPotType("Fixed");
 
         Game createdGame = gameService.createGame(testGame.getGameName(), testGame.getGameHostID(), testGame.getPotType());
-//        createdGame.addMessage("players", testChatLog1);
-//        createdGame.addMessage("players", testChatLog2);
 
         chatService.newMessage("spectators", 1L, testChatLog1);
 
-        assertEquals(createdGame.getMessages("spectators"), chat);
+        assertEquals(chat, createdGame.getMessages("spectators"));
 
     }
 
