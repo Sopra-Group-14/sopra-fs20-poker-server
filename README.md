@@ -34,16 +34,15 @@ Go into the sopra-fs20-group-14-server folder in your directory and open two com
 To deploy the project:
 The project automatically depoys onto Heroku (https://dashboard.heroku.com/apps/sopra-fs20-group-14-server) once pushed to Github.
 
-## Illustrations
-To play poker the user needs to register or log in. Then he can create or join a pokergame. The user has an account where he can top up his credit once every 24h. As a not logged in (as well as a logged in) user it is possible to join a game as a spectator and see the hand cards of the different Players as well as some winning odds. 
-
-
 ## Roadmap
-We could imagine adding sound effects, card animations as well as a
-friend list or private messages to stay in contact with people you liked to play with. 
+A friends list and an out-of-game chat could be implemented so that people can easily find and talk to other players they enjoyed playing with.
+
+Different rulesets of Poker could be added. 
+
+Paid topping up of an account outside of the 24-hour cooldown could be implemented.
 
 ## Authors and acknowledgment
-Csanad Erdei-Griff, Kevin Kindler, Konstantin Moser, Lara Fried, Andy Aidoo
+Csanad Erdei-Griff, Kevin Kindler, Konstantin Moser, Lara Fried, Andy Aidoo, Dimitri Kohler (Coach)
 
 ## License
 MIT License
